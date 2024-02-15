@@ -11,6 +11,9 @@ class HomePageTab extends ConsumerStatefulWidget {
 class _HomePageTabState extends ConsumerState<HomePageTab> {
   @override
   Widget build(BuildContext context) {
-    return Text('HomePageTab');
+    //文字中央配置
+    return Center(
+        child: Text('HomePageTab', textAlign: TextAlign.center, style: TextStyle(fontSize: 30))
+    );
   }
 }

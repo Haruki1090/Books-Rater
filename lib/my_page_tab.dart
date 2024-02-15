@@ -11,6 +11,8 @@ class MyPageTab extends ConsumerStatefulWidget {
 class _MyPageTabState extends ConsumerState<MyPageTab> {
   @override
   Widget build(BuildContext context) {
-    return Text('MyPageTab');
+    return Center(
+        child: Text('MyPageTab', textAlign: TextAlign.center, style: TextStyle(fontSize: 30))
+    );
   }
 }

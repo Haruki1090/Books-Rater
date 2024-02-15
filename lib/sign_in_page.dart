@@ -2,16 +2,15 @@ import 'package:books_rater/sign_up_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'home_tab.dart';
+import 'home.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
   ConsumerState<SignInPage> createState() => _SignInPageState();
 }
 
-class _SignInPageState extends ConsumerState<SignInPage> {
+final firebaseAuthProvider = StateProvider((ref) => FirebaseAuth.instance);
 
-  final firebaseAuthProvider = StateProvider((ref) => FirebaseAuth.instance);
+class _SignInPageState extends ConsumerState<SignInPage> {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -76,7 +75,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                       // ホームタブ画面に遷移
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
+                        MaterialPageRoute(builder: (context) => Home()),
                       );
                     } else {
                       // ログイン失敗

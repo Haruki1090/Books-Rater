@@ -1,16 +1,19 @@
 import 'package:books_rater/home_page_tab.dart';
 import 'package:books_rater/my_books_tab.dart';
 import 'package:books_rater/my_page_tab.dart';
+import 'package:books_rater/sign_in_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomePage extends ConsumerStatefulWidget {
-  ConsumerState<HomePage> createState() => _HomePageState();
+class Home extends ConsumerStatefulWidget {
+  ConsumerState<Home> createState() => _HomeState();
 }
 
+final firebaseAuthProvider = StateProvider((ref) => FirebaseAuth.instance);
 final currentIndexProvider = StateProvider<int>((ref) => 0);
 
-class _HomePageState extends ConsumerState<HomePage> {
+class _HomeState extends ConsumerState<Home> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -27,6 +30,19 @@ class _HomePageState extends ConsumerState<HomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Home'),
+        actions: [
+          // sign out button
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await ref.read(firebaseAuthProvider).signOut();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => SignInPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: display[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -50,3 +66,4 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 }
+
