@@ -10,6 +10,7 @@ class SignInPage extends ConsumerStatefulWidget {
 }
 
 class _SignInPageState extends ConsumerState<SignInPage> {
+
   final firebaseAuthProvider = StateProvider((ref) => FirebaseAuth.instance);
 
   final _emailController = TextEditingController();
@@ -53,6 +54,11 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   final email = _emailController.text.trim();
                   final password = _passwordController.text.trim();
 
+                  if (email.isEmpty || password.isEmpty) {
+                    _showErrorDialog('メールアドレスとパスワードを入力してください。');
+                    return;
+                  }
+
                   try {
                     final user = await ref.read(firebaseAuthProvider).signInWithEmailAndPassword(
                       email: email,
@@ -70,17 +76,24 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                       // ホームタブ画面に遷移
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => HomeTab()),
+                        MaterialPageRoute(builder: (context) => HomePage()),
                       );
                     } else {
                       // ログイン失敗
-                      _showErrorDialog('ログインに失敗しました。ユーザーが見つかりませんでした。');
+                      print('ログイン失敗');
+                      _showErrorDialog('ログインに失敗しました。');
                     }
                   } on FirebaseAuthException catch (e) {
-                    print('Error during sign-in: ${e.message}');
+                    if (e.code == 'user-not-found') {
+                      print('No user found for that email.');
+                      _showErrorDialog('ユーザーが見つかりませんでした。');
+                    } else if (e.code == 'wrong-password') {
+                      print('Wrong password provided for that user.');
+                      _showErrorDialog('パスワードが間違っています。');
+                    }
                   } catch (e) {
-                    print('Unexpected error during sign-in: $e');
-                    _showErrorDialog('予期せぬエラーが発生しました。');
+                    print(e);
+                    _showErrorDialog('エラーが発生しました。');
                   }
                 },
                 child: const Text('Sign in'),
