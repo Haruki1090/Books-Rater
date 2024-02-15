@@ -1,3 +1,5 @@
+import 'package:books_rater/my_books_tab.dart';
+import 'package:books_rater/my_page_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,8 +8,31 @@ class HomeTab extends ConsumerStatefulWidget {
 }
 
 class _HomeTabState extends ConsumerState<HomeTab> {
+  final currentIndexProvider = StateProvider<int>((ref) => 0);
 
-  //fireStoreから本のレビューデータを取得して表示する
+  void _onItemTapped(int index) {
+    ref.read(currentIndexProvider.notifier).update((index) => index);
+    if (index == 0) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProviderScope(
+                  child: HomeTab()
+              )
+          )
+      );
+    } else if (index == 1) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MyBooksTab())
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MyPageTab())
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +50,8 @@ class _HomeTabState extends ConsumerState<HomeTab> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: ref.read(currentIndexProvider),
+        onTap: _onItemTapped,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -32,7 +59,7 @@ class _HomeTabState extends ConsumerState<HomeTab> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book),
-            label: 'Books',
+            label: 'My Books',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

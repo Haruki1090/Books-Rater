@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MyBooksTab extends ConsumerStatefulWidget {
-  const MyBooksTab({super.key});
+class MyPageTab extends ConsumerStatefulWidget {
+  const MyPageTab({super.key});
 
   @override
-  ConsumerState<MyBooksTab> createState() => _MyBooksTabState();
+  ConsumerState<MyPageTab> createState() => _MyPageTabState();
 }
 
-class _MyBooksTabState extends ConsumerState<MyBooksTab> {
+class _MyPageTabState extends ConsumerState<MyPageTab> {
   //fireStoreから「自分のみ」の本のレビューデータを取得して表示する
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('My Books'),
+            const Text('My page'),
           ],
         ),
       ),
