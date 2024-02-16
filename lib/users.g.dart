@@ -6,17 +6,19 @@ part of 'users.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$UserDataImpl _$$UserDataImplFromJson(Map<String, dynamic> json) =>
-    _$UserDataImpl(
+_$UsersImpl _$$UsersImplFromJson(Map<String, dynamic> json) => _$UsersImpl(
       uid: json['uid'] as String,
       email: json['email'] as String,
       name: json['name'] as String,
       bookCount: json['bookCount'] as num,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
+      books: (json['books'] as List<dynamic>)
+          .map((e) => BookData.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
-Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
+Map<String, dynamic> _$$UsersImplToJson(_$UsersImpl instance) =>
     <String, dynamic>{
       'uid': instance.uid,
       'email': instance.email,
@@ -24,4 +26,5 @@ Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
       'bookCount': instance.bookCount,
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
+      'books': instance.books,
     };

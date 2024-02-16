@@ -15,17 +15,18 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 Users _$UsersFromJson(Map<String, dynamic> json) {
-  return _UserData.fromJson(json);
+  return _Users.fromJson(json);
 }
 
 /// @nodoc
 mixin _$Users {
-  String get uid => throw _privateConstructorUsedError; //ユーザーID(e-mail)
+  String get uid => throw _privateConstructorUsedError; // ユーザーID(e-mail)
   String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   num get bookCount => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
+  List<BookData> get books => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $UsersCopyWith<$Res> {
       String name,
       num bookCount,
       DateTime createdAt,
-      DateTime updatedAt});
+      DateTime updatedAt,
+      List<BookData> books});
 }
 
 /// @nodoc
@@ -65,6 +67,7 @@ class _$UsersCopyWithImpl<$Res, $Val extends Users>
     Object? bookCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? books = null,
   }) {
     return _then(_value.copyWith(
       uid: null == uid
@@ -91,15 +94,19 @@ class _$UsersCopyWithImpl<$Res, $Val extends Users>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      books: null == books
+          ? _value.books
+          : books // ignore: cast_nullable_to_non_nullable
+              as List<BookData>,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$UserDataImplCopyWith<$Res> implements $UsersCopyWith<$Res> {
-  factory _$$UserDataImplCopyWith(
-          _$UserDataImpl value, $Res Function(_$UserDataImpl) then) =
-      __$$UserDataImplCopyWithImpl<$Res>;
+abstract class _$$UsersImplCopyWith<$Res> implements $UsersCopyWith<$Res> {
+  factory _$$UsersImplCopyWith(
+          _$UsersImpl value, $Res Function(_$UsersImpl) then) =
+      __$$UsersImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -108,15 +115,16 @@ abstract class _$$UserDataImplCopyWith<$Res> implements $UsersCopyWith<$Res> {
       String name,
       num bookCount,
       DateTime createdAt,
-      DateTime updatedAt});
+      DateTime updatedAt,
+      List<BookData> books});
 }
 
 /// @nodoc
-class __$$UserDataImplCopyWithImpl<$Res>
-    extends _$UsersCopyWithImpl<$Res, _$UserDataImpl>
-    implements _$$UserDataImplCopyWith<$Res> {
-  __$$UserDataImplCopyWithImpl(
-      _$UserDataImpl _value, $Res Function(_$UserDataImpl) _then)
+class __$$UsersImplCopyWithImpl<$Res>
+    extends _$UsersCopyWithImpl<$Res, _$UsersImpl>
+    implements _$$UsersImplCopyWith<$Res> {
+  __$$UsersImplCopyWithImpl(
+      _$UsersImpl _value, $Res Function(_$UsersImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -128,8 +136,9 @@ class __$$UserDataImplCopyWithImpl<$Res>
     Object? bookCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? books = null,
   }) {
-    return _then(_$UserDataImpl(
+    return _then(_$UsersImpl(
       uid: null == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
@@ -154,27 +163,33 @@ class __$$UserDataImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      books: null == books
+          ? _value._books
+          : books // ignore: cast_nullable_to_non_nullable
+              as List<BookData>,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$UserDataImpl implements _UserData {
-  const _$UserDataImpl(
+class _$UsersImpl implements _Users {
+  const _$UsersImpl(
       {required this.uid,
       required this.email,
       required this.name,
       required this.bookCount,
       required this.createdAt,
-      required this.updatedAt});
+      required this.updatedAt,
+      required final List<BookData> books})
+      : _books = books;
 
-  factory _$UserDataImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UserDataImplFromJson(json);
+  factory _$UsersImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UsersImplFromJson(json);
 
   @override
   final String uid;
-//ユーザーID(e-mail)
+// ユーザーID(e-mail)
   @override
   final String email;
   @override
@@ -185,17 +200,24 @@ class _$UserDataImpl implements _UserData {
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
+  final List<BookData> _books;
+  @override
+  List<BookData> get books {
+    if (_books is EqualUnmodifiableListView) return _books;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_books);
+  }
 
   @override
   String toString() {
-    return 'Users(uid: $uid, email: $email, name: $name, bookCount: $bookCount, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Users(uid: $uid, email: $email, name: $name, bookCount: $bookCount, createdAt: $createdAt, updatedAt: $updatedAt, books: $books)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UserDataImpl &&
+            other is _$UsersImpl &&
             (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.name, name) || other.name == name) &&
@@ -204,43 +226,44 @@ class _$UserDataImpl implements _UserData {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            const DeepCollectionEquality().equals(other._books, _books));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, uid, email, name, bookCount, createdAt, updatedAt);
+  int get hashCode => Object.hash(runtimeType, uid, email, name, bookCount,
+      createdAt, updatedAt, const DeepCollectionEquality().hash(_books));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UserDataImplCopyWith<_$UserDataImpl> get copyWith =>
-      __$$UserDataImplCopyWithImpl<_$UserDataImpl>(this, _$identity);
+  _$$UsersImplCopyWith<_$UsersImpl> get copyWith =>
+      __$$UsersImplCopyWithImpl<_$UsersImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UserDataImplToJson(
+    return _$$UsersImplToJson(
       this,
     );
   }
 }
 
-abstract class _UserData implements Users {
-  const factory _UserData(
+abstract class _Users implements Users {
+  const factory _Users(
       {required final String uid,
       required final String email,
       required final String name,
       required final num bookCount,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$UserDataImpl;
+      required final DateTime updatedAt,
+      required final List<BookData> books}) = _$UsersImpl;
 
-  factory _UserData.fromJson(Map<String, dynamic> json) =
-      _$UserDataImpl.fromJson;
+  factory _Users.fromJson(Map<String, dynamic> json) = _$UsersImpl.fromJson;
 
   @override
   String get uid;
-  @override //ユーザーID(e-mail)
+  @override // ユーザーID(e-mail)
   String get email;
   @override
   String get name;
@@ -251,7 +274,9 @@ abstract class _UserData implements Users {
   @override
   DateTime get updatedAt;
   @override
+  List<BookData> get books;
+  @override
   @JsonKey(ignore: true)
-  _$$UserDataImplCopyWith<_$UserDataImpl> get copyWith =>
+  _$$UsersImplCopyWith<_$UsersImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
