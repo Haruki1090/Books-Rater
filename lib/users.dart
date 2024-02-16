@@ -1,11 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-part 'user_data.freezed.dart';
-part 'user_data.g.dart';
+part 'users.freezed.dart';
+part 'users.g.dart';
 
 @freezed
-class UserData with _$UserData {
-  const factory UserData({
-    required String uid,
+class Users with _$Users {
+  const factory Users({
+    required String uid,//ユーザーID(e-mail)
     required String email,
     required String name,
     required num bookCount,
@@ -13,5 +13,5 @@ class UserData with _$UserData {
     required DateTime updatedAt,
   }) = _UserData;
 
-  factory UserData.fromJson(Map<String, dynamic> json) => _$UserDataFromJson(json);
+  factory Users.fromJson(Map<String, dynamic> json) => _$UsersFromJson(json);
 }

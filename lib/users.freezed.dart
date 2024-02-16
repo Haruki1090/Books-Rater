@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'user_data.dart';
+part of 'users.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,13 +14,13 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-UserData _$UserDataFromJson(Map<String, dynamic> json) {
+Users _$UsersFromJson(Map<String, dynamic> json) {
   return _UserData.fromJson(json);
 }
 
 /// @nodoc
-mixin _$UserData {
-  String get uid => throw _privateConstructorUsedError;
+mixin _$Users {
+  String get uid => throw _privateConstructorUsedError; //ユーザーID(e-mail)
   String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   num get bookCount => throw _privateConstructorUsedError;
@@ -29,14 +29,13 @@ mixin _$UserData {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $UserDataCopyWith<UserData> get copyWith =>
-      throw _privateConstructorUsedError;
+  $UsersCopyWith<Users> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserDataCopyWith<$Res> {
-  factory $UserDataCopyWith(UserData value, $Res Function(UserData) then) =
-      _$UserDataCopyWithImpl<$Res, UserData>;
+abstract class $UsersCopyWith<$Res> {
+  factory $UsersCopyWith(Users value, $Res Function(Users) then) =
+      _$UsersCopyWithImpl<$Res, Users>;
   @useResult
   $Res call(
       {String uid,
@@ -48,9 +47,9 @@ abstract class $UserDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
-    implements $UserDataCopyWith<$Res> {
-  _$UserDataCopyWithImpl(this._value, this._then);
+class _$UsersCopyWithImpl<$Res, $Val extends Users>
+    implements $UsersCopyWith<$Res> {
+  _$UsersCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -97,8 +96,7 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
 }
 
 /// @nodoc
-abstract class _$$UserDataImplCopyWith<$Res>
-    implements $UserDataCopyWith<$Res> {
+abstract class _$$UserDataImplCopyWith<$Res> implements $UsersCopyWith<$Res> {
   factory _$$UserDataImplCopyWith(
           _$UserDataImpl value, $Res Function(_$UserDataImpl) then) =
       __$$UserDataImplCopyWithImpl<$Res>;
@@ -115,7 +113,7 @@ abstract class _$$UserDataImplCopyWith<$Res>
 
 /// @nodoc
 class __$$UserDataImplCopyWithImpl<$Res>
-    extends _$UserDataCopyWithImpl<$Res, _$UserDataImpl>
+    extends _$UsersCopyWithImpl<$Res, _$UserDataImpl>
     implements _$$UserDataImplCopyWith<$Res> {
   __$$UserDataImplCopyWithImpl(
       _$UserDataImpl _value, $Res Function(_$UserDataImpl) _then)
@@ -176,6 +174,7 @@ class _$UserDataImpl implements _UserData {
 
   @override
   final String uid;
+//ユーザーID(e-mail)
   @override
   final String email;
   @override
@@ -189,7 +188,7 @@ class _$UserDataImpl implements _UserData {
 
   @override
   String toString() {
-    return 'UserData(uid: $uid, email: $email, name: $name, bookCount: $bookCount, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Users(uid: $uid, email: $email, name: $name, bookCount: $bookCount, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -227,7 +226,7 @@ class _$UserDataImpl implements _UserData {
   }
 }
 
-abstract class _UserData implements UserData {
+abstract class _UserData implements Users {
   const factory _UserData(
       {required final String uid,
       required final String email,
@@ -241,7 +240,7 @@ abstract class _UserData implements UserData {
 
   @override
   String get uid;
-  @override
+  @override //ユーザーID(e-mail)
   String get email;
   @override
   String get name;
