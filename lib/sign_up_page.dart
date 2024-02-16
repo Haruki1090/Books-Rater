@@ -21,10 +21,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Sign UP'),
-      ),
       body: Center(
         child: Column(
           /// Sign up Form
@@ -89,9 +85,97 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
+                        final username = _usernameController.text.trim();
+                        final email = _emailController.text.trim();
+                        final password = _passwordController.text.trim();
+                        final confirmPassword = _confirmPasswordController.text.trim();
 
+                        if (username.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('エラー'),
+                                content: const Text('全ての項目を入力してください。'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          return;
+                        }
+
+                        if (password != confirmPassword) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('エラー'),
+                                content: const Text('パスワードが一致しません。'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          return;
+                        }
+
+                        try {
+                          //プログレスインジケーター
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          );
+                          ref.read(firebaseAuthProvider).createUserWithEmailAndPassword(
+                            email: email,
+                            password: password,
+                          );
+                          // 登録成功
+                          print('登録成功');
+                          //スナックバーを表示
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('登録に成功しました。'),
+                            ),
+                          );
+                        } on FirebaseAuthException catch (e) {
+                          print('Firebase Authエラー: $e');
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('エラー'),
+                                content: const Text('登録に失敗しました。'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
                       },
-                      child: const Text('登録内容を確認'),
+                      child: const Text('サインアップ'),
                     ),
                   ),
                 ],
