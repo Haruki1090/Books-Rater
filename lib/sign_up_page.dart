@@ -157,6 +157,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                             ),
                           );
 
+                          //todo ユーザー情報をFirestoreに保存
+
                         } on FirebaseAuthException catch (e) {
                           print('Firebase Authエラー: $e');
                           showDialog(
