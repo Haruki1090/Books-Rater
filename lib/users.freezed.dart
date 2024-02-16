@@ -22,7 +22,8 @@ Users _$UsersFromJson(Map<String, dynamic> json) {
 mixin _$Users {
   String get uid => throw _privateConstructorUsedError; // ユーザーID(e-mail)
   String get email => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
+  String get username => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
   num get bookCount => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
@@ -41,7 +42,8 @@ abstract class $UsersCopyWith<$Res> {
   $Res call(
       {String uid,
       String email,
-      String name,
+      String username,
+      String imageUrl,
       num bookCount,
       DateTime createdAt,
       DateTime updatedAt,
@@ -63,7 +65,8 @@ class _$UsersCopyWithImpl<$Res, $Val extends Users>
   $Res call({
     Object? uid = null,
     Object? email = null,
-    Object? name = null,
+    Object? username = null,
+    Object? imageUrl = null,
     Object? bookCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -78,9 +81,13 @@ class _$UsersCopyWithImpl<$Res, $Val extends Users>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       bookCount: null == bookCount
           ? _value.bookCount
@@ -112,7 +119,8 @@ abstract class _$$UsersImplCopyWith<$Res> implements $UsersCopyWith<$Res> {
   $Res call(
       {String uid,
       String email,
-      String name,
+      String username,
+      String imageUrl,
       num bookCount,
       DateTime createdAt,
       DateTime updatedAt,
@@ -132,7 +140,8 @@ class __$$UsersImplCopyWithImpl<$Res>
   $Res call({
     Object? uid = null,
     Object? email = null,
-    Object? name = null,
+    Object? username = null,
+    Object? imageUrl = null,
     Object? bookCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -147,9 +156,13 @@ class __$$UsersImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       bookCount: null == bookCount
           ? _value.bookCount
@@ -177,7 +190,8 @@ class _$UsersImpl implements _Users {
   const _$UsersImpl(
       {required this.uid,
       required this.email,
-      required this.name,
+      required this.username,
+      required this.imageUrl,
       required this.bookCount,
       required this.createdAt,
       required this.updatedAt,
@@ -193,7 +207,9 @@ class _$UsersImpl implements _Users {
   @override
   final String email;
   @override
-  final String name;
+  final String username;
+  @override
+  final String imageUrl;
   @override
   final num bookCount;
   @override
@@ -210,7 +226,7 @@ class _$UsersImpl implements _Users {
 
   @override
   String toString() {
-    return 'Users(uid: $uid, email: $email, name: $name, bookCount: $bookCount, createdAt: $createdAt, updatedAt: $updatedAt, books: $books)';
+    return 'Users(uid: $uid, email: $email, username: $username, imageUrl: $imageUrl, bookCount: $bookCount, createdAt: $createdAt, updatedAt: $updatedAt, books: $books)';
   }
 
   @override
@@ -220,7 +236,10 @@ class _$UsersImpl implements _Users {
             other is _$UsersImpl &&
             (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.name, name) || other.name == name) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             (identical(other.bookCount, bookCount) ||
                 other.bookCount == bookCount) &&
             (identical(other.createdAt, createdAt) ||
@@ -232,8 +251,16 @@ class _$UsersImpl implements _Users {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, uid, email, name, bookCount,
-      createdAt, updatedAt, const DeepCollectionEquality().hash(_books));
+  int get hashCode => Object.hash(
+      runtimeType,
+      uid,
+      email,
+      username,
+      imageUrl,
+      bookCount,
+      createdAt,
+      updatedAt,
+      const DeepCollectionEquality().hash(_books));
 
   @JsonKey(ignore: true)
   @override
@@ -253,7 +280,8 @@ abstract class _Users implements Users {
   const factory _Users(
       {required final String uid,
       required final String email,
-      required final String name,
+      required final String username,
+      required final String imageUrl,
       required final num bookCount,
       required final DateTime createdAt,
       required final DateTime updatedAt,
@@ -266,7 +294,9 @@ abstract class _Users implements Users {
   @override // ユーザーID(e-mail)
   String get email;
   @override
-  String get name;
+  String get username;
+  @override
+  String get imageUrl;
   @override
   num get bookCount;
   @override

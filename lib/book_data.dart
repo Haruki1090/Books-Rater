@@ -8,7 +8,7 @@ class BookData with _$BookData {
   const factory BookData({
     required String bookId,
     required String title,
-    required String imageUrl,
+    required String bookImageUrl,
     required String description,
     required DateTime createdAt,
     required DateTime updatedAt,

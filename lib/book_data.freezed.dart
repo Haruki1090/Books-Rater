@@ -22,7 +22,7 @@ BookData _$BookDataFromJson(Map<String, dynamic> json) {
 mixin _$BookData {
   String get bookId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String get imageUrl => throw _privateConstructorUsedError;
+  String get bookImageUrl => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
@@ -41,7 +41,7 @@ abstract class $BookDataCopyWith<$Res> {
   $Res call(
       {String bookId,
       String title,
-      String imageUrl,
+      String bookImageUrl,
       String description,
       DateTime createdAt,
       DateTime updatedAt});
@@ -62,7 +62,7 @@ class _$BookDataCopyWithImpl<$Res, $Val extends BookData>
   $Res call({
     Object? bookId = null,
     Object? title = null,
-    Object? imageUrl = null,
+    Object? bookImageUrl = null,
     Object? description = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -76,9 +76,9 @@ class _$BookDataCopyWithImpl<$Res, $Val extends BookData>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      imageUrl: null == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
+      bookImageUrl: null == bookImageUrl
+          ? _value.bookImageUrl
+          : bookImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       description: null == description
           ? _value.description
@@ -107,7 +107,7 @@ abstract class _$$BookDataImplCopyWith<$Res>
   $Res call(
       {String bookId,
       String title,
-      String imageUrl,
+      String bookImageUrl,
       String description,
       DateTime createdAt,
       DateTime updatedAt});
@@ -126,7 +126,7 @@ class __$$BookDataImplCopyWithImpl<$Res>
   $Res call({
     Object? bookId = null,
     Object? title = null,
-    Object? imageUrl = null,
+    Object? bookImageUrl = null,
     Object? description = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -140,9 +140,9 @@ class __$$BookDataImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      imageUrl: null == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
+      bookImageUrl: null == bookImageUrl
+          ? _value.bookImageUrl
+          : bookImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       description: null == description
           ? _value.description
@@ -166,7 +166,7 @@ class _$BookDataImpl implements _BookData {
   const _$BookDataImpl(
       {required this.bookId,
       required this.title,
-      required this.imageUrl,
+      required this.bookImageUrl,
       required this.description,
       required this.createdAt,
       required this.updatedAt});
@@ -179,7 +179,7 @@ class _$BookDataImpl implements _BookData {
   @override
   final String title;
   @override
-  final String imageUrl;
+  final String bookImageUrl;
   @override
   final String description;
   @override
@@ -189,7 +189,7 @@ class _$BookDataImpl implements _BookData {
 
   @override
   String toString() {
-    return 'BookData(bookId: $bookId, title: $title, imageUrl: $imageUrl, description: $description, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'BookData(bookId: $bookId, title: $title, bookImageUrl: $bookImageUrl, description: $description, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -199,8 +199,8 @@ class _$BookDataImpl implements _BookData {
             other is _$BookDataImpl &&
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
+            (identical(other.bookImageUrl, bookImageUrl) ||
+                other.bookImageUrl == bookImageUrl) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.createdAt, createdAt) ||
@@ -211,8 +211,8 @@ class _$BookDataImpl implements _BookData {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, bookId, title, imageUrl, description, createdAt, updatedAt);
+  int get hashCode => Object.hash(runtimeType, bookId, title, bookImageUrl,
+      description, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -232,7 +232,7 @@ abstract class _BookData implements BookData {
   const factory _BookData(
       {required final String bookId,
       required final String title,
-      required final String imageUrl,
+      required final String bookImageUrl,
       required final String description,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$BookDataImpl;
@@ -245,7 +245,7 @@ abstract class _BookData implements BookData {
   @override
   String get title;
   @override
-  String get imageUrl;
+  String get bookImageUrl;
   @override
   String get description;
   @override

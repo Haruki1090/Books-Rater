@@ -9,7 +9,8 @@ class Users with _$Users {
   const factory Users({
     required String uid, // ユーザーID(e-mail)
     required String email,
-    required String name,
+    required String username,
+    required String imageUrl,
     required num bookCount,
     required DateTime createdAt,
     required DateTime updatedAt,
