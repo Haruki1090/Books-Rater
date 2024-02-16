@@ -1,3 +1,4 @@
+import 'package:books_rater/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -169,7 +170,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                             'imageUrl': '',
                             'books': [],
                           });
-
+                          // ホームタブ画面に遷移
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                                (Route<dynamic> route) => false,
+                          );
 
                         } on FirebaseAuthException catch (e) {
                           print('Firebase Authエラー: $e');
