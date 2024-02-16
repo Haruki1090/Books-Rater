@@ -157,7 +157,19 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                             ),
                           );
 
-                          //todo ユーザー情報をFirestoreに保存
+                          //ユーザー情報をFirestoreに保存
+                          // uid -> e-mail
+                          // username -> username
+                          await FirebaseFirestore.instance.collection('users').doc(email).set({
+                            'uid': email,
+                            'username': username,
+                            'bookCount': 0,
+                            'createdAt': DateTime.now(),
+                            'updatedAt': DateTime.now(),
+                            'imageUrl': '',
+                            'books': [],
+                          });
+
 
                         } on FirebaseAuthException catch (e) {
                           print('Firebase Authエラー: $e');
