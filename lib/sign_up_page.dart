@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -84,7 +85,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         final username = _usernameController.text.trim();
                         final email = _emailController.text.trim();
                         final password = _passwordController.text.trim();
@@ -142,10 +143,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                               );
                             },
                           );
-                          ref.read(firebaseAuthProvider).createUserWithEmailAndPassword(
+                          final UserCredential userCredential = await ref.read(firebaseAuthProvider).createUserWithEmailAndPassword(
                             email: email,
                             password: password,
                           );
+
                           // 登録成功
                           print('登録成功');
                           //スナックバーを表示
@@ -154,6 +156,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                               content: Text('登録に成功しました。'),
                             ),
                           );
+
                         } on FirebaseAuthException catch (e) {
                           print('Firebase Authエラー: $e');
                           showDialog(
