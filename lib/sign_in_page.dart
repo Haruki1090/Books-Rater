@@ -19,78 +19,85 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Sign in to Books Rater App'),
+        title: const Text('サインイン'),
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email Address',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: () async {
-                  final email = _emailController.text.trim();
-                  final password = _passwordController.text.trim();
-
-                  if (email.isEmpty || password.isEmpty) {
-                    _showErrorDialog('メールアドレスとパスワードを入力してください。');
-                    return;
-                  }
-
-                  try {
-                    //プログレスインジケーター
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      },
-                    );
-                    await ref.read(firebaseAuthProvider).signInWithEmailAndPassword(
-                      email: email,
-                      password: password,
-                    );
-                    // ログイン成功
-                    print('ログイン成功');
-                    //スナックバーを表示
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('ログインに成功しました。'),
+            Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email Address',
+                        border: OutlineInputBorder(),
                       ),
-                    );
-                    // ホームタブ画面に遷移
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => Home()),
-                      (Route<dynamic> route) => false,
-                    );
-                  } on FirebaseAuthException catch (e) {
-                      print('Firebase Authエラー: $e');
-                      _showErrorDialog('ログインに失敗しました。');
-                  }
-                },
-                child: const Text('Sign in'),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _passwordController,
+                      decoration: const InputDecoration(
+                        labelText: 'Password',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final email = _emailController.text.trim();
+                        final password = _passwordController.text.trim();
+
+                        if (email.isEmpty || password.isEmpty) {
+                          _showErrorDialog('メールアドレスとパスワードを入力してください。');
+                          return;
+                        }
+
+                        try {
+                          //プログレスインジケーター
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          );
+                          await ref.read(firebaseAuthProvider).signInWithEmailAndPassword(
+                            email: email,
+                            password: password,
+                          );
+                          // ログイン成功
+                          print('ログイン成功');
+                          //スナックバーを表示
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('ログインに成功しました。'),
+                            ),
+                          );
+                          // ホームタブ画面に遷移
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                                (Route<dynamic> route) => false,
+                          );
+                        } on FirebaseAuthException catch (e) {
+                          print('Firebase Authエラー: $e');
+                          _showErrorDialog('ログインに失敗しました。');
+                        }
+                      },
+                      child: const Text('サインイン'),
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -102,7 +109,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                     MaterialPageRoute(builder: (context) => SignUpPage()),
                   );
                 },
-                child: const Text('Sign up'),
+                child: const Text('アカウントをお持ちでない場合'),
               ),
             ),
           ],
