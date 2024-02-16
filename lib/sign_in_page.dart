@@ -11,7 +11,6 @@ class SignInPage extends ConsumerStatefulWidget {
 final firebaseAuthProvider = StateProvider((ref) => FirebaseAuth.instance);
 
 class _SignInPageState extends ConsumerState<SignInPage> {
-
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -59,40 +58,36 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   }
 
                   try {
-                    final user = await ref.read(firebaseAuthProvider).signInWithEmailAndPassword(
+                    //プログレスインジケーター
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    );
+                    await ref.read(firebaseAuthProvider).signInWithEmailAndPassword(
                       email: email,
                       password: password,
                     );
-                    if (user != null) {
-                      // ログイン成功
-                      print('ログイン成功');
-                      //スナックバーを表示
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('ログインに成功しました。'),
-                        ),
-                      );
-                      // ホームタブ画面に遷移
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => Home()),
-                      );
-                    } else {
-                      // ログイン失敗
-                      print('ログイン失敗');
-                      _showErrorDialog('ログインに失敗しました。');
-                    }
+                    // ログイン成功
+                    print('ログイン成功');
+                    //スナックバーを表示
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('ログインに成功しました。'),
+                      ),
+                    );
+                    // ホームタブ画面に遷移
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()),
+                      (Route<dynamic> route) => false,
+                    );
                   } on FirebaseAuthException catch (e) {
-                    if (e.code == 'user-not-found') {
-                      print('No user found for that email.');
-                      _showErrorDialog('ユーザーが見つかりませんでした。');
-                    } else if (e.code == 'wrong-password') {
-                      print('Wrong password provided for that user.');
-                      _showErrorDialog('パスワードが間違っています。');
-                    }
-                  } catch (e) {
-                    print(e);
-                    _showErrorDialog('エラーが発生しました。');
+                      print('Firebase Authエラー: $e');
+                      _showErrorDialog('ログインに失敗しました。');
                   }
                 },
                 child: const Text('Sign in'),

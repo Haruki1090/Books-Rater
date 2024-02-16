@@ -35,10 +35,33 @@ class _HomeState extends ConsumerState<Home> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
-              await ref.read(firebaseAuthProvider).signOut();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => SignInPage()),
+              // Sign outしますか？
+              final signOutCheck = await showDialog<bool>(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Sign out'),
+                    content: const Text('サインアウトしますか？'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => SignInPage()),
+                                (Route<dynamic> route) => false,
+                          );
+                        },
+                        child: const Text('サインアウト'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, false);
+                        },
+                        child: const Text('キャンセル'),
+                      ),
+                    ],
+                  );
+                }
               );
             },
           ),
