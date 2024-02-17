@@ -35,10 +35,19 @@ class _EdditingUserDataPageState extends ConsumerState<EdditingUserDataPage> {
   Future<void> _saveUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
       await FirebaseFirestore.instance.collection('users').doc(user.email).update({
         'username': _usernameController.text,
         'updatedAt': DateTime.now(),
       });
+      print('ユーザー情報の変更を保存しました');
     }
   }
 
