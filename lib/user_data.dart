@@ -1,12 +1,12 @@
 import 'package:books_rater/book_data.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'users.freezed.dart';
-part 'users.g.dart';
+part 'user_data.freezed.dart';
+part 'user_data.g.dart';
 
 @freezed
-class Users with _$Users {
-  const factory Users({
+class UserData with _$UserData {
+  const factory UserData({
     required String uid, // ユーザーID(e-mail)
     required String email,
     required String username,
@@ -15,7 +15,7 @@ class Users with _$Users {
     required DateTime createdAt,
     required DateTime updatedAt,
     required List<BookData> books,
-  }) = _Users;
+  }) = _UserData;
 
-  factory Users.fromJson(Map<String, dynamic> json) => _$UsersFromJson(json);
+  factory UserData.fromJson(Map<String, dynamic> json) => _$UserDataFromJson(json);
 }

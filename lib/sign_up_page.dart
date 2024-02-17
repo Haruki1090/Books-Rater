@@ -144,6 +144,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                               );
                             },
                           );
+
                           final UserCredential userCredential = await ref.read(firebaseAuthProvider).createUserWithEmailAndPassword(
                             email: email,
                             password: password,
@@ -161,6 +162,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                           //ユーザー情報をFirestoreに保存
                           // uid -> e-mail
                           // username -> username
+
+
                           await FirebaseFirestore.instance.collection('users').doc(email).set({
                             'uid': email,
                             'username': username,

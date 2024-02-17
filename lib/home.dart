@@ -2,16 +2,12 @@ import 'package:books_rater/home_page_tab.dart';
 import 'package:books_rater/my_books_tab.dart';
 import 'package:books_rater/my_page_tab.dart';
 import 'package:books_rater/sign_in_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Home extends ConsumerStatefulWidget {
   ConsumerState<Home> createState() => _HomeState();
 }
-
-final firebaseAuthProvider = StateProvider((ref) => FirebaseAuth.instance);
-final currentIndexProvider = StateProvider<int>((ref) => 0);
 
 class _HomeState extends ConsumerState<Home> {
   int _selectedIndex = 0;
@@ -35,8 +31,7 @@ class _HomeState extends ConsumerState<Home> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
-              // Sign outしますか？
-              final signOutCheck = await showDialog<bool>(
+              await showDialog<bool>(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
