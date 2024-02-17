@@ -1,4 +1,4 @@
-import 'package:books_rater/editing_my_data.dart';
+import 'package:books_rater/edditing_my_data.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
