@@ -1,16 +1,18 @@
+import 'package:books_rater/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:books_rater/home.dart'; // StateNotifierProviderを定義している場所を参照
 
-class EdditingUserDataPage extends ConsumerStatefulWidget {
-  const EdditingUserDataPage({super.key});
+class EditingUserDataPage extends ConsumerStatefulWidget {
+  const EditingUserDataPage({super.key});
 
   @override
-  ConsumerState<EdditingUserDataPage> createState() => _EdditingUserDataPageState();
+  ConsumerState<EditingUserDataPage> createState() => _EditingUserDataPageState();
 }
 
-class _EdditingUserDataPageState extends ConsumerState<EdditingUserDataPage> {
+class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
   final _usernameController = TextEditingController();
 
   @override
@@ -19,7 +21,6 @@ class _EdditingUserDataPageState extends ConsumerState<EdditingUserDataPage> {
     _loadUserData();
   }
 
-  // ユーザー情報を読み込む(初期表示で起動)
   Future<void> _loadUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -31,23 +32,19 @@ class _EdditingUserDataPageState extends ConsumerState<EdditingUserDataPage> {
     }
   }
 
-  // ユーザー情報を保存する(保存ボタンで起動)
   Future<void> _saveUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      );
       await FirebaseFirestore.instance.collection('users').doc(user.email).update({
         'username': _usernameController.text,
         'updatedAt': DateTime.now(),
       });
+
+      // StateNotifierを使用してユーザーデータの状態を更新
+      ref.read(userDataProvider.notifier).updateUserData(_usernameController.text);
+
       print('ユーザー情報の変更を保存しました');
+      Navigator.pop(context);
     }
   }
 
@@ -73,7 +70,6 @@ class _EdditingUserDataPageState extends ConsumerState<EdditingUserDataPage> {
             ElevatedButton(
               onPressed: () async {
                 await _saveUserData();
-                Navigator.pop(context);
               },
               child: const Text('保存'),
             ),

@@ -1,62 +1,56 @@
-import 'package:books_rater/edditing_my_data.dart';
+import 'package:books_rater/home.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'user_data.dart';
+import 'editing_my_data.dart';
 
-class MyPageTab extends StatelessWidget {
+class MyPageTab extends ConsumerStatefulWidget {
   const MyPageTab({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  ConsumerState<MyPageTab> createState() => _MyPageTabState();
+}
 
-    final user = FirebaseAuth.instance.currentUser;
+class _MyPageTabState extends ConsumerState<MyPageTab> {
+  @override
+  Widget build(BuildContext context) {
+    final userData = ref.watch(userDataProvider);
+
+    if (userData == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('マイページ'),
       ),
-      body: user != null ? FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance.collection('users').doc(user.email).get(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Center(child: Text('エラーが発生しました: ${snapshot.error}'));
-          }
-
-          if (!snapshot.hasData) {
-            return const Center(child: Text('ユーザーデータが見つかりません'));
-          }
-
-          final userData = snapshot.data?.data() as Map<String, dynamic>;
-          final userImage = userData['imageUrl'] ?? 'https://www.shoshinsha-design.com/wp-content/uploads/2020/05/noimage-760x460.png';
-          final username = userData['username'] ?? 'ゲスト';
-          final bookCount = userData['bookCount'] ?? '取得中';
-
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(90, 20, 90, 20),
-                child: Image.network(userImage),
-              ),
-              const SizedBox(height: 16),
-              Text('$username', style: TextStyle(fontSize: 24)),
-              const SizedBox(height: 16),
-              TextButton(onPressed: (){
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.network(userData.imageUrl, height: 100),
+            ),
+            Text(userData.username, style: const TextStyle(fontSize: 24)),
+            Text('登録した本：${userData.bookCount}冊', style: const TextStyle(fontSize: 20)),
+            ElevatedButton(
+              onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const EdditingUserDataPage()
-                    )
+                  context,
+                  MaterialPageRoute(builder: (context) => const EditingUserDataPage()),
                 );
-              }, child: const Text('プロフィールを編集')),
-              const SizedBox(height: 16),
-              Text('登録した本：$bookCount冊', style: TextStyle(fontSize: 20)),
-            ],
-          );
-        },
-      ) : const Center(child: Text('ログインしていません')),
+              },
+              child: const Text('プロフィールを編集'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
+

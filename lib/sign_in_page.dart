@@ -5,6 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'home.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
+  const SignInPage({super.key});
+
+  @override
   ConsumerState<SignInPage> createState() => _SignInPageState();
 }
 
@@ -25,11 +28,9 @@ class _SignInPageState extends ConsumerState<SignInPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'アカウント情報を入力',
-                    style: const TextStyle(
-                      fontSize: 20,
-                    ),
+                    style: TextStyle(fontSize: 20),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -64,36 +65,30 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                         }
 
                         try {
-                          //プログレスインジケーター
                           showDialog(
                             context: context,
+                            barrierDismissible: false,
                             builder: (BuildContext context) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
+                              return const Center(child: CircularProgressIndicator());
                             },
                           );
-                          await ref.read(firebaseAuthProvider).signInWithEmailAndPassword(
+                          await FirebaseAuth.instance.signInWithEmailAndPassword(
                             email: email,
                             password: password,
                           );
-                          // ログイン成功
-                          print('ログイン成功');
-                          //スナックバーを表示
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('ログインに成功しました。'),
-                            ),
-                          );
-                          // ホームタブ画面に遷移
+                          Navigator.of(context).pop(); // プログレスダイアログを閉じる
+
+                          // サインイン成功時の処理
+                          ref.read(userDataProvider.notifier).reloadUserData(); // ユーザーデータの再読み込み
+
                           Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => Home()),
+                            MaterialPageRoute(builder: (context) =>  Home()),
                                 (Route<dynamic> route) => false,
                           );
                         } on FirebaseAuthException catch (e) {
-                          print('Firebase Authエラー: $e');
-                          _showErrorDialog('ログインに失敗しました。');
+                          Navigator.of(context).pop(); // エラー時もプログレスダイアログを閉じる
+                          _showErrorDialog('サインインに失敗しました。エラー: ${e.message}');
                         }
                       },
                       child: const Text('サインイン'),
@@ -108,7 +103,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SignUpPage()),
+                    MaterialPageRoute(builder: (context) => const SignUpPage()),
                   );
                 },
                 child: const Text('アカウントをお持ちでない場合'),
