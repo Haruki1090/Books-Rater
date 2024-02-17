@@ -33,8 +33,7 @@ class _HomeState extends ConsumerState<Home> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Sign out'),
-                    content: const Text('サインアウトしますか？'),
+                    title: const Text('サインアウトしますか？'),
                     actions: [
                       TextButton(
                         onPressed: () {
