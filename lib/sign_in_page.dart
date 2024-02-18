@@ -76,10 +76,14 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                             email: email,
                             password: password,
                           );
-                          Navigator.of(context).pop(); // プログレスダイアログを閉じる
+                          Navigator.of(context).pop();
 
                           // サインイン成功時の処理
-                          ref.read(userDataProvider.notifier).reloadUserData(); // ユーザーデータの再読み込み
+                          ref.read(userDataProvider.notifier).reloadUserData();
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('サインインしました')),
+                          );
 
                           Navigator.pushAndRemoveUntil(
                             context,
@@ -87,7 +91,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                                 (Route<dynamic> route) => false,
                           );
                         } on FirebaseAuthException catch (e) {
-                          Navigator.of(context).pop(); // エラー時もプログレスダイアログを閉じる
+                          Navigator.of(context).pop();
                           _showErrorDialog('サインインに失敗しました。エラー: ${e.message}');
                         }
                       },

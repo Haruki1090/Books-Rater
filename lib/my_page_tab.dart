@@ -25,16 +25,13 @@ class _MyPageTabState extends ConsumerState<MyPageTab> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('マイページ'),
-      ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.network(userData.imageUrl, height: 100),
+              child: Image.network(userData.imageUrl, height: 200),
             ),
             Text(userData.username, style: const TextStyle(fontSize: 24)),
             Text('登録した本：${userData.bookCount}冊', style: const TextStyle(fontSize: 20)),

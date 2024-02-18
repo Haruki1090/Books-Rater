@@ -1,9 +1,8 @@
-import 'package:books_rater/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:books_rater/home.dart'; // StateNotifierProviderを定義している場所を参照
+import 'package:books_rater/home.dart';
 
 class EditingUserDataPage extends ConsumerStatefulWidget {
   const EditingUserDataPage({super.key});

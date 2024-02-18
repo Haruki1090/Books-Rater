@@ -136,11 +136,15 @@ class _HomeState extends ConsumerState<Home> {
                   }
               );
               if (result == true) {
-                // FirebaseAuthでサインアウト
+                // FirebaseAuthサインアウト
                 await FirebaseAuth.instance.signOut();
-                // UserStateNotifierの状態をリセット
+                // UserStateNotifierをリセット
                 ref.read(userDataProvider.notifier).resetUserData();
-                // サインインページへ遷移
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('サインアウトしました')),
+                );
+
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => SignInPage()),
