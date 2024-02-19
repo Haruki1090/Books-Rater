@@ -18,6 +18,8 @@ dependencies:
   flutter_riverpod:
   riverpod_annotation:
   freezed_annotation:
+  image_picker:
+  firebase_storage:
 
 
 
