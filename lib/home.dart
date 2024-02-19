@@ -126,6 +126,10 @@ class _HomeState extends ConsumerState<Home> {
         ],
       ),
       body: display[_selectedIndex],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
