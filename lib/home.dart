@@ -7,7 +7,6 @@ import 'package:books_rater/book_data.dart';
 import 'package:books_rater/home_page_tab.dart';
 import 'package:books_rater/my_books_tab.dart';
 import 'package:books_rater/my_page_tab.dart';
-import 'package:books_rater/sign_in_page.dart';
 import 'package:books_rater/user_data.dart';
 
 class UserStateNotifier extends StateNotifier<UserData?> {
