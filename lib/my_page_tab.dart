@@ -31,7 +31,17 @@ class _MyPageTabState extends ConsumerState<MyPageTab> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.network(userData.imageUrl, height: 200),
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(userData.imageUrl)
+                  ),
+                ),
+              ),
             ),
             Text(userData.username, style: const TextStyle(fontSize: 24)),
             Text('登録した本：${userData.bookCount}冊', style: const TextStyle(fontSize: 20)),
