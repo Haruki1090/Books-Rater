@@ -127,7 +127,29 @@ class _HomeState extends ConsumerState<Home> {
       ),
       body: display[_selectedIndex],
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('本を追加'),
+                content: SingleChildScrollView(),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('キャンセル'),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('追加'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
