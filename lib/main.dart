@@ -1,3 +1,4 @@
+import 'package:books_rater/setting_page.dart';
 import 'package:books_rater/sign_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,18 +15,26 @@ Future<void> main() async{
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(darkModeProvider)
+        ? ThemeMode.dark
+        : ThemeMode.light;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Books Rater App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
         useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+      ),
+      themeMode: themeMode,
       home: SignInPage(),
     );
   }

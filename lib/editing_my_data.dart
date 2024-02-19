@@ -90,7 +90,7 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _selectedFile = File(pickedFile.path); // 選択した画像ファイルをセット
+        _selectedFile = File(pickedFile.path); // 選択した画像ファイルを仮セット
       });
     }
   }

@@ -1,3 +1,4 @@
+import 'package:books_rater/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -119,44 +120,9 @@ class _HomeState extends ConsumerState<Home> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              final result = await showDialog<bool>(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('サインアウトしますか？'),
-                  actions: <TextButton>[
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      child: const Text('サインアウト'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text('キャンセル'),
-                    ),
-                  ],
-                ),
-              );
-              if (result == true) {
-                // FirebaseAuthでサインアウトする処理
-                await FirebaseAuth.instance.signOut();
-                // UserStateNotifierをリセット
-                ref.read(userDataProvider.notifier).resetUserData();
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('サインアウトしました')),
-                );
-
-                // SignInPageへ遷移
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignInPage()),
-                      (Route<dynamic> route) => false,
-                );
-              }
-            },
-          ),
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingPage()));
+          }, icon: const Icon(Icons.settings)),
         ],
       ),
       body: display[_selectedIndex],
