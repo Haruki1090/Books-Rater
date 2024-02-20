@@ -171,7 +171,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                             'createdAt': DateTime.now(),
                             'updatedAt': DateTime.now(),
                             'imageUrl': 'https://knsoza1.com/wp-content/uploads/2020/07/70b3dd52350bf605f1bb4078ef79c9b9.png',
-                            'books': [],
                           });
                           // ホームタブ画面に遷移
                           Navigator.pushAndRemoveUntil(

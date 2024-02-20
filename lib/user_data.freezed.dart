@@ -27,7 +27,6 @@ mixin _$UserData {
   num get bookCount => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
-  List<BookData> get books => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,8 +46,7 @@ abstract class $UserDataCopyWith<$Res> {
       String imageUrl,
       num bookCount,
       DateTime createdAt,
-      DateTime updatedAt,
-      List<BookData> books});
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -71,7 +69,6 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
     Object? bookCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
-    Object? books = null,
   }) {
     return _then(_value.copyWith(
       uid: null == uid
@@ -102,10 +99,6 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      books: null == books
-          ? _value.books
-          : books // ignore: cast_nullable_to_non_nullable
-              as List<BookData>,
     ) as $Val);
   }
 }
@@ -125,8 +118,7 @@ abstract class _$$UserDataImplCopyWith<$Res>
       String imageUrl,
       num bookCount,
       DateTime createdAt,
-      DateTime updatedAt,
-      List<BookData> books});
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -147,7 +139,6 @@ class __$$UserDataImplCopyWithImpl<$Res>
     Object? bookCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
-    Object? books = null,
   }) {
     return _then(_$UserDataImpl(
       uid: null == uid
@@ -178,10 +169,6 @@ class __$$UserDataImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      books: null == books
-          ? _value._books
-          : books // ignore: cast_nullable_to_non_nullable
-              as List<BookData>,
     ));
   }
 }
@@ -196,9 +183,7 @@ class _$UserDataImpl implements _UserData {
       required this.imageUrl,
       required this.bookCount,
       required this.createdAt,
-      required this.updatedAt,
-      required final List<BookData> books})
-      : _books = books;
+      required this.updatedAt});
 
   factory _$UserDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDataImplFromJson(json);
@@ -218,17 +203,10 @@ class _$UserDataImpl implements _UserData {
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
-  final List<BookData> _books;
-  @override
-  List<BookData> get books {
-    if (_books is EqualUnmodifiableListView) return _books;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_books);
-  }
 
   @override
   String toString() {
-    return 'UserData(uid: $uid, email: $email, username: $username, imageUrl: $imageUrl, bookCount: $bookCount, createdAt: $createdAt, updatedAt: $updatedAt, books: $books)';
+    return 'UserData(uid: $uid, email: $email, username: $username, imageUrl: $imageUrl, bookCount: $bookCount, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -247,22 +225,13 @@ class _$UserDataImpl implements _UserData {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt) &&
-            const DeepCollectionEquality().equals(other._books, _books));
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      uid,
-      email,
-      username,
-      imageUrl,
-      bookCount,
-      createdAt,
-      updatedAt,
-      const DeepCollectionEquality().hash(_books));
+  int get hashCode => Object.hash(runtimeType, uid, email, username, imageUrl,
+      bookCount, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -286,8 +255,7 @@ abstract class _UserData implements UserData {
       required final String imageUrl,
       required final num bookCount,
       required final DateTime createdAt,
-      required final DateTime updatedAt,
-      required final List<BookData> books}) = _$UserDataImpl;
+      required final DateTime updatedAt}) = _$UserDataImpl;
 
   factory _UserData.fromJson(Map<String, dynamic> json) =
       _$UserDataImpl.fromJson;
@@ -306,8 +274,6 @@ abstract class _UserData implements UserData {
   DateTime get createdAt;
   @override
   DateTime get updatedAt;
-  @override
-  List<BookData> get books;
   @override
   @JsonKey(ignore: true)
   _$$UserDataImplCopyWith<_$UserDataImpl> get copyWith =>

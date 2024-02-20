@@ -14,7 +14,6 @@ class UserData with _$UserData {
     required num bookCount,
     required DateTime createdAt,
     required DateTime updatedAt,
-    required List<BookData> books,
   }) = _UserData;
 
   factory UserData.fromJson(Map<String, dynamic> json) => _$UserDataFromJson(json);

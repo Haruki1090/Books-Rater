@@ -15,9 +15,6 @@ _$UserDataImpl _$$UserDataImplFromJson(Map<String, dynamic> json) =>
       bookCount: json['bookCount'] as num,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
-      books: (json['books'] as List<dynamic>)
-          .map((e) => BookData.fromJson(e as Map<String, dynamic>))
-          .toList(),
     );
 
 Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
@@ -29,5 +26,4 @@ Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
       'bookCount': instance.bookCount,
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
-      'books': instance.books,
     };

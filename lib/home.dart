@@ -56,7 +56,6 @@ class UserStateNotifier extends StateNotifier<UserData?> {
           bookCount: userData['bookCount'] ?? 0,
           createdAt: (userData['createdAt'] as Timestamp).toDate(),
           updatedAt: (userData['updatedAt'] as Timestamp).toDate(),
-          books: books,
         );
       }
     } catch (e) {
