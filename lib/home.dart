@@ -1,3 +1,4 @@
+import 'package:books_rater/posting_new_book.dart';
 import 'package:books_rater/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -129,24 +130,7 @@ class _HomeState extends ConsumerState<Home> {
         onPressed: () {
           showDialog(
             context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('本を追加'),
-                content: SingleChildScrollView(),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('キャンセル'),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('追加'),
-                  ),
-                ],
-              );
-            },
+            builder: (context) => PostingNewBook(),
           );
         },
         child: const Icon(Icons.add),
