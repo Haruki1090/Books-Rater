@@ -6,6 +6,8 @@ part 'book_data.g.dart';
 @freezed
 class BookData with _$BookData {
   const factory BookData({
+    required String uid,
+    required bool banned,
     required String bookId,
     required String title,
     required String bookImageUrl,

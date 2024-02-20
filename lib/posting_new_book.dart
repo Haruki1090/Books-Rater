@@ -151,12 +151,14 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                   onPressed: () async{
                     if(_selectedBookImageFile != null) {
                       final newBookData = BookData(
+                        uid: FirebaseAuth.instance.currentUser!.uid,
                         bookId: '',
                         title: ref.read(titleProvider),
                         bookImageUrl: '',
                         description: ref.read(descriptionProvider),
                         createdAt: DateTime.now(),
                         updatedAt: DateTime.now(),
+                        banned: false,
                       );
 
                       await saveOrUpdateBook(newBookData, _selectedBookImageFile!);

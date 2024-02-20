@@ -8,6 +8,8 @@ part of 'book_data.dart';
 
 _$BookDataImpl _$$BookDataImplFromJson(Map<String, dynamic> json) =>
     _$BookDataImpl(
+      uid: json['uid'] as String,
+      banned: json['banned'] as bool,
       bookId: json['bookId'] as String,
       title: json['title'] as String,
       bookImageUrl: json['bookImageUrl'] as String,
@@ -18,6 +20,8 @@ _$BookDataImpl _$$BookDataImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$BookDataImplToJson(_$BookDataImpl instance) =>
     <String, dynamic>{
+      'uid': instance.uid,
+      'banned': instance.banned,
       'bookId': instance.bookId,
       'title': instance.title,
       'bookImageUrl': instance.bookImageUrl,

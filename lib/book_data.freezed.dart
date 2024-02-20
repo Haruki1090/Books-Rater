@@ -20,6 +20,8 @@ BookData _$BookDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$BookData {
+  String get uid => throw _privateConstructorUsedError;
+  bool get banned => throw _privateConstructorUsedError;
   String get bookId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get bookImageUrl => throw _privateConstructorUsedError;
@@ -39,7 +41,9 @@ abstract class $BookDataCopyWith<$Res> {
       _$BookDataCopyWithImpl<$Res, BookData>;
   @useResult
   $Res call(
-      {String bookId,
+      {String uid,
+      bool banned,
+      String bookId,
       String title,
       String bookImageUrl,
       String description,
@@ -60,6 +64,8 @@ class _$BookDataCopyWithImpl<$Res, $Val extends BookData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? uid = null,
+    Object? banned = null,
     Object? bookId = null,
     Object? title = null,
     Object? bookImageUrl = null,
@@ -68,6 +74,14 @@ class _$BookDataCopyWithImpl<$Res, $Val extends BookData>
     Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
+      uid: null == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+      banned: null == banned
+          ? _value.banned
+          : banned // ignore: cast_nullable_to_non_nullable
+              as bool,
       bookId: null == bookId
           ? _value.bookId
           : bookId // ignore: cast_nullable_to_non_nullable
@@ -105,7 +119,9 @@ abstract class _$$BookDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String bookId,
+      {String uid,
+      bool banned,
+      String bookId,
       String title,
       String bookImageUrl,
       String description,
@@ -124,6 +140,8 @@ class __$$BookDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? uid = null,
+    Object? banned = null,
     Object? bookId = null,
     Object? title = null,
     Object? bookImageUrl = null,
@@ -132,6 +150,14 @@ class __$$BookDataImplCopyWithImpl<$Res>
     Object? updatedAt = null,
   }) {
     return _then(_$BookDataImpl(
+      uid: null == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+      banned: null == banned
+          ? _value.banned
+          : banned // ignore: cast_nullable_to_non_nullable
+              as bool,
       bookId: null == bookId
           ? _value.bookId
           : bookId // ignore: cast_nullable_to_non_nullable
@@ -164,7 +190,9 @@ class __$$BookDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$BookDataImpl implements _BookData {
   const _$BookDataImpl(
-      {required this.bookId,
+      {required this.uid,
+      required this.banned,
+      required this.bookId,
       required this.title,
       required this.bookImageUrl,
       required this.description,
@@ -174,6 +202,10 @@ class _$BookDataImpl implements _BookData {
   factory _$BookDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$BookDataImplFromJson(json);
 
+  @override
+  final String uid;
+  @override
+  final bool banned;
   @override
   final String bookId;
   @override
@@ -189,7 +221,7 @@ class _$BookDataImpl implements _BookData {
 
   @override
   String toString() {
-    return 'BookData(bookId: $bookId, title: $title, bookImageUrl: $bookImageUrl, description: $description, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'BookData(uid: $uid, banned: $banned, bookId: $bookId, title: $title, bookImageUrl: $bookImageUrl, description: $description, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -197,6 +229,8 @@ class _$BookDataImpl implements _BookData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$BookDataImpl &&
+            (identical(other.uid, uid) || other.uid == uid) &&
+            (identical(other.banned, banned) || other.banned == banned) &&
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.bookImageUrl, bookImageUrl) ||
@@ -211,8 +245,8 @@ class _$BookDataImpl implements _BookData {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, bookId, title, bookImageUrl,
-      description, createdAt, updatedAt);
+  int get hashCode => Object.hash(runtimeType, uid, banned, bookId, title,
+      bookImageUrl, description, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -230,7 +264,9 @@ class _$BookDataImpl implements _BookData {
 
 abstract class _BookData implements BookData {
   const factory _BookData(
-      {required final String bookId,
+      {required final String uid,
+      required final bool banned,
+      required final String bookId,
       required final String title,
       required final String bookImageUrl,
       required final String description,
@@ -240,6 +276,10 @@ abstract class _BookData implements BookData {
   factory _BookData.fromJson(Map<String, dynamic> json) =
       _$BookDataImpl.fromJson;
 
+  @override
+  String get uid;
+  @override
+  bool get banned;
   @override
   String get bookId;
   @override
