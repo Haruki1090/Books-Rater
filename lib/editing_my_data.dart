@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:books_rater/home.dart'; // home.dartが適切に設定されている必要があります
+import 'package:books_rater/home.dart';
 
 class EditingUserDataPage extends ConsumerStatefulWidget {
   const EditingUserDataPage({Key? key}) : super(key: key);
@@ -43,11 +43,11 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
   Future<void> _saveUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      String? imageUrl = _imageUrl; // 保存する画像URL
+      String? imageUrl = _imageUrl;
 
       showDialog(
         context: context,
-        barrierDismissible: false, // ユーザーがダイアログ外をタップしても閉じないようにする
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return const Center(child: CircularProgressIndicator());
         },
@@ -137,7 +137,7 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
                     const Icon(Icons.account_circle, size: 200),
                   SizedBox(height: 15),
                   ElevatedButton(
-                    onPressed: _pickImage, // 画像選択ダイアログを開く
+                    onPressed: _pickImage,
                     child: const Text('プロフィール画像を変更'),
                   ),
                 ]
@@ -154,7 +154,7 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
               ),
             ),
             ElevatedButton(
-              onPressed: _saveUserData, // データ保存処理を実行
+              onPressed: _saveUserData,
               child: const Text('保存'),
             ),
           ],

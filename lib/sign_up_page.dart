@@ -25,7 +25,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     return Scaffold(
       body: Center(
         child: Column(
-          /// Sign up Form
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
@@ -38,7 +37,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       fontSize: 22,
                     ),
                   ),
-                  // username
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
@@ -49,7 +47,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       ),
                     ),
                   ),
-                  // mailAdress
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
@@ -60,7 +57,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       ),
                     ),
                   ),
-                  // password
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
@@ -71,7 +67,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       ),
                     ),
                   ),
-                  // confirm password
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
@@ -82,7 +77,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       ),
                     ),
                   ),
-                  // Sign up button
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
@@ -135,7 +129,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         }
 
                         try {
-                          //プログレスインジケーター
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -149,20 +142,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                             email: email,
                             password: password,
                           );
-
-                          // 登録成功
                           print('登録成功');
-                          //スナックバーを表示
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('登録に成功しました。'),
                             ),
                           );
-
-                          //ユーザー情報をFirestoreに保存
-                          // uid -> e-mail
-                          // username -> username
-
 
                           await FirebaseFirestore.instance.collection('users').doc(email).set({
                             'uid': email,
@@ -172,7 +157,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                             'updatedAt': DateTime.now(),
                             'imageUrl': 'https://knsoza1.com/wp-content/uploads/2020/07/70b3dd52350bf605f1bb4078ef79c9b9.png',
                           });
-                          // ホームタブ画面に遷移
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => Home()),

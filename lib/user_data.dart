@@ -1,4 +1,3 @@
-import 'package:books_rater/book_data.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_data.freezed.dart';

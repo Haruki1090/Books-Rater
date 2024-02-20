@@ -31,8 +31,8 @@ Future<void> addBookToUserAllUserBooks({
   // 新しい本のデータを作成
   final newBookData = BookData(
     bookId: '',
-    uid: user.uid, // 投稿したユーザーのUID、必要に応じて
-    banned: false, // bannedフラグの初期値、必要に応じて
+    uid: user.uid,
+    banned: false,
     title: title,
     description: description,
     bookImageUrl: bookImageUrl,
@@ -76,7 +76,7 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _selectedBookImageFile = File(pickedFile.path); // 選択した画像ファイルをセット
+        _selectedBookImageFile = File(pickedFile.path); // 選択した画像ファイルを仮セット
       });
     }
   }
@@ -109,7 +109,7 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
             child: Column(
               children: [
                 GestureDetector(
-                  onTap: _pickBookImage, // 画像選択ダイアログを開く
+                  onTap: _pickBookImage,
                   child: Container(
                     width: 120,
                     height: 180,
@@ -123,7 +123,7 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                   ),
                 ),
                 const SizedBox(height: 20.0),
-                ///タイトル
+
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'タイトル',
@@ -132,7 +132,7 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                   onChanged: (value) => ref.read(titleProvider.notifier).state = value,
                 ),
                 const SizedBox(height: 20.0),
-                ///URL
+
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: '本のURL',
@@ -141,7 +141,7 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                   onChanged: (value) => ref.read(bookUrlProvider.notifier).state = value,
                 ),
                 const SizedBox(height: 20.0),
-                ///説明
+
                 TextFormField(
                   maxLines: null,
                   decoration: const InputDecoration(
@@ -173,7 +173,7 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                         imageFile: _selectedBookImageFile!,
                       );
 
-                      Navigator.of(context).pop(); // プログレスダイアログを閉じる
+                      Navigator.of(context).pop();
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

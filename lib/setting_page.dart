@@ -12,9 +12,8 @@ class SettingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 現在のダークモードの状態を監視
+
     final bool isDarkModeEnabled = ref.watch(darkModeProvider);
-    // 現在のモードに応じて表示テキストを設定
     final String currentMode = isDarkModeEnabled ? 'ダークモード' : 'ライトモード';
 
     return Scaffold(
@@ -26,19 +25,18 @@ class SettingPage extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ListTile(
-              title: Text(currentMode), // 現在のモードを表示
+              title: Text(currentMode),
               trailing: CupertinoSwitch(
-                value: isDarkModeEnabled, // 現在の状態をスイッチに反映
+                value: isDarkModeEnabled,
                 onChanged: (bool newValue) {
-                  // スイッチの新しい値で状態を更新
                   ref.read(darkModeProvider.notifier).state = newValue;
                 },
               ),
             ),
 
             ElevatedButton.icon(
-              icon: const Icon(Icons.logout), // アイコンを設定
-              label: const Text('サインアウト'), // ボタンのテキスト
+              icon: const Icon(Icons.logout),
+              label: const Text('サインアウト'),
               onPressed: () async {
                 final result = await showDialog<bool>(
                   context: context,
@@ -57,16 +55,14 @@ class SettingPage extends ConsumerWidget {
                   ),
                 );
                 if (result == true) {
-                  // FirebaseAuthでサインアウトする処理
+                  // FirebaseAuth サインアウト処理
                   await FirebaseAuth.instance.signOut();
-                  // UserStateNotifierをリセット
+                  // UserStateNotifier リセット
                   ref.read(userDataProvider.notifier).resetUserData();
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('サインアウトしました')),
                   );
-
-                  // SignInPageへ遷移
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => SignInPage()),
@@ -75,7 +71,6 @@ class SettingPage extends ConsumerWidget {
                 }
               },
             )
-
           ],
         ),
       ),

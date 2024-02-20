@@ -1,7 +1,6 @@
 import 'package:books_rater/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'user_data.dart';
 import 'editing_my_data.dart';
 
 class MyPageTab extends ConsumerStatefulWidget {
