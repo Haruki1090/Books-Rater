@@ -17,7 +17,7 @@ class EditingUserDataPage extends ConsumerStatefulWidget {
 class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
   final _usernameController = TextEditingController();
   String? _imageUrl; // Firestoreから読み込んだ現在の画像URL
-  File? _selectedFile; // ユーザーが選択した新しい画像ファイル
+  File? _selectedUserImageFile; // ユーザーが選択した新しい画像ファイル
 
   @override
   void initState() {
@@ -54,9 +54,9 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
       );
 
       // 新しい画像が選択されていればアップロード
-      if (_selectedFile != null) {
+      if (_selectedUserImageFile != null) {
         final storageRef = FirebaseStorage.instance.ref('userImages/${user.uid}/${Timestamp.now().millisecondsSinceEpoch}');
-        await storageRef.putFile(_selectedFile!);
+        await storageRef.putFile(_selectedUserImageFile!);
         imageUrl = await storageRef.getDownloadURL(); // 新しい画像URLを取得
       }
 
@@ -90,7 +90,7 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _selectedFile = File(pickedFile.path); // 選択した画像ファイルを仮セット
+        _selectedUserImageFile = File(pickedFile.path); // 選択した画像ファイルを仮セット
       });
     }
   }
@@ -109,7 +109,7 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (_selectedFile != null)
+                  if (_selectedUserImageFile != null)
                     Container(
                         width: 200,
                         height: 200,
@@ -117,7 +117,7 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
                             shape: BoxShape.circle,
                             image: DecorationImage(
                                 fit: BoxFit.fill,
-                                image: FileImage(_selectedFile!)
+                                image: FileImage(_selectedUserImageFile!)
                             )
                         )
                     )
