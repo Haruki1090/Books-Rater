@@ -4,9 +4,7 @@ import 'package:books_rater/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -89,13 +87,13 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          const Text(
             "本の登録",
             style: TextStyle(fontSize: 25.0),
             textAlign: TextAlign.center,
           ),
           IconButton(
-            icon: Icon(Icons.close),
+            icon: const Icon(Icons.close),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -121,38 +119,38 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                     ),
                     child: _selectedBookImageFile != null
                         ? Image.file(_selectedBookImageFile!, fit: BoxFit.cover)
-                        : Icon(Icons.image_outlined, size: 50.0), // デフォルト -> アイコンを表示
+                        : const Icon(Icons.image_outlined, size: 50.0), // デフォルト -> アイコンを表示
                   ),
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 ///タイトル
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'タイトル',
                     hintText: 'タイトルを入力してください',
                   ),
                   onChanged: (value) => ref.read(titleProvider.notifier).state = value,
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 ///URL
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: '本のURL',
                     hintText: '本のURLを入力してください',
                   ),
                   onChanged: (value) => ref.read(bookUrlProvider.notifier).state = value,
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 ///説明
                 TextFormField(
                   maxLines: null,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: '説明',
                     hintText: '説明を入力してください',
                   ),
                   onChanged: (value) => ref.read(descriptionProvider.notifier).state = value,
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
 
                 ElevatedButton(
                   onPressed: () async {
@@ -178,24 +176,24 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                       Navigator.of(context).pop(); // プログレスダイアログを閉じる
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('投稿に成功しました'),
+                        const SnackBar(
+                          content: Text('投稿に成功しました'),
                           backgroundColor: Colors.greenAccent,
-                          duration: const Duration(seconds: 2),
+                          duration: Duration(seconds: 2),
                         ),
                       );
 
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => Home()),
+                        MaterialPageRoute(builder: (context) => const Home()),
                             (Route<dynamic> route) => false,
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('画像を選択してください'),
+                        const SnackBar(
+                          content: Text('画像を選択してください'),
                           backgroundColor: Colors.orange,
-                          duration: const Duration(seconds: 2),
+                          duration: Duration(seconds: 2),
                         ),
                       );
                     }
