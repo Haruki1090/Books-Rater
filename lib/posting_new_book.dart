@@ -17,7 +17,11 @@ class PostingNewBook extends ConsumerStatefulWidget {
   ConsumerState<PostingNewBook> createState() => _PostingNewBookState();
 }
 
-Future<void> saveOrUpdateBook(BookData bookData, File imageFile) async {
+Future<void> addBookToUserAllUserBooks({
+  required String title,
+  required String description,
+  required File imageFile,
+}) async {
   final user = FirebaseAuth.instance.currentUser;
   if (user == null) {
     throw Exception('User not logged in');
@@ -26,24 +30,27 @@ Future<void> saveOrUpdateBook(BookData bookData, File imageFile) async {
   // 画像をStorageにアップロードし、URLを取得
   String bookImageUrl = await uploadImage(imageFile);
 
-  // BookDataオブジェクトを更新して、画像URLを含める
-  final updatedBookData = bookData.copyWith(bookImageUrl: bookImageUrl);
+  // 新しい本のデータを作成
+  final newBookData = BookData(
+    bookId: '',
+    uid: user.uid, // 投稿したユーザーのUID、必要に応じて
+    banned: false, // bannedフラグの初期値、必要に応じて
+    title: title,
+    description: description,
+    bookImageUrl: bookImageUrl,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+  );
 
-  final booksCollection = FirebaseFirestore.instance.collection('users').doc(user.uid).collection('books');
 
-  // Firestoreに保存するためにBookDataをJSON形式に変換
-  final bookDataJson = updatedBookData.toJson();
-
-  // 新しい本を追加するか、既存の本を更新する
-  if (updatedBookData.bookId.isEmpty) {
-    // bookIdが空の場合、新しい本のデータを追加し、自動生成されたIDを取得
-    final docRef = await booksCollection.add(bookDataJson);
-    // 必要に応じて、docRefを使用して何か処理を行う（例：自動生成されたIDを保存する）
-  } else {
-    // bookIdが存在する場合、既存の本のデータを更新
-    await booksCollection.doc(updatedBookData.bookId).update(bookDataJson);
-  }
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.email)
+      .collection('books')
+      .add(newBookData.toJson());
 }
+
+
 
 
 Future<String> uploadImage(File imageFile) async {
@@ -138,7 +145,7 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                 SizedBox(height: 20.0),
                 ///説明
                 TextFormField(
-                  maxLines: null,///改行入力可能
+                  maxLines: null,
                   decoration: InputDecoration(
                     labelText: '説明',
                     hintText: '説明を入力してください',
@@ -146,22 +153,29 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                   onChanged: (value) => ref.read(descriptionProvider.notifier).state = value,
                 ),
                 SizedBox(height: 20.0),
-                ///投稿ボタン
+
                 ElevatedButton(
-                  onPressed: () async{
-                    if(_selectedBookImageFile != null) {
-                      final newBookData = BookData(
-                        uid: FirebaseAuth.instance.currentUser!.uid,
-                        bookId: '',
-                        title: ref.read(titleProvider),
-                        bookImageUrl: '',
-                        description: ref.read(descriptionProvider),
-                        createdAt: DateTime.now(),
-                        updatedAt: DateTime.now(),
-                        banned: false,
+                  onPressed: () async {
+                    if (_selectedBookImageFile != null) {
+
+                      final title = ref.read(titleProvider);
+                      final description = ref.read(descriptionProvider);
+
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return const Center(child: CircularProgressIndicator());
+                        },
                       );
 
-                      await saveOrUpdateBook(newBookData, _selectedBookImageFile!);
+                      await addBookToUserAllUserBooks(
+                        title: title,
+                        description: description,
+                        imageFile: _selectedBookImageFile!,
+                      );
+
+                      Navigator.of(context).pop(); // プログレスダイアログを閉じる
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -170,15 +184,16 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                           duration: const Duration(seconds: 2),
                         ),
                       );
+
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) =>  Home()),
+                        MaterialPageRoute(builder: (context) => Home()),
                             (Route<dynamic> route) => false,
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: const Text('エラーが発生しました'),
+                          content: const Text('画像を選択してください'),
                           backgroundColor: Colors.orange,
                           duration: const Duration(seconds: 2),
                         ),
