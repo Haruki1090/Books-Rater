@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:books_rater/book_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,6 +34,18 @@ Future<void> saveOrUpdateBook(BookData bookData) async {
     // bookIdが存在する場合、既存の本のデータを更新
     await booksCollection.doc(bookData.bookId).update(bookDataJson);
   }
+}
+
+Future<String> uploadImage(File imageFile) async {
+  final storageRef = FirebaseStorage.instance.ref();
+  final imagesRef = storageRef.child("images/${DateTime.now().toIso8601String()}.jpg");
+  UploadTask uploadTask = imagesRef.putFile(imageFile);
+
+  // アップロードが完了するのを待つ
+  await uploadTask.whenComplete(() => null);
+  // アップロードされたファイルのURLを取得
+  String imageUrl = await imagesRef.getDownloadURL();
+  return imageUrl;
 }
 
 final titleProvider = StateProvider<String>((ref) => '');
