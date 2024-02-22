@@ -59,7 +59,7 @@ class SettingPage extends ConsumerWidget {
                   await FirebaseAuth.instance.signOut();
                   // UserStateNotifier リセット
                   ref.read(userDataProvider.notifier).resetUserData();
-
+                  print('サインアウトしました');
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('サインアウトしました')),
                   );

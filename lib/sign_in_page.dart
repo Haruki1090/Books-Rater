@@ -84,7 +84,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('サインインしました')),
                           );
-
+                          print('サインインしました');
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) =>  Home()),
