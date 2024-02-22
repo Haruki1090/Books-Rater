@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:books_rater/book_data.dart';
 import 'package:books_rater/home_page_tab.dart';
 import 'package:books_rater/my_books_tab.dart';
 import 'package:books_rater/my_page_tab.dart';
@@ -23,23 +22,6 @@ class UserStateNotifier extends StateNotifier<UserData?> {
     _loadUserData();
   }
 
-  Future<List<BookData>> fetchBooksFromFirestore() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      return [];
-    }
-
-    try {
-      final userData = await FirebaseFirestore.instance.collection('users').doc(user.email).get();
-      final booksDynamic = userData.data()?['books'] as List<dynamic>? ?? [];
-      final books = booksDynamic.map((book) => BookData.fromJson(book as Map<String, dynamic>)).toList();
-      return books;
-    } catch (e) {
-      print("Error fetching books: $e");
-      return [];
-    }
-  }
-
   Future<void> _loadUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
@@ -47,7 +29,6 @@ class UserStateNotifier extends StateNotifier<UserData?> {
       final userDataDoc = await FirebaseFirestore.instance.collection('users').doc(user.email).get();
       final userData = userDataDoc.data();
       if (userData != null) {
-        final books = await fetchBooksFromFirestore();
         state = UserData(
           uid: user.uid,
           email: user.email!,

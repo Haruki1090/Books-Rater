@@ -1,3 +1,4 @@
+import 'package:books_rater/firestore_service.dart';
 import 'package:books_rater/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,10 +11,18 @@ class MyPageTab extends ConsumerStatefulWidget {
   ConsumerState<MyPageTab> createState() => _MyPageTabState();
 }
 
+final firestoreServiceProvider = Provider((ref) => FirestoreService());
+
+final bookCountProvider = FutureProvider.autoDispose.family<int, String>((ref, userId) async {
+  final firestoreService = ref.read(firestoreServiceProvider);
+  return firestoreService.countBooks(userId);
+});
+
 class _MyPageTabState extends ConsumerState<MyPageTab> {
   @override
   Widget build(BuildContext context) {
     final userData = ref.watch(userDataProvider);
+    final asyncBookCount = ref.watch(bookCountProvider(userData!.email));
 
     if (userData == null) {
       return const Scaffold(
@@ -43,7 +52,11 @@ class _MyPageTabState extends ConsumerState<MyPageTab> {
               ),
             ),
             Text(userData.username, style: const TextStyle(fontSize: 24)),
-            Text('登録した本：${userData.bookCount}冊', style: const TextStyle(fontSize: 20)),
+            asyncBookCount.when(
+              data: (bookCount) => Text('登録した本：$bookCount冊', style: const TextStyle(fontSize: 20)),
+              loading: () => CircularProgressIndicator(),
+              error: (e, _) => Text('エラーが発生しました: $e'),
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
