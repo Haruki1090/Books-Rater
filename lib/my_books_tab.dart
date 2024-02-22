@@ -11,8 +11,7 @@ class MyBooksTab extends ConsumerStatefulWidget {
 class _MyBooksTabState extends ConsumerState<MyBooksTab> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Text('MyBooksTab', textAlign: TextAlign.center, style: TextStyle(fontSize: 30))
+    return Scaffold(
     );
   }
 }
