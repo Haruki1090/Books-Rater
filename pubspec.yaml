@@ -20,6 +20,7 @@ dependencies:
   freezed_annotation:
   image_picker:
   firebase_storage:
+  intl:
 
 
 
