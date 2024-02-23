@@ -4,14 +4,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'home.dart';
 
+class AuthController extends StateNotifier<User?>{
+  AuthController({User? initialUser}) : super(initialUser) {
+    _auth.userChanges().listen((user){
+      state = user;
+    });
+  }
+}
+
+final _auth = FirebaseAuth.instance;
+
+Future<void>signInWithEmailAndPassword(String email, String password) async {
+  final userCredential = await _auth.signInWithEmailAndPassword(
+    email: email,
+    password: password,
+  );
+}
+
+final authControllerProvider = StateNotifierProvider.autoDispose<AuthController, User?>(
+    (ref) => AuthController(initialUser: FirebaseAuth.instance.currentUser),
+);
+
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});
 
   @override
   ConsumerState<SignInPage> createState() => _SignInPageState();
 }
-
-final firebaseAuthProvider = StateProvider((ref) => FirebaseAuth.instance);
 
 class _SignInPageState extends ConsumerState<SignInPage> {
   final _emailController = TextEditingController();

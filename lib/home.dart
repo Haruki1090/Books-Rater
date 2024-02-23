@@ -1,5 +1,6 @@
 import 'package:books_rater/posting_new_book.dart';
 import 'package:books_rater/setting_page.dart';
+import 'package:books_rater/sign_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -97,6 +98,8 @@ class _HomeState extends ConsumerState<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(authControllerProvider);
+    final authController = ref.watch(authControllerProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         actions: [
