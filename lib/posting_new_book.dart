@@ -15,7 +15,7 @@ class PostingNewBook extends ConsumerStatefulWidget {
   ConsumerState<PostingNewBook> createState() => _PostingNewBookState();
 }
 
-Future<void> addBookToUserAllUserBooks({
+Future<void> addBookToUserBooks({
   required String title,
   required String description,
   required File imageFile,
@@ -167,7 +167,7 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                         },
                       );
 
-                      await addBookToUserAllUserBooks(
+                      await addBookToUserBooks(
                         title: title,
                         description: description,
                         imageFile: _selectedBookImageFile!,
