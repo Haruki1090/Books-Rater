@@ -22,15 +22,16 @@ class _MyPageTabState extends ConsumerState<MyPageTab> {
   @override
   Widget build(BuildContext context) {
     final userData = ref.watch(userDataProvider);
-    final asyncBookCount = ref.watch(bookCountProvider(userData!.email));
 
     if (userData == null) {
       return const Scaffold(
         body: Center(
-          child: CircularProgressIndicator(),
+          child: Text("ユーザーデータがありません。"),
         ),
       );
     }
+
+    final asyncBookCount = ref.watch(bookCountProvider(userData.email));
 
     return Scaffold(
       body: Center(
@@ -54,7 +55,7 @@ class _MyPageTabState extends ConsumerState<MyPageTab> {
             Text(userData.username, style: const TextStyle(fontSize: 24)),
             asyncBookCount.when(
               data: (bookCount) => Text('登録した本：$bookCount冊', style: const TextStyle(fontSize: 20)),
-              loading: () => CircularProgressIndicator(),
+              loading: () => const CircularProgressIndicator(),
               error: (e, _) => Text('エラーが発生しました: $e'),
             ),
             ElevatedButton(
