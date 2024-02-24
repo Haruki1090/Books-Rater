@@ -32,6 +32,7 @@ Future<void> addBookToUserBooks({
   final newBookData = BookData(
     bookId: '',
     uid: user.uid,
+    email: user.email!,
     banned: false,
     title: title,
     description: description,

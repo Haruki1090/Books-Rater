@@ -10,6 +10,7 @@ _$BookDataImpl _$$BookDataImplFromJson(Map<String, dynamic> json) =>
     _$BookDataImpl(
       uid: json['uid'] as String,
       banned: json['banned'] as bool,
+      email: json['email'] as String,
       bookId: json['bookId'] as String,
       title: json['title'] as String,
       bookImageUrl: json['bookImageUrl'] as String,
@@ -22,6 +23,7 @@ Map<String, dynamic> _$$BookDataImplToJson(_$BookDataImpl instance) =>
     <String, dynamic>{
       'uid': instance.uid,
       'banned': instance.banned,
+      'email': instance.email,
       'bookId': instance.bookId,
       'title': instance.title,
       'bookImageUrl': instance.bookImageUrl,

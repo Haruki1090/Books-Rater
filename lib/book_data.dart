@@ -8,6 +8,7 @@ class BookData with _$BookData {
   const factory BookData({
     required String uid,
     required bool banned,
+    required String email,
     required String bookId,
     required String title,
     required String bookImageUrl,

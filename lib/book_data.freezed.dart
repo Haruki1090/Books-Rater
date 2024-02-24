@@ -22,6 +22,7 @@ BookData _$BookDataFromJson(Map<String, dynamic> json) {
 mixin _$BookData {
   String get uid => throw _privateConstructorUsedError;
   bool get banned => throw _privateConstructorUsedError;
+  String get email => throw _privateConstructorUsedError;
   String get bookId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get bookImageUrl => throw _privateConstructorUsedError;
@@ -43,6 +44,7 @@ abstract class $BookDataCopyWith<$Res> {
   $Res call(
       {String uid,
       bool banned,
+      String email,
       String bookId,
       String title,
       String bookImageUrl,
@@ -66,6 +68,7 @@ class _$BookDataCopyWithImpl<$Res, $Val extends BookData>
   $Res call({
     Object? uid = null,
     Object? banned = null,
+    Object? email = null,
     Object? bookId = null,
     Object? title = null,
     Object? bookImageUrl = null,
@@ -82,6 +85,10 @@ class _$BookDataCopyWithImpl<$Res, $Val extends BookData>
           ? _value.banned
           : banned // ignore: cast_nullable_to_non_nullable
               as bool,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
       bookId: null == bookId
           ? _value.bookId
           : bookId // ignore: cast_nullable_to_non_nullable
@@ -121,6 +128,7 @@ abstract class _$$BookDataImplCopyWith<$Res>
   $Res call(
       {String uid,
       bool banned,
+      String email,
       String bookId,
       String title,
       String bookImageUrl,
@@ -142,6 +150,7 @@ class __$$BookDataImplCopyWithImpl<$Res>
   $Res call({
     Object? uid = null,
     Object? banned = null,
+    Object? email = null,
     Object? bookId = null,
     Object? title = null,
     Object? bookImageUrl = null,
@@ -158,6 +167,10 @@ class __$$BookDataImplCopyWithImpl<$Res>
           ? _value.banned
           : banned // ignore: cast_nullable_to_non_nullable
               as bool,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
       bookId: null == bookId
           ? _value.bookId
           : bookId // ignore: cast_nullable_to_non_nullable
@@ -192,6 +205,7 @@ class _$BookDataImpl implements _BookData {
   const _$BookDataImpl(
       {required this.uid,
       required this.banned,
+      required this.email,
       required this.bookId,
       required this.title,
       required this.bookImageUrl,
@@ -207,6 +221,8 @@ class _$BookDataImpl implements _BookData {
   @override
   final bool banned;
   @override
+  final String email;
+  @override
   final String bookId;
   @override
   final String title;
@@ -221,7 +237,7 @@ class _$BookDataImpl implements _BookData {
 
   @override
   String toString() {
-    return 'BookData(uid: $uid, banned: $banned, bookId: $bookId, title: $title, bookImageUrl: $bookImageUrl, description: $description, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'BookData(uid: $uid, banned: $banned, email: $email, bookId: $bookId, title: $title, bookImageUrl: $bookImageUrl, description: $description, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -231,6 +247,7 @@ class _$BookDataImpl implements _BookData {
             other is _$BookDataImpl &&
             (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.banned, banned) || other.banned == banned) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.bookImageUrl, bookImageUrl) ||
@@ -245,8 +262,8 @@ class _$BookDataImpl implements _BookData {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, uid, banned, bookId, title,
-      bookImageUrl, description, createdAt, updatedAt);
+  int get hashCode => Object.hash(runtimeType, uid, banned, email, bookId,
+      title, bookImageUrl, description, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -266,6 +283,7 @@ abstract class _BookData implements BookData {
   const factory _BookData(
       {required final String uid,
       required final bool banned,
+      required final String email,
       required final String bookId,
       required final String title,
       required final String bookImageUrl,
@@ -280,6 +298,8 @@ abstract class _BookData implements BookData {
   String get uid;
   @override
   bool get banned;
+  @override
+  String get email;
   @override
   String get bookId;
   @override
