@@ -47,7 +47,7 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                 final book = books[index];
                 return InkWell(
                   onTap: () {
-                    // 本がタップされたときの処理
+                    // 本がタップされたときの処理 -> boolの操作を追加
                   },
                   child: Card(
                     child: Row(
