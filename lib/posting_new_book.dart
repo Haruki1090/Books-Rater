@@ -42,11 +42,13 @@ Future<void> addBookToUserBooks({
   );
 
 
-  await FirebaseFirestore.instance
+  DocumentReference docRef = await FirebaseFirestore.instance
       .collection('users')
       .doc(user.email)
       .collection('books')
       .add(newBookData.toJson());
+
+  await docRef.update({'bookId': docRef.id});
 }
 
 
