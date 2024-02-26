@@ -15,12 +15,13 @@ class HomePageTab extends ConsumerStatefulWidget {
 final allUsersBooksProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
   final stream = FirebaseFirestore.instance
       .collection('allUsersBooks')
+      .orderBy('createdAt', descending: true)
       .snapshots()
       .map((snapshot) =>
-      snapshot.docs.map((doc) => BookData.fromJson(doc.data() as Map<String, dynamic>)).toList()
-  );
+      snapshot.docs.map((doc) => BookData.fromJson(doc.data() as Map<String, dynamic>)).toList());
   return stream;
 });
+
 
 class _HomePageTabState extends ConsumerState<HomePageTab> {
   @override
