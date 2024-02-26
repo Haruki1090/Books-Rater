@@ -111,7 +111,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                           );
                         } on FirebaseAuthException catch (e) {
                           Navigator.of(context).pop();
-                          _showErrorDialog('サインインに失敗しました。エラー: ${e.message}');
+                          _showErrorDialog('サインインに失敗しました。');
                         }
                       },
                       child: const Text('サインイン'),
