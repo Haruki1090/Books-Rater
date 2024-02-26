@@ -25,7 +25,9 @@ mixin _$UserData {
   String get username => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
   num get bookCount => throw _privateConstructorUsedError;
+  @DateTimeTimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @DateTimeTimestampConverter()
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,8 +47,8 @@ abstract class $UserDataCopyWith<$Res> {
       String username,
       String imageUrl,
       num bookCount,
-      DateTime createdAt,
-      DateTime updatedAt});
+      @DateTimeTimestampConverter() DateTime createdAt,
+      @DateTimeTimestampConverter() DateTime updatedAt});
 }
 
 /// @nodoc
@@ -117,8 +119,8 @@ abstract class _$$UserDataImplCopyWith<$Res>
       String username,
       String imageUrl,
       num bookCount,
-      DateTime createdAt,
-      DateTime updatedAt});
+      @DateTimeTimestampConverter() DateTime createdAt,
+      @DateTimeTimestampConverter() DateTime updatedAt});
 }
 
 /// @nodoc
@@ -182,8 +184,8 @@ class _$UserDataImpl implements _UserData {
       required this.username,
       required this.imageUrl,
       required this.bookCount,
-      required this.createdAt,
-      required this.updatedAt});
+      @DateTimeTimestampConverter() required this.createdAt,
+      @DateTimeTimestampConverter() required this.updatedAt});
 
   factory _$UserDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDataImplFromJson(json);
@@ -200,8 +202,10 @@ class _$UserDataImpl implements _UserData {
   @override
   final num bookCount;
   @override
+  @DateTimeTimestampConverter()
   final DateTime createdAt;
   @override
+  @DateTimeTimestampConverter()
   final DateTime updatedAt;
 
   @override
@@ -249,13 +253,14 @@ class _$UserDataImpl implements _UserData {
 
 abstract class _UserData implements UserData {
   const factory _UserData(
-      {required final String uid,
-      required final String email,
-      required final String username,
-      required final String imageUrl,
-      required final num bookCount,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$UserDataImpl;
+          {required final String uid,
+          required final String email,
+          required final String username,
+          required final String imageUrl,
+          required final num bookCount,
+          @DateTimeTimestampConverter() required final DateTime createdAt,
+          @DateTimeTimestampConverter() required final DateTime updatedAt}) =
+      _$UserDataImpl;
 
   factory _UserData.fromJson(Map<String, dynamic> json) =
       _$UserDataImpl.fromJson;
@@ -271,8 +276,10 @@ abstract class _UserData implements UserData {
   @override
   num get bookCount;
   @override
+  @DateTimeTimestampConverter()
   DateTime get createdAt;
   @override
+  @DateTimeTimestampConverter()
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
