@@ -41,17 +41,12 @@ Future<void> addBookToUserBooks({
     updatedAt: DateTime.now(),
   );
 
-
-  DocumentReference docRef = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(user.email)
-      .collection('books')
-      .add(newBookData.toJson());
-
-  await docRef.update({'bookId': docRef.id});
+  // bookId 問題の解決
+  final DocumentReference documentRef = FirebaseFirestore.instance.collection('users').doc(user.email).collection('books').doc();
+  final bookId = documentRef.id;
+  final _newBookData = newBookData.copyWith(bookId: bookId);
+  await documentRef.set(_newBookData.toJson());
 }
-
-
 
 
 Future<String> uploadImage(File imageFile) async {
