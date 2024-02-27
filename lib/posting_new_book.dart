@@ -180,7 +180,6 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                           duration: Duration(seconds: 2),
                         ),
                       );
-
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => const Home()),

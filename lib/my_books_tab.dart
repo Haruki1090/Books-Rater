@@ -68,7 +68,20 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                 title: Text('編集'),
                                 onTap: () {
                                   Navigator.pop(context);
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditingPostedBook()));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => EditingPostedBook(
+                                            email: book.email,
+                                            bookId: book.bookId,
+                                            bookTitle: book.title,
+                                            bookImageUrl: book.bookImageUrl,
+                                            bookDescription: book.description,
+                                            bookUpdatedAt: book.updatedAt,
+                                            bookBanned: book.banned,
+                                          )
+                                      )
+                                  );
                                 },
                               ),
                               ListTile(
