@@ -1,10 +1,10 @@
 import 'package:books_rater/book_data.dart';
+import 'package:books_rater/editing_posted_book.dart';
 import 'package:books_rater/sign_in_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-
 
 class MyBooksTab extends ConsumerStatefulWidget {
   const MyBooksTab({Key? key}) : super(key: key);
@@ -47,7 +47,67 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                 final book = books[index];
                 return InkWell(
                   onTap: () {
-                    // 本がタップされたときの処理 -> boolの操作を追加
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          height: 250,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                leading: Icon(Icons.keyboard_double_arrow_down),
+                                title: Text('閉じる'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              ListTile(
+                                leading: Icon(Icons.edit),
+                                title: Text('編集'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditingPostedBook()));
+                                },
+                              ),
+                              ListTile(
+                                leading: Icon(Icons.delete),
+                                title: Text('削除'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text('本を削除しますか？'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('キャンセル'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).delete();
+                                              await FirebaseFirestore.instance.collection('allUsersBooks').doc(book.bookId).delete();
+                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('本を削除しました')));
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('削除'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
                   },
                   child: Card(
                     child: Row(
