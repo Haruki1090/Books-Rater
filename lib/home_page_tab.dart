@@ -14,7 +14,7 @@ class HomePageTab extends ConsumerStatefulWidget {
 final allUsersBooksProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
   final stream = FirebaseFirestore.instance
       .collection('allUsersBooks')
-      .orderBy('createdAt', descending: true)
+      .orderBy('updatedAt', descending: true)
       .snapshots()
       .map((snapshot) =>
       snapshot.docs.map((doc) => BookData.fromJson(doc.data() as Map<String, dynamic>)).toList());
@@ -64,7 +64,7 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                     Text(userName, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                                     Text(book.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                     SizedBox(height: 8),
-                                    Text("作成日: ${DateFormat('yyyy-MM-dd').format(book.createdAt)}"),
+                                    Text("作成日: ${DateFormat('yyyy-MM-dd HH:mm').format(book.createdAt)}"),
                                     SizedBox(height: 8),
                                     Text(book.description),
                                   ],
