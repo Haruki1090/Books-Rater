@@ -1,3 +1,4 @@
+import 'package:books_rater/posting_new_book.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +125,7 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
                 labelText: '本の説明',
                 border: OutlineInputBorder(),
               ),
-              maxLines: 5,
+              maxLines: 3,
               onChanged: (value) {
                 ref.read(descriptionProvider.notifier).state = value;
               },
@@ -145,7 +146,7 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
               ),
             ),
             const SizedBox(height: 20),
-            Text('更新日時: ${DateFormat('yyyy-MM-dd HH:mm').format(widget.bookUpdatedAt)}'),
+            Text('最終更新日時: ${DateFormat('yyyy-MM-dd HH:mm').format(widget.bookUpdatedAt)}'),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async{
