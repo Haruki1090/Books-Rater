@@ -116,11 +116,20 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                           ),
                                           TextButton(
                                             onPressed: () async {
+                                              showDialog(
+                                                context: context,
+                                                barrierDismissible: false,
+                                                builder: (BuildContext context) {
+                                                  return const Center(child: CircularProgressIndicator());
+                                                },
+                                              );
+                                              
                                               await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).delete();
 
                                               await decrementBookCount(FirebaseAuth.instance.currentUser!.email!);
 
                                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('本を削除しました')));
+                                              Navigator.pop(context);
                                               Navigator.pop(context);
                                             },
                                             child: Text('削除'),
