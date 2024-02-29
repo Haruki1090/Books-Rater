@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:books_rater/book_data.dart';
 import 'package:books_rater/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,17 @@ class PostingNewBook extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<PostingNewBook> createState() => _PostingNewBookState();
+}
+
+Future<void> callIncrementBookCount(String userId) async {
+  HttpsCallable callable = FirebaseFunctions.instanceFor(region: "asia-northeast1").httpsCallable('incrementBookCount');
+  try {
+    await callable.call(<String, dynamic>{
+      'userId': userId,
+    });
+  } catch (e) {
+    print(e);
+  }
 }
 
 Future<void> addBookToUserBooks({
@@ -170,6 +182,8 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                         description: description,
                         imageFile: _selectedBookImageFile!,
                       );
+
+                      await callIncrementBookCount(FirebaseAuth.instance.currentUser!.uid);
 
                       Navigator.of(context).pop();
 
