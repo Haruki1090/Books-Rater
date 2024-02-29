@@ -35,3 +35,64 @@ exports.deleteFromAllUsersBooks = functions.firestore
               error,
           ));
     });
+
+exports.incrementBookCount = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "The function must be called while authenticated.",
+    );
+  }
+
+  const userId = data.userId;
+  const userRef = admin.firestore().collection("users").doc(userId);
+
+  try {
+    await admin.firestore().runTransaction(async (transaction) => {
+      const userDoc = await transaction.get(userRef);
+      if (!userDoc.exists) {
+        throw new functions.https.HttpsError("not-found", "User not found");
+      }
+      const userData = userDoc.data();
+      const bookCount = (userData.bookCount || 0) + 1;
+      transaction.update(userRef, {bookCount: bookCount});
+    });
+    return {success: true};
+  } catch (error) {
+    throw new functions.https.HttpsError(
+        "internal",
+        "Failed to increment book count",
+    );
+  }
+});
+
+exports.decrementBookCount = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "The function must be called while authenticated.",
+    );
+  }
+
+  const userId = data.userId;
+  const userRef = admin.firestore().collection("users").doc(userId);
+
+  try {
+    await admin.firestore().runTransaction(async (transaction) => {
+      const userDoc = await transaction.get(userRef);
+      if (!userDoc.exists) {
+        throw new functions.https.HttpsError("not-found", "User not found");
+      }
+      const userData = userDoc.data();
+      const bookCount = (userData.bookCount || 0) - 1;
+      transaction.update(userRef, {bookCount: bookCount > 0 ? bookCount : 0});
+    });
+    return {success: true};
+  } catch (error) {
+    throw new functions.https.HttpsError(
+        "internal",
+        "Failed to decrement book count",
+    );
+  }
+});
+
