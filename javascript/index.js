@@ -37,6 +37,7 @@ exports.deleteFromAllUsersBooks = functions.firestore
     });
 
 exports.incrementBookCount = functions.https.onCall(async (data, context) => {
+  console.log("Received email:", data.email);
   if (!context.auth) {
     throw new functions.https.HttpsError(
         "unauthenticated",
@@ -44,8 +45,7 @@ exports.incrementBookCount = functions.https.onCall(async (data, context) => {
     );
   }
 
-  const userId = data.userId;
-  const userRef = admin.firestore().collection("users").doc(userId);
+  const userRef = admin.firestore().collection("users").doc(data.email);
 
   try {
     await admin.firestore().runTransaction(async (transaction) => {
@@ -74,8 +74,7 @@ exports.decrementBookCount = functions.https.onCall(async (data, context) => {
     );
   }
 
-  const userId = data.userId;
-  const userRef = admin.firestore().collection("users").doc(userId);
+  const userRef = admin.firestore().collection("users").doc(data.email);
 
   try {
     await admin.firestore().runTransaction(async (transaction) => {

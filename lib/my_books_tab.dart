@@ -2,6 +2,8 @@ import 'package:books_rater/book_data.dart';
 import 'package:books_rater/editing_posted_book.dart';
 import 'package:books_rater/sign_in_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +13,17 @@ class MyBooksTab extends ConsumerStatefulWidget {
 
   @override
   _MyBooksTabState createState() => _MyBooksTabState();
+}
+
+Future<void> decrementBookCount(String email) async {
+  HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable('decrementBookCount');
+  try {
+    await callable.call(<String, dynamic>{
+      'email': email,
+    });
+  } catch (e) {
+    print(e);
+  }
 }
 
 final myBooksStreamProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
@@ -104,7 +117,9 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                           TextButton(
                                             onPressed: () async {
                                               await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).delete();
-                                              await FirebaseFirestore.instance.collection('allUsersBooks').doc(book.bookId).delete();
+
+                                              await decrementBookCount(FirebaseAuth.instance.currentUser!.email!);
+
                                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('本を削除しました')));
                                               Navigator.pop(context);
                                             },

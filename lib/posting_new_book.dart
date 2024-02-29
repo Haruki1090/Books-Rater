@@ -16,11 +16,14 @@ class PostingNewBook extends ConsumerStatefulWidget {
   ConsumerState<PostingNewBook> createState() => _PostingNewBookState();
 }
 
-Future<void> callIncrementBookCount(String userId) async {
-  HttpsCallable callable = FirebaseFunctions.instanceFor(region: "asia-northeast1").httpsCallable('incrementBookCount');
+Future<void> callIncrementBookCount(
+    {required String email}
+    ) async {
+  HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable('incrementBookCount');
   try {
+    print('${email}');
     await callable.call(<String, dynamic>{
-      'userId': userId,
+      'email': email,
     });
   } catch (e) {
     print(e);
@@ -183,7 +186,9 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                         imageFile: _selectedBookImageFile!,
                       );
 
-                      await callIncrementBookCount(FirebaseAuth.instance.currentUser!.uid);
+                      await callIncrementBookCount(
+                        email: FirebaseAuth.instance.currentUser!.email!,
+                      );
 
                       Navigator.of(context).pop();
 
