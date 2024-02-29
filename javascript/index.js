@@ -14,3 +14,24 @@ exports.addBookToAllUsersBooks = functions.firestore
             console.error("Error adding document: ", error);
           });
     });
+
+exports.deleteFromAllUsersBooks = functions.firestore
+    .document("users/{userId}/books/{bookId}")
+    .onDelete((snap, context) => {
+      const bookId = context.params.bookId; // 削除されたドキュメントのbookIdを取得
+      // allUsersBooksコレクションからbookIdが一致するドキュメントを検索して削除
+      return admin.firestore().collection("allUsersBooks")
+          .where("bookId", "==", bookId)
+          .get()
+          .then((snapshot) => {
+            const deletions = [];
+            snapshot.forEach((doc) => {
+              deletions.push(doc.ref.delete()); // 各ドキュメントを削除
+            });
+            return Promise.all(deletions); // すべての削除操作を同時に実行
+          })
+          .catch((error) => console.error(
+              "Error deleting matching documents:",
+              error,
+          ));
+    });
