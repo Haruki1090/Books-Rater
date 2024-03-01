@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,6 +34,7 @@ Future<void> callIncrementBookCount(
 Future<void> addBookToUserBooks({
   required String title,
   required String description,
+  required bool banned,
   required File imageFile,
 }) async {
   final user = FirebaseAuth.instance.currentUser;
@@ -48,7 +50,7 @@ Future<void> addBookToUserBooks({
     bookId: '',
     uid: user.uid,
     email: user.email!,
-    banned: false,
+    banned: banned,
     title: title,
     description: description,
     bookImageUrl: bookImageUrl,
@@ -79,6 +81,7 @@ Future<String> uploadImage(File imageFile) async {
 final titleProvider = StateProvider<String>((ref) => '');
 final bookUrlProvider = StateProvider<String>((ref) => '');
 final descriptionProvider = StateProvider<String>((ref) => '');
+final bannedProvider = StateProvider<bool>((ref) => false);
 
 class _PostingNewBookState extends ConsumerState<PostingNewBook> {
   File? _selectedBookImageFile;
@@ -116,10 +119,10 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
       children: [
         SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
                   onTap: _pickBookImage,
@@ -147,15 +150,6 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                 const SizedBox(height: 20.0),
 
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: '本のURL',
-                    hintText: '本のURLを入力してください',
-                  ),
-                  onChanged: (value) => ref.read(bookUrlProvider.notifier).state = value,
-                ),
-                const SizedBox(height: 20.0),
-
-                TextFormField(
                   maxLines: null,
                   decoration: const InputDecoration(
                     labelText: '説明',
@@ -165,12 +159,55 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                 ),
                 const SizedBox(height: 20.0),
 
+                // 公開設定
+                ListTile(
+                  title: const Text('ホーム非表示にする'),
+                  leading: SizedBox(
+                    width: 30,
+                    child: IconButton(
+                      icon: Icon(Icons.info_outline),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('ホーム非表示について'),
+                              content: const Text('ホーム非表示にすると、他のユーザーがあなたの投稿した本を見ることができなくなります。ただし、あなた自身は自分の投稿した本を見ることができます。この設定は投稿した後からでも変更可能です。'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('閉じる'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+
+                      },
+                    ),
+                  ),
+                  trailing: Consumer(
+                    builder: (context, ref, _) {
+                      final banned = ref.watch(bannedProvider);
+                      return CupertinoSwitch(
+                        value: banned,
+                        onChanged: (bool value) {
+                          ref.read(bannedProvider.notifier).state = value;
+                        },
+                      );
+                    },
+                  ),
+                ),
+
                 ElevatedButton(
                   onPressed: () async {
                     if (_selectedBookImageFile != null) {
 
                       final title = ref.read(titleProvider);
                       final description = ref.read(descriptionProvider);
+                      final banned = ref.read(bannedProvider);
 
                       showDialog(
                         context: context,
@@ -183,6 +220,7 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                       await addBookToUserBooks(
                         title: title,
                         description: description,
+                        banned: banned,
                         imageFile: _selectedBookImageFile!,
                       );
 
