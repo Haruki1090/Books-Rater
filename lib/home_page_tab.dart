@@ -83,21 +83,26 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                         final userImageUrl = userData?['imageUrl'] ?? 'デフォルト画像URL';
                         return Card(
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CircleAvatar(
-                                  backgroundImage: NetworkImage(userImageUrl),
-                                  radius: 20,
-                                ),
-                              ),
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(userName, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(2.0),
+                                            child: CircleAvatar(
+                                              backgroundImage: NetworkImage(userImageUrl),
+                                              radius: 20,
+                                            ),
+                                          ),
+                                          Text(userName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                                        ],
+                                      ),
                                       Text(book.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                       SizedBox(height: 8),
                                       Text("作成日: ${DateFormat('yyyy-MM-dd HH:mm').format(book.createdAt)}"),
