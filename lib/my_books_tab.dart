@@ -148,6 +148,7 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                   },
                   child: Card(
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Padding(
@@ -157,12 +158,15 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                               children: [
                                 Text(
                                   book.title,
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(height: 8),
                                 Text("作成日: ${DateFormat('yyyy-MM-dd').format(book.createdAt)}"),
                                 SizedBox(height: 30),
-                                Text(book.description),
+                                Text(
+                                  book.description,
+                                  maxLines: 3,
+                                ),
                               ],
                             ),
                           ),
@@ -172,8 +176,8 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
                             child: Container(
-                              width: 120,
-                              height: 180,
+                              width: 120*0.7,
+                              height: 180*0.7,
                               child: Image.network(book.bookImageUrl, fit: BoxFit.cover),
                             ),
                           ),

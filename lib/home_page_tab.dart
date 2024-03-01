@@ -107,7 +107,10 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                       SizedBox(height: 8),
                                       Text("作成日: ${DateFormat('yyyy-MM-dd HH:mm').format(book.createdAt)}"),
                                       SizedBox(height: 8),
-                                      Text(book.description),
+                                      Text(
+                                        book.description,
+                                        maxLines: 4,
+                                      ),
                                     ],
                                   ),
                                 ),
