@@ -37,5 +37,9 @@ dev_dependencies:
   json_serializable:
 
 flutter:
-
   uses-material-design: true
+
+flutter_icons:
+  ios: true
+  remove_alpha_ios: true
+  image_path: "lib/image/books_rater_icon.png"
