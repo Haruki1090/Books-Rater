@@ -26,7 +26,6 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
   @override
   Widget build(BuildContext context) {
     final booksData = ref.watch(allUsersBooksProvider);
-
     return Scaffold(
       body: booksData.when(
         data: (books) {
@@ -37,55 +36,93 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
               itemCount: books.length,
               itemBuilder: (context, index) {
                 final book = books[index];
-                return FutureBuilder<DocumentSnapshot>(
-                  future: FirebaseFirestore.instance.collection('users').doc(book.email).get(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                      // データが存在する場合、ユーザーデータを取得
-                      final userData = snapshot.data!.data() as Map<String, dynamic>?;
-                      final userName = userData?['username'] ?? '不明';
-                      final userImageUrl = userData?['imageUrl'] ?? 'デフォルト画像URL';
-                      return Card(
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(userImageUrl),
-                                radius: 20,
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(userName, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                    Text(book.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                    SizedBox(height: 8),
-                                    Text("作成日: ${DateFormat('yyyy-MM-dd HH:mm').format(book.createdAt)}"),
-                                    SizedBox(height: 8),
-                                    Text(book.description),
-                                  ],
+                return InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(book.title),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: SizedBox(
+                                    width: 200,
+                                    height: 200,
+                                    child: Image(image: NetworkImage(book.bookImageUrl))
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10.0),
-                                child: Image.network(book.bookImageUrl, width: 120, height: 180, fit: BoxFit.cover),
-                              ),
+                              SizedBox(height: 8),
+                              Text('作成日: ${DateFormat('yyyy-MM-dd HH:mm').format(book.createdAt)}'),
+                              SizedBox(height: 8),
+                              Text(book.description),
+                              SizedBox(height: 8),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('閉じる'),
                             ),
                           ],
-                        ),
-                      );
-                    } else {
-                      // データロード中またはエラーがある場合
-                      return Center(child: CircularProgressIndicator());
-                    }
+                        );
+                      },
+                    );
                   },
+                  child: FutureBuilder<DocumentSnapshot>(
+                    future: FirebaseFirestore.instance.collection('users').doc(book.email).get(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                        // データが存在する場合、ユーザーデータを取得
+                        final userData = snapshot.data!.data() as Map<String, dynamic>?;
+                        final userName = userData?['username'] ?? '不明';
+                        final userImageUrl = userData?['imageUrl'] ?? 'デフォルト画像URL';
+                        return Card(
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage(userImageUrl),
+                                  radius: 20,
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(userName, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                      Text(book.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                      SizedBox(height: 8),
+                                      Text("作成日: ${DateFormat('yyyy-MM-dd HH:mm').format(book.createdAt)}"),
+                                      SizedBox(height: 8),
+                                      Text(book.description),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: Image.network(book.bookImageUrl, width: 120, height: 180, fit: BoxFit.cover),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        // データロード中またはエラーがある場合
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
                 );
               },
 

@@ -123,7 +123,7 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                   return const Center(child: CircularProgressIndicator());
                                                 },
                                               );
-                                              
+
                                               await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).delete();
 
                                               await decrementBookCount(FirebaseAuth.instance.currentUser!.email!);
