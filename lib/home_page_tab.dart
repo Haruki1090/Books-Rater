@@ -1,4 +1,5 @@
 import 'package:books_rater/book_data.dart';
+import 'package:books_rater/editing_posted_book.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,14 +13,21 @@ class HomePageTab extends ConsumerStatefulWidget {
 }
 
 final allUsersBooksProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
-  final stream = FirebaseFirestore.instance
-      .collection('allUsersBooks')
-      .orderBy('updatedAt', descending: true)
+  return FirebaseFirestore.instance
+      .collection("allUsersBooks")
+      .where('banned', isEqualTo: false)
       .snapshots()
-      .map((snapshot) =>
-      snapshot.docs.map((doc) => BookData.fromJson(doc.data() as Map<String, dynamic>)).toList());
-  return stream;
+      .map((snapshot) {
+    final books = snapshot.docs.map((e) {
+      final bookData = BookData.fromJson(e.data());
+      // デバッグのために取得したデータをコンソールに出力
+      print('Book: ${bookData.title}, Banned: ${bookData.banned}');
+      return bookData;
+    }).toList();
+    return books;
+  });
 });
+
 
 
 class _HomePageTabState extends ConsumerState<HomePageTab> {
