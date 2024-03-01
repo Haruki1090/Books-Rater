@@ -103,7 +103,12 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                           Text(userName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                                         ],
                                       ),
-                                      Text(book.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                      Text(
+                                          book.title,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
+                                      ),
                                       SizedBox(height: 8),
                                       Text("作成日: ${DateFormat('yyyy-MM-dd HH:mm').format(book.createdAt)}"),
                                       SizedBox(height: 8),

@@ -162,7 +162,7 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                 ),
                                 SizedBox(height: 8),
                                 Text("作成日: ${DateFormat('yyyy-MM-dd').format(book.createdAt)}"),
-                                SizedBox(height: 30),
+                                SizedBox(height: 12),
                                 Text(
                                   book.description,
                                   maxLines: 3,
