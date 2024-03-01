@@ -23,6 +23,7 @@ dependencies:
   intl:
   cloud_functions: ^4.6.5
   url_launcher:
+  flutter_launcher_icons:
 
 
 
