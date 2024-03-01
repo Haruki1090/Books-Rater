@@ -22,7 +22,7 @@ Future<void> callIncrementBookCount(
     ) async {
   HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable('incrementBookCount');
   try {
-    print('${email}');
+    print('投稿者：${email}');
     await callable.call(<String, dynamic>{
       'email': email,
     });
