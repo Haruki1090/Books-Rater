@@ -47,6 +47,7 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
   Widget build(BuildContext context) {
     final booksData = ref.watch(myBooksStreamProvider);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: booksData.when(
         data: (books) {
           if (books.isEmpty) {

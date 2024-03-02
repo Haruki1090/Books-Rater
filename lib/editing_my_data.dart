@@ -98,6 +98,7 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('ユーザー情報編集'),
       ),

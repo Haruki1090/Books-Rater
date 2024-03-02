@@ -40,6 +40,7 @@ class _MyPageTabState extends ConsumerState<MyPageTab> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
