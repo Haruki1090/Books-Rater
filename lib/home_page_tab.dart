@@ -124,6 +124,24 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                         book.description,
                                         maxLines: 4,
                                       ),
+                                      Row(
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(Icons.favorite),
+                                              onPressed: () {
+                                                // いいねボタンが押された時の処理
+                                              },
+                                            ),
+                                            Text('いいね数'),
+                                            IconButton(
+                                              icon: Icon(Icons.comment),
+                                              onPressed: () {
+                                                // コメントボタンが押された時の処理
+                                              },
+                                            ),
+                                            Text('コメント数'),
+                                          ]
+                                      ),
                                     ],
                                   ),
                                 ),
