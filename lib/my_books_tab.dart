@@ -43,6 +43,7 @@ final myBooksStreamProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
 });
 
 class _MyBooksTabState extends ConsumerState<MyBooksTab> {
+  bool _isProcessing = false;
   @override
   Widget build(BuildContext context) {
     final booksData = ref.watch(myBooksStreamProvider);
@@ -147,12 +148,12 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                     );
                   },
                   child: Card(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 14, 8, 14),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -167,23 +168,62 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                   book.description,
                                   maxLines: 3,
                                 ),
+                                Row(
+                                    children: [
+                                      IconButton(
+                                        icon: _isProcessing
+                                            ? CircularProgressIndicator() // 非同期処理中はインジケータを表示
+                                            : Icon(
+                                          Icons.favorite,
+                                          color: book.favorites.contains(FirebaseAuth.instance.currentUser!.email) ? Colors.red : Colors.grey,
+                                        ),
+                                        color: book.favorites.contains(FirebaseAuth.instance.currentUser!.email) ? Colors.red : Colors.grey,
+                                        onPressed: () async{
+                                          setState(() {
+                                            _isProcessing = true;
+                                          });
+                                          // いいねボタンが押された時の処理
+                                          var whoLiked = FirebaseAuth.instance.currentUser!.email;
+                                          if (book.favorites.contains(whoLiked)) {
+                                            // いいねを取り消す
+                                            await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).update({'favorites': FieldValue.arrayRemove([whoLiked])});
+                                          } else {
+                                            // いいねを加算
+                                            await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).update({'favorites': FieldValue.arrayUnion([whoLiked])});
+                                          }
+                                          await Future.delayed(Duration(milliseconds: 2180));
+                                          setState(() {
+                                            _isProcessing = false;
+                                          });
+                                        },
+                                      ),
+                                      Text(book.favorites.length.toString()),
+                                      IconButton(
+                                        icon: Icon(Icons.comment),
+                                        onPressed: () {
+                                          // コメントボタンが押された時の処理
+                                        },
+                                      ),
+                                      Text('コメント数'),
+                                    ]
+                                ),
                               ],
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: Container(
-                              width: 120*0.7,
-                              height: 180*0.7,
-                              child: Image.network(book.bookImageUrl, fit: BoxFit.cover),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Container(
+                                width: 120*0.7,
+                                height: 180*0.7,
+                                child: Image.network(book.bookImageUrl, fit: BoxFit.cover),
+                              ),
                             ),
                           ),
-                        ),
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
