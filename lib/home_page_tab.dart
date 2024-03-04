@@ -1,6 +1,7 @@
 import 'package:books_rater/book_data.dart';
 import 'package:books_rater/editing_posted_book.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -128,11 +129,17 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                           children: [
                                             IconButton(
                                               icon: Icon(Icons.favorite),
-                                              onPressed: () {
+                                              onPressed: () async{
                                                 // いいねボタンが押された時の処理
+                                                var whoLiked = FirebaseAuth.instance.currentUser!.email;
+                                                if (book.favorites.contains(whoLiked)) {
+                                                  await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).update({'favorites': FieldValue.arrayRemove([whoLiked])});
+                                                } else {
+                                                  await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).update({'favorites': FieldValue.arrayUnion([whoLiked])});
+                                                }
                                               },
                                             ),
-                                            Text('いいね数'),
+                                            Text(book.favorites.length.toString()),
                                             IconButton(
                                               icon: Icon(Icons.comment),
                                               onPressed: () {
