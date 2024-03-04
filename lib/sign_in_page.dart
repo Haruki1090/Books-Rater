@@ -58,6 +58,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                       controller: _emailController,
                       decoration: const InputDecoration(
                         labelText: 'Email Address',
+                        prefixIcon: Icon(Icons.mail),
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -68,6 +69,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                       controller: _passwordController,
                       decoration: const InputDecoration(
                         labelText: 'Password',
+                        prefixIcon: Icon(Icons.lock),
                         border: OutlineInputBorder(),
                       ),
                     ),

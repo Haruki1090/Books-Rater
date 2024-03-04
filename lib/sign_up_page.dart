@@ -44,6 +44,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       controller: _usernameController,
                       decoration: const InputDecoration(
                         labelText: 'Username',
+                        prefixIcon: Icon(Icons.account_circle),
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -54,6 +55,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       controller: _emailController,
                       decoration: const InputDecoration(
                         labelText: 'Email Address',
+                        prefixIcon: Icon(Icons.mail),
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -64,6 +66,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       controller: _passwordController,
                       decoration: const InputDecoration(
                         labelText: 'Password',
+                        prefixIcon: Icon(Icons.lock),
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -74,6 +77,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       controller: _confirmPasswordController,
                       decoration: const InputDecoration(
                         labelText: 'Password (再入力)',
+                        prefixIcon: Icon(Icons.lock_outline),
                         border: OutlineInputBorder(),
                       ),
                     ),
