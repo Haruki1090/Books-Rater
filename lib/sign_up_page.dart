@@ -20,7 +20,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _passwordController = TextEditingController(); // password
   final _confirmPasswordController = TextEditingController(); // confirm password
 
-  @override
+  bool _isObscure = true;
+  bool _isObscureConfirm = true;
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -64,7 +66,16 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       controller: _passwordController,
-                      decoration: const InputDecoration(
+                      obscureText: _isObscure,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              _isObscure = !_isObscure;
+                            });
+                          },
+                        ),
                         labelText: 'Password',
                         prefixIcon: Icon(Icons.lock),
                         border: OutlineInputBorder(),
@@ -75,7 +86,16 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       controller: _confirmPasswordController,
-                      decoration: const InputDecoration(
+                      obscureText: _isObscureConfirm,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(_isObscureConfirm ? Icons.visibility_off : Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              _isObscureConfirm = !_isObscureConfirm;
+                            });
+                          },
+                        ),
                         labelText: 'Password (再入力)',
                         prefixIcon: Icon(Icons.lock_outline),
                         border: OutlineInputBorder(),

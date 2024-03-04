@@ -35,6 +35,7 @@ class SignInPage extends ConsumerStatefulWidget {
 class _SignInPageState extends ConsumerState<SignInPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +68,17 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       controller: _passwordController,
-                      decoration: const InputDecoration(
+                      obscureText: _isObscure,
+                      decoration: InputDecoration(
                         labelText: 'Password',
+                        suffixIcon: IconButton(
+                          icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              _isObscure = !_isObscure;
+                            });
+                          }
+                        ),
                         prefixIcon: Icon(Icons.lock),
                         border: OutlineInputBorder(),
                       ),
@@ -82,7 +92,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                         final password = _passwordController.text.trim();
 
                         if (email.isEmpty || password.isEmpty) {
-                          _showErrorDialog('メールアドレスとパスワードを入力してください。');
+                          _showErrorDialog('正しいメールアドレスとパスワードを入力してください。');
                           return;
                         }
 
