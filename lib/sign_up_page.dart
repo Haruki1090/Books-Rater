@@ -25,7 +25,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

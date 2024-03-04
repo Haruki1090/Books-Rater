@@ -40,7 +40,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -95,7 +94,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                           _showErrorDialog('正しいメールアドレスとパスワードを入力してください。');
                           return;
                         }
-
                         try {
                           showDialog(
                             context: context,

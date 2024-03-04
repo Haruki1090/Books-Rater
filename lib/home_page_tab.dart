@@ -35,7 +35,6 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
   Widget build(BuildContext context) {
     final booksData = ref.watch(allUsersBooksProvider);
     return Scaffold(
-      backgroundColor: Colors.white,
       body: booksData.when(
         data: (books) {
           if (books.isEmpty) {
