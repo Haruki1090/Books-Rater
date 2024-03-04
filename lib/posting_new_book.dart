@@ -54,6 +54,7 @@ Future<void> addBookToUserBooks({
     title: title,
     description: description,
     bookImageUrl: bookImageUrl,
+    favoritesCount: 0,
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
   );
