@@ -1,4 +1,5 @@
 import 'package:books_rater/book_data.dart';
+import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/favorites_data.dart';
 import 'package:books_rater/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -76,6 +77,20 @@ final commentsCountProvider = StreamProvider.family<int, BookData>((ref, bookDat
       .collection('comments')
       .snapshots()
       .map((snapshot) => snapshot.docs.length); // コメントの数をカウント
+});
+
+final commentsDataProvider = StreamProvider.family<List<CommentData>, BookData>((ref, bookData) {
+  return FirebaseFirestore.instance
+      .collection('users')
+      .doc(bookData.email) // 書籍の投稿者の email を使用
+      .collection('books')
+      .doc(bookData.bookId)
+      .collection('comments')
+      .orderBy('commentedAt', descending: true) // 最新のコメントが上に来るように
+      .snapshots()
+      .map((snapshot) {
+    return snapshot.docs.map((doc) => CommentData.fromJson(doc.data() as Map<String, dynamic>)).toList();
+  });
 });
 
 
@@ -200,9 +215,93 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                               Row(
                                 children: [
                                   IconButton(
-                                      onPressed: (){},
-                                      icon: Icon(Icons.comment)
+                                    icon: Icon(Icons.comment),
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                        isScrollControlled: true,
+                                        context: context,
+                                        builder: (context) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Container(
+                                              padding: EdgeInsets.all(16),
+                                              width: MediaQuery.of(context).size.width,
+                                              height: MediaQuery.of(context).size.height * 0.85,
+                                              child: Column(
+                                                children: [
+                                                  Text(ref.watch(commentsCountProvider(book)).when(
+                                                    data: (count) => 'コメント数：$count',
+                                                    loading: () => 'Loading...',
+                                                    error: (error, _) => 'Error',
+                                                  )),
+                                                  SizedBox(height: 16),
+                                                  // コメントをListViewで表示
+                                                  Expanded(
+                                                    child: ref.watch(commentsDataProvider(book)).when(
+                                                      data: (comments) {
+                                                        if (comments.isEmpty) {
+                                                          // コメントが一つもない場合
+                                                          return Center(
+                                                            child: Text(
+                                                              'コメントはまだありません。\nコメントを追加しましょう。',
+                                                              textAlign: TextAlign.center,
+                                                              style: TextStyle(
+                                                                color: Colors.grey,
+                                                                fontSize: 18.0,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        } else {
+                                                          // コメントがある場合
+                                                          return ListView.builder(
+                                                            itemCount: comments.length,
+                                                            itemBuilder: (context, index) {
+                                                              final comment = comments[index];
+                                                              return ListTile(
+                                                                leading: CircleAvatar(
+                                                                  backgroundImage: NetworkImage(comment.commentatorImageUrl),
+                                                                ),
+                                                                title: Text(comment.commentatorUsername),
+                                                                subtitle: Text(comment.comment),
+                                                                trailing: Text(DateFormat('MM/dd HH:mm').format(comment.commentedAt)),
+                                                              );
+                                                            },
+                                                          );
+                                                        }
+                                                      },
+                                                      loading: () => Center(child: CircularProgressIndicator()),
+                                                      error: (error, _) => Center(child: Text('エラーが発生しました: $error')),
+                                                    ),
+                                                  ),
+                                                  // コメント入力フィールド
+                                                  TextFormField(
+                                                    decoration: InputDecoration(
+                                                      border: OutlineInputBorder(),
+                                                      labelText: 'コメントを追加...',
+                                                      suffixIcon: IconButton(
+                                                        icon: Icon(Icons.send),
+                                                        onPressed: () {
+                                                          // コメントの送信処理を実装
+                                                          // コメントテキストはTextFormFieldのコントローラーから取得
+                                                        },
+                                                      ),
+                                                    ),
+                                                    onFieldSubmitted: (value) {
+                                                      // コメントの送信処理を実装
+                                                      // 送信が成功したらFormFieldをクリア
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+
+
+                                    },
                                   ),
+
                                   Text(ref.watch(commentsCountProvider(book)).when(
                                     data: (count) => 'コメント数：$count',
                                     loading: () => 'Loading...',
