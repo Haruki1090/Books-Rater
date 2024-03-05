@@ -28,6 +28,7 @@ mixin _$BookData {
   String get bookImageUrl => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   List<dynamic> get favorites => throw _privateConstructorUsedError;
+  num get favoritesCount => throw _privateConstructorUsedError;
   @DateTimeTimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
   @DateTimeTimestampConverter()
@@ -53,6 +54,7 @@ abstract class $BookDataCopyWith<$Res> {
       String bookImageUrl,
       String description,
       List<dynamic> favorites,
+      num favoritesCount,
       @DateTimeTimestampConverter() DateTime createdAt,
       @DateTimeTimestampConverter() DateTime updatedAt});
 }
@@ -78,6 +80,7 @@ class _$BookDataCopyWithImpl<$Res, $Val extends BookData>
     Object? bookImageUrl = null,
     Object? description = null,
     Object? favorites = null,
+    Object? favoritesCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -114,6 +117,10 @@ class _$BookDataCopyWithImpl<$Res, $Val extends BookData>
           ? _value.favorites
           : favorites // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
+      favoritesCount: null == favoritesCount
+          ? _value.favoritesCount
+          : favoritesCount // ignore: cast_nullable_to_non_nullable
+              as num,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -143,6 +150,7 @@ abstract class _$$BookDataImplCopyWith<$Res>
       String bookImageUrl,
       String description,
       List<dynamic> favorites,
+      num favoritesCount,
       @DateTimeTimestampConverter() DateTime createdAt,
       @DateTimeTimestampConverter() DateTime updatedAt});
 }
@@ -166,6 +174,7 @@ class __$$BookDataImplCopyWithImpl<$Res>
     Object? bookImageUrl = null,
     Object? description = null,
     Object? favorites = null,
+    Object? favoritesCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -202,6 +211,10 @@ class __$$BookDataImplCopyWithImpl<$Res>
           ? _value._favorites
           : favorites // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
+      favoritesCount: null == favoritesCount
+          ? _value.favoritesCount
+          : favoritesCount // ignore: cast_nullable_to_non_nullable
+              as num,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -226,6 +239,7 @@ class _$BookDataImpl implements _BookData {
       required this.bookImageUrl,
       required this.description,
       required final List<dynamic> favorites,
+      required this.favoritesCount,
       @DateTimeTimestampConverter() required this.createdAt,
       @DateTimeTimestampConverter() required this.updatedAt})
       : _favorites = favorites;
@@ -256,6 +270,8 @@ class _$BookDataImpl implements _BookData {
   }
 
   @override
+  final num favoritesCount;
+  @override
   @DateTimeTimestampConverter()
   final DateTime createdAt;
   @override
@@ -264,7 +280,7 @@ class _$BookDataImpl implements _BookData {
 
   @override
   String toString() {
-    return 'BookData(uid: $uid, banned: $banned, email: $email, bookId: $bookId, title: $title, bookImageUrl: $bookImageUrl, description: $description, favorites: $favorites, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'BookData(uid: $uid, banned: $banned, email: $email, bookId: $bookId, title: $title, bookImageUrl: $bookImageUrl, description: $description, favorites: $favorites, favoritesCount: $favoritesCount, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -283,6 +299,8 @@ class _$BookDataImpl implements _BookData {
                 other.description == description) &&
             const DeepCollectionEquality()
                 .equals(other._favorites, _favorites) &&
+            (identical(other.favoritesCount, favoritesCount) ||
+                other.favoritesCount == favoritesCount) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -301,6 +319,7 @@ class _$BookDataImpl implements _BookData {
       bookImageUrl,
       description,
       const DeepCollectionEquality().hash(_favorites),
+      favoritesCount,
       createdAt,
       updatedAt);
 
@@ -328,6 +347,7 @@ abstract class _BookData implements BookData {
           required final String bookImageUrl,
           required final String description,
           required final List<dynamic> favorites,
+          required final num favoritesCount,
           @DateTimeTimestampConverter() required final DateTime createdAt,
           @DateTimeTimestampConverter() required final DateTime updatedAt}) =
       _$BookDataImpl;
@@ -351,6 +371,8 @@ abstract class _BookData implements BookData {
   String get description;
   @override
   List<dynamic> get favorites;
+  @override
+  num get favoritesCount;
   @override
   @DateTimeTimestampConverter()
   DateTime get createdAt;

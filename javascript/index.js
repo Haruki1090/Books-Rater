@@ -94,26 +94,3 @@ exports.decrementBookCount = functions.https.onCall(async (data, context) => {
     );
   }
 });
-
-exports.updateFavoritesWithTransaction = functions.firestore
-    .document("users/{userId}/books/{bookId}")
-    .onUpdate((change, context) => {
-      const db = admin.firestore();
-      const newData = change.after.data();
-      const bookId = newData.bookId; // 更新されたドキュメントのbookIdを取得
-
-      return db.runTransaction(async (transaction) => {
-        const allUsersBooksRef = db.collection("allUsersBooks")
-            .where("bookId", "==", bookId);
-        const snapshot = await transaction.get(allUsersBooksRef);
-
-        // allUsersBooksコレクションのドキュメントを更新
-        snapshot.forEach((doc) => {
-          transaction.update(db.collection("allUsersBooks")
-              .doc(doc.id), {favorites: newData.favorites});
-        });
-      })
-          .then(() => console.log("Transaction successfully committed!"))
-          .catch((error) => console.log("Transaction failed: ", error));
-    });
-

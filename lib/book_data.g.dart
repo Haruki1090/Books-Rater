@@ -16,6 +16,7 @@ _$BookDataImpl _$$BookDataImplFromJson(Map<String, dynamic> json) =>
       bookImageUrl: json['bookImageUrl'] as String,
       description: json['description'] as String,
       favorites: json['favorites'] as List<dynamic>,
+      favoritesCount: json['favoritesCount'] as num,
       createdAt: const DateTimeTimestampConverter()
           .fromJson(json['createdAt'] as Timestamp),
       updatedAt: const DateTimeTimestampConverter()
@@ -32,6 +33,7 @@ Map<String, dynamic> _$$BookDataImplToJson(_$BookDataImpl instance) =>
       'bookImageUrl': instance.bookImageUrl,
       'description': instance.description,
       'favorites': instance.favorites,
+      'favoritesCount': instance.favoritesCount,
       'createdAt':
           const DateTimeTimestampConverter().toJson(instance.createdAt),
       'updatedAt':

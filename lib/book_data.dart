@@ -15,6 +15,7 @@ class BookData with _$BookData {
     required String bookImageUrl,
     required String description,
     required List favorites,
+    required num favoritesCount,
     @DateTimeTimestampConverter() required DateTime createdAt,
     @DateTimeTimestampConverter() required DateTime updatedAt,
   }) = _BookData;
