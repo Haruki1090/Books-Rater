@@ -12,7 +12,7 @@ class HomePageTab extends ConsumerStatefulWidget {
   const HomePageTab({Key? key}) : super(key: key);
 
   @override
-  _HomePageTabState createState() => _HomePageTabState();
+  HomePageTabState createState() => HomePageTabState();
 }
 
 final allUsersBooksProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
@@ -64,7 +64,7 @@ final favoritesUsersProvider = StreamProvider.family<List<FavoritesData>, BookDa
       .collection('favorites')
       .snapshots()
       .map((snapshot) => snapshot.docs.map((doc) {
-    return FavoritesData.fromJson(doc.data() as Map<String, dynamic>);
+    return FavoritesData.fromJson(doc.data());
   }).toList());
 });
 
@@ -89,12 +89,12 @@ final commentsDataProvider = StreamProvider.family<List<CommentData>, BookData>(
       .orderBy('commentedAt', descending: true) // 最新のコメントが上に来るように
       .snapshots()
       .map((snapshot) {
-    return snapshot.docs.map((doc) => CommentData.fromJson(doc.data() as Map<String, dynamic>)).toList();
+    return snapshot.docs.map((doc) => CommentData.fromJson(doc.data())).toList();
   });
 });
 
 
-class _HomePageTabState extends ConsumerState<HomePageTab> {
+class HomePageTabState extends ConsumerState<HomePageTab> {
   @override
   Widget build(BuildContext context) {
     final booksData = ref.watch(allUsersBooksProvider);
@@ -103,7 +103,7 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
       body: booksData.when(
         data: (books) {
           if (books.isEmpty) {
-            return Center(child: Text('本が追加されていません'));
+            return const Center(child: Text('本が追加されていません'));
           } else {
             return ListView.builder(
               itemCount: books.length,
@@ -127,18 +127,18 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                     child: Image(image: NetworkImage(book.bookImageUrl))
                                 ),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text('作成日: ${DateFormat('yyyy-MM-dd HH:mm').format(book.createdAt)}'),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(book.description),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Row(
                                 children: [
                                   Row(
                                     children: [
                                       IconButton(
                                           onPressed: (){},
-                                          icon: Icon(Icons.favorite)
+                                          icon: const Icon(Icons.favorite)
                                       ),
                                       TextButton(
                                         onPressed: (){
@@ -147,24 +147,24 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                               context: context,
                                               builder: (context) {
                                                 return Container(
-                                                  padding: EdgeInsets.all(16),
+                                                  padding: const EdgeInsets.all(16),
                                                   width: MediaQuery.of(context).size.width,
                                                   height: MediaQuery.of(context).size.height*0.85,
                                                   child: Column(
                                                     children: [
-                                                      Text(ref.watch(favoritesCountProvider(book)).when(
-                                                        data: (count) => 'いいね数：$count',
-                                                        loading: () => 'Loading...',
-                                                        error: (error, _) => 'Error',
-                                                      )),
-                                                      SizedBox(height: 16),
+                                                  Text(ref.watch(favoritesCountProvider(book)).when(
+                                                  data: (favoritesCount) => 'いいね数：$favoritesCount',
+                                                  loading: () => 'Loading...',
+                                                  error: (error, _) => 'Error',
+                                                )),
+                                                const SizedBox(height: 16),
                                                       // いいねしたユーザーをListViewで表示
                                                       Expanded(
                                                         child: ref.watch(favoritesUsersProvider(book)).when(
                                                           data: (users) {
                                                             if (users.isEmpty) {
                                                               // いいねしたユーザーがいない場合
-                                                              return Center(
+                                                              return const Center(
                                                                 child: Column(
                                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                                   children: [
@@ -191,7 +191,7 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                                               );
                                                             }
                                                             },
-                                                          loading: () => Center(child: CircularProgressIndicator()),
+                                                          loading: () => const Center(child: CircularProgressIndicator()),
                                                           error: (error, _) => Center(child: Text('エラーが発生しました: $error')),
                                                         ),
                                                       )
@@ -202,7 +202,7 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                               );
                                           },
                                         child: Text(ref.watch(favoritesCountProvider(book)).when(
-                                          data: (count) => 'いいね数：$count',
+                                          data: (favoritesCount) => 'いいね数：$favoritesCount', // `count`を`favoritesCount`に変更
                                           loading: () => 'Loading...',
                                           error: (error, _) => 'Error',
                                         )),
@@ -211,11 +211,11 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 16),
+                              const SizedBox(width: 16),
                               Row(
                                 children: [
                                   IconButton(
-                                    icon: Icon(Icons.comment),
+                                    icon: const Icon(Icons.comment),
                                     onPressed: () {
                                       showModalBottomSheet(
                                         isScrollControlled: true,
@@ -224,24 +224,24 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                           return Padding(
                                             padding: const EdgeInsets.all(16.0),
                                             child: Container(
-                                              padding: EdgeInsets.all(16),
+                                              padding: const EdgeInsets.all(16),
                                               width: MediaQuery.of(context).size.width,
                                               height: MediaQuery.of(context).size.height * 0.85,
                                               child: Column(
                                                 children: [
-                                                  Text(ref.watch(commentsCountProvider(book)).when(
-                                                    data: (count) => 'コメント数：$count',
-                                                    loading: () => 'Loading...',
-                                                    error: (error, _) => 'Error',
-                                                  )),
-                                                  SizedBox(height: 16),
+                                              Text(ref.watch(commentsCountProvider(book)).when(
+                                              data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
+                                              loading: () => 'Loading...',
+                                              error: (error, _) => 'Error',
+                                            )),
+                                          const SizedBox(height: 16),
                                                   // コメントをListViewで表示
                                                   Expanded(
                                                     child: ref.watch(commentsDataProvider(book)).when(
                                                       data: (comments) {
                                                         if (comments.isEmpty) {
                                                           // コメントが一つもない場合
-                                                          return Center(
+                                                          return const Center(
                                                             child: Text(
                                                               'コメントはまだありません。\nコメントを追加しましょう。',
                                                               textAlign: TextAlign.center,
@@ -269,17 +269,17 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                                           );
                                                         }
                                                       },
-                                                      loading: () => Center(child: CircularProgressIndicator()),
+                                                      loading: () => const Center(child: CircularProgressIndicator()),
                                                       error: (error, _) => Center(child: Text('エラーが発生しました: $error')),
                                                     ),
                                                   ),
                                                   // コメント入力フィールド
                                                   TextFormField(
                                                     decoration: InputDecoration(
-                                                      border: OutlineInputBorder(),
+                                                      border: const OutlineInputBorder(),
                                                       labelText: 'コメントを追加...',
                                                       suffixIcon: IconButton(
-                                                        icon: Icon(Icons.send),
+                                                        icon: const Icon(Icons.send),
                                                         onPressed: () {
                                                           // コメントの送信処理を実装
                                                           // コメントテキストはTextFormFieldのコントローラーから取得
@@ -297,13 +297,10 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                           );
                                         },
                                       );
-
-
                                     },
                                   ),
-
                                   Text(ref.watch(commentsCountProvider(book)).when(
-                                    data: (count) => 'コメント数：$count',
+                                    data: (commentsCount) => 'コメント数：$commentsCount',
                                     loading: () => 'Loading...',
                                     error: (error, _) => 'Error',
                                   )),
@@ -316,7 +313,7 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: Text('閉じる'),
+                              child: const Text('閉じる'),
                             ),
                           ],
                         );
@@ -350,18 +347,18 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                               radius: 20,
                                             ),
                                           ),
-                                          Text(userName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                                          Text(userName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                                         ],
                                       ),
                                       Text(
                                           book.title,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
+                                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
                                       ),
-                                      SizedBox(height: 8),
+                                      const SizedBox(height: 8),
                                       Text("作成日: ${DateFormat('yyyy-MM-dd HH:mm').format(book.createdAt)}"),
-                                      SizedBox(height: 8),
+                                      const SizedBox(height: 8),
                                       Text(
                                         book.description,
                                         maxLines: 4,
@@ -412,35 +409,32 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                                     },
                                                   ),
                                                   Text(ref.watch(favoritesCountProvider(book)).when(
-                                                    data: (count) => '$count',
+                                                    data: (favoritesCount) => '$favoritesCount',
                                                     loading: () => 'Loading...',
                                                     error: (error, _) => 'Error',
                                                   )),
                                                 ],
                                               );
                                             }),
-                                            SizedBox(width: 16),
+                                            const SizedBox(width: 16),
                                             Consumer(builder: (context, ref, _) {
                                               // BookData オブジェクトを使用してコメント数を取得
-                                              final commentsCount = ref.watch(commentsCountProvider(book));
-
                                               return Row(
                                                 children: [
                                                   IconButton(
-                                                    icon: Icon(Icons.comment),
+                                                    icon: const Icon(Icons.comment),
                                                     onPressed: () {
                                                       // コメントボタンが押された時の処理（コメント表示ダイアログなど）
                                                     },
                                                   ),
-                                                  Text(commentsCount.when(
-                                                    data: (count) => '$count', // コメント数の表示
-                                                    loading: () => '...',
-                                                    error: (e, _) => 'Error',
+                                                  Text(ref.watch(commentsCountProvider(book)).when(
+                                                    data: (commentsCount) => '$commentsCount',
+                                                    loading: () => 'Loading...',
+                                                    error: (error, _) => 'Error',
                                                   )),
                                                 ],
                                               );
                                             }),
-
                                           ]
                                       ),
                                     ],
@@ -459,7 +453,7 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                         );
                       } else {
                         // データロード中またはエラーがある場合
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       }
                     },
                   ),
