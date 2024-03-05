@@ -22,8 +22,6 @@ final allUsersBooksProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
       .map((snapshot) {
     final books = snapshot.docs.map((e) {
       final bookData = BookData.fromJson(e.data());
-      // デバッグコンソール出力
-      print('Book: ${bookData.title}, Banned: ${bookData.banned}');
       return bookData;
     }).toList();
     return books;
