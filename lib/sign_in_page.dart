@@ -15,10 +15,6 @@ class AuthController extends StateNotifier<User?>{
 final _auth = FirebaseAuth.instance;
 
 Future<void>signInWithEmailAndPassword(String email, String password) async {
-  final userCredential = await _auth.signInWithEmailAndPassword(
-    email: email,
-    password: password,
-  );
 }
 
 final authControllerProvider = StateNotifierProvider.autoDispose<AuthController, User?>(
@@ -44,92 +40,92 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'アカウント情報を入力',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Email Address',
-                        prefixIcon: Icon(Icons.mail),
-                        border: OutlineInputBorder(),
-                      ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'アカウント情報を入力',
+                  style: TextStyle(fontSize: 20),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email Address',
+                      prefixIcon: Icon(Icons.mail),
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _passwordController,
-                      obscureText: _isObscure,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        suffixIcon: IconButton(
-                          icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
-                          onPressed: () {
-                            setState(() {
-                              _isObscure = !_isObscure;
-                            });
-                          }
-                        ),
-                        prefixIcon: Icon(Icons.lock),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final email = _emailController.text.trim();
-                        final password = _passwordController.text.trim();
-
-                        if (email.isEmpty || password.isEmpty) {
-                          _showErrorDialog('正しいメールアドレスとパスワードを入力してください。');
-                          return;
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: _passwordController,
+                    obscureText: _isObscure,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      suffixIcon: IconButton(
+                        icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
                         }
-                        try {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return const Center(child: CircularProgressIndicator());
-                            },
-                          );
-                          await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: email,
-                            password: password,
-                          );
-                          Navigator.of(context).pop();
+                      ),
+                      prefixIcon: const Icon(Icons.lock),
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final email = _emailController.text.trim();
+                      final password = _passwordController.text.trim();
 
-                          // サインイン成功時の処理
-                          ref.read(userDataProvider.notifier).reloadUserData();
+                      if (email.isEmpty || password.isEmpty) {
+                        _showErrorDialog('正しいメールアドレスとパスワードを入力してください。');
+                        return;
+                      }
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('サインインしました')),
-                          );
-                          print('サインインしました');
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) =>  Home()),
-                                (Route<dynamic> route) => false,
-                          );
-                        } on FirebaseAuthException catch (e) {
-                          Navigator.of(context).pop();
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return const Center(child: CircularProgressIndicator());
+                        },
+                      );
+
+                      FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: email,
+                        password: password,
+                      ).then((_) {
+                        Navigator.of(context).pop(); // プログレスダイアログを閉じる
+
+                        // サインイン成功時の処理
+                        ref.read(userDataProvider.notifier).reloadUserData();
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('サインインしました')),
+                        );
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Home()),
+                              (Route<dynamic> route) => false,
+                        );
+                      }).catchError((error) {
+                        Navigator.of(context).pop(); // プログレスダイアログを閉じる
+                        if (error is FirebaseAuthException) {
                           _showErrorDialog('サインインに失敗しました。');
                         }
-                      },
-                      child: const Text('サインイン'),
-                    ),
+                      });
+                    },
+                    child: const Text('サインイン'),
                   ),
-                ],
-              ),
+                )
+              ],
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
