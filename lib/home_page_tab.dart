@@ -30,8 +30,7 @@ final allUsersBooksProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
   });
 });
 
-final favoritesCountProvider = StreamProvider.family<int, BookData>((ref, bookData) {
-  return FirebaseFirestore.instance
+final favoritesCountProvider = StreamProvider.family<int, BookData>((ref, bookData) {  return FirebaseFirestore.instance
       .collection('users')
       .doc(bookData.email) // 書籍の投稿者の email を使用
       .collection('books')
@@ -58,12 +57,23 @@ final favoritesProvider = StreamProvider.family<bool, BookData>((ref, bookData) 
       .map((snapshot) => snapshot.exists);
 });
 
-
+final favoritesUsersProvider = StreamProvider.family<List<FavoritesData>, BookData>((ref, bookData) {  return FirebaseFirestore.instance
+      .collection('users')
+      .doc(bookData.email)
+      .collection('books')
+      .doc(bookData.bookId)
+      .collection('favorites')
+      .snapshots()
+      .map((snapshot) => snapshot.docs.map((doc) {
+    return FavoritesData.fromJson(doc.data() as Map<String, dynamic>);
+  }).toList());
+});
 
 class _HomePageTabState extends ConsumerState<HomePageTab> {
   @override
   Widget build(BuildContext context) {
     final booksData = ref.watch(allUsersBooksProvider);
+
     return Scaffold(
       body: booksData.when(
         data: (books) {
@@ -123,8 +133,43 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                                         error: (error, _) => 'Error',
                                                       )),
                                                       SizedBox(height: 16),
-                                                        // いいねしたユーザーをListViewで表示
-                                                        //Expanded(child: ListView.builder(),),
+                                                      // いいねしたユーザーをListViewで表示
+                                                      Expanded(
+                                                        child: ref.watch(favoritesUsersProvider(book)).when(
+                                                          data: (users) {
+                                                            if (users.isEmpty) {
+                                                              // いいねしたユーザーがいない場合
+                                                              return Center(
+                                                                child: Column(
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  children: [
+                                                                    Text('いいねしたユーザーがいません。', style: TextStyle(fontSize: 18.0)),
+                                                                    SizedBox(height: 8),
+                                                                    Text('この投稿にいいねしよう！', style: TextStyle(fontSize: 16.0)),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            } else {
+                                                              // いいねしたユーザーがいる場合
+                                                              return ListView.builder(
+                                                                itemCount: users.length,
+                                                                itemBuilder: (context, index) {
+                                                                  final user = users[index];
+                                                                  return ListTile(
+                                                                    leading: CircleAvatar(
+                                                                      backgroundImage: NetworkImage(user.imageUrl),
+                                                                    ),
+                                                                    title: Text(user.username),
+                                                                    subtitle: Text(user.email),
+                                                                  );
+                                                                },
+                                                              );
+                                                            }
+                                                          },
+                                                          loading: () => Center(child: CircularProgressIndicator()),
+                                                          error: (error, _) => Center(child: Text('エラーが発生しました: $error')),
+                                                        ),
+                                                      )
                                                       ],
                                                     ),
                                                   );
