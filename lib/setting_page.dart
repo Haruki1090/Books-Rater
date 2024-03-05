@@ -37,8 +37,8 @@ class SettingPage extends ConsumerWidget {
             ElevatedButton.icon(
               icon: const Icon(Icons.logout),
               label: const Text('サインアウト'),
-              onPressed: () async {
-                final result = await showDialog<bool>(
+              onPressed: () {
+                showDialog<bool>(
                   context: context,
                   builder: (context) => AlertDialog(
                     title: const Text('サインアウトしますか？'),
@@ -53,24 +53,24 @@ class SettingPage extends ConsumerWidget {
                       ),
                     ],
                   ),
-                );
-                if (result == true) {
-                  // FirebaseAuth サインアウト処理
-                  await FirebaseAuth.instance.signOut();
-                  // UserStateNotifier リセット
-                  ref.read(userDataProvider.notifier).resetUserData();
-                  print('サインアウトしました');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('サインアウトしました')),
-                  );
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignInPage()),
-                        (Route<dynamic> route) => false,
-                  );
-                }
+                ).then((result) {
+                  if (result == true) {
+                    FirebaseAuth.instance.signOut().then((_) {
+                      ref.read(userDataProvider.notifier).resetUserData();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('サインアウトしました')),
+                      );
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignInPage()),
+                            (Route<dynamic> route) => false,
+                      );
+                    });
+                  }
+                });
               },
             )
+
           ],
         ),
       ),
