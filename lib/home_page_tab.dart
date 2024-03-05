@@ -42,20 +42,22 @@ final favoritesCountProvider = StreamProvider.family<int, BookData>((ref, bookDa
 });
 
 
-final favoritesProvider = StreamProvider.family<bool, String>((ref, bookId) {
+final favoritesProvider = StreamProvider.family<bool, BookData>((ref, bookData) {
   final user = FirebaseAuth.instance.currentUser;
-  if (user == null) return const Stream.empty();
-
+  if (user == null) {
+    return Stream.value(false);
+  }
   return FirebaseFirestore.instance
       .collection('users')
-      .doc(user.email)
+      .doc(bookData.email) // 投稿者の email を使用
       .collection('books')
-      .doc(bookId)
+      .doc(bookData.bookId)
       .collection('favorites')
       .doc(user.uid)
       .snapshots()
       .map((snapshot) => snapshot.exists);
 });
+
 
 
 class _HomePageTabState extends ConsumerState<HomePageTab> {
@@ -201,12 +203,13 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                       Row(
                                           children: [
                                             Consumer(builder: (context, ref, _) {
-                                              final isFavorite = ref.watch(favoritesProvider(book.bookId)).asData?.value ?? false;
-                                            return IconButton(
-                                              icon: Icon(
-                                                Icons.favorite,
-                                                color: isFavorite ? Colors.red : Colors.grey,
-                                              ),
+                                              // ここで BookData オブジェクトを favoritesProvider に渡す
+                                              final isFavorite = ref.watch(favoritesProvider(book)).asData?.value ?? false;
+                                              return IconButton(
+                                                icon: Icon(
+                                                  Icons.favorite,
+                                                  color: isFavorite ? Colors.red : Colors.grey,
+                                                ),
                                               onPressed: () async{
                                                 // いいねボタンの onPressed コールバック内
                                                 final user = FirebaseAuth.instance.currentUser;
