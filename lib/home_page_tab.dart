@@ -1,5 +1,6 @@
 import 'package:books_rater/book_data.dart';
 import 'package:books_rater/favorites_data.dart';
+import 'package:books_rater/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,16 +30,17 @@ final allUsersBooksProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
   });
 });
 
-final favoritesCountProvider = StreamProvider.family<int, String>((ref, bookId) {
+final favoritesCountProvider = StreamProvider.family<int, BookData>((ref, bookData) {
   return FirebaseFirestore.instance
       .collection('users')
-      .doc(FirebaseAuth.instance.currentUser!.email)
+      .doc(bookData.email) // 書籍の投稿者の email を使用
       .collection('books')
-      .doc(bookId)
+      .doc(bookData.bookId)
       .collection('favorites')
       .snapshots()
       .map((snapshot) => snapshot.docs.length); // いいねの数をカウント
 });
+
 
 final favoritesProvider = StreamProvider.family<bool, String>((ref, bookId) {
   final user = FirebaseAuth.instance.currentUser;
@@ -102,23 +104,23 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                           icon: Icon(Icons.favorite)
                                       ),
                                       TextButton(
-                                          onPressed: (){
-                                            showModalBottomSheet(
-                                                isScrollControlled: true,
-                                                context: context,
-                                                builder: (context) {
-                                                  return Container(
-                                                    padding: EdgeInsets.all(16),
-                                                    width: MediaQuery.sizeOf(context).width,
-                                                    height: MediaQuery.sizeOf(context).height*0.85,
-                                                    child: Column(
-                                                      children: [
-                                                        Text(ref.watch(favoritesCountProvider(book.bookId)).when(
-                                                          data: (count) => count.toString(),
-                                                          loading: () => 'Loading...',
-                                                          error: (error, _) => 'Error',
-                                                        )),
-                                                        SizedBox(height: 16),
+                                        onPressed: (){
+                                          showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              context: context,
+                                              builder: (context) {
+                                                return Container(
+                                                  padding: EdgeInsets.all(16),
+                                                  width: MediaQuery.of(context).size.width,
+                                                  height: MediaQuery.of(context).size.height*0.85,
+                                                  child: Column(
+                                                    children: [
+                                                      Text(ref.watch(favoritesCountProvider(book)).when(
+                                                        data: (count) => 'いいね数：$count',
+                                                        loading: () => 'Loading...',
+                                                        error: (error, _) => 'Error',
+                                                      )),
+                                                      SizedBox(height: 16),
                                                         // いいねしたユーザーをListViewで表示
                                                         //Expanded(child: ListView.builder(),),
                                                       ],
@@ -127,12 +129,11 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                                 }
                                             );
                                           },
-                                          child: Text(ref.watch(favoritesCountProvider(book.bookId)).when(
-                                            data: (count) => count.toString(),
-                                            loading: () => 'Loading...',
-                                            error: (error, _) => 'Error',
-                                          )),
-
+                                        child: Text(ref.watch(favoritesCountProvider(book)).when(
+                                          data: (count) => 'いいね数：$count',
+                                          loading: () => 'Loading...',
+                                          error: (error, _) => 'Error',
+                                        )),
                                       )
                                     ],
                                   ),
@@ -209,6 +210,8 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                               onPressed: () async{
                                                 // いいねボタンの onPressed コールバック内
                                                 final user = FirebaseAuth.instance.currentUser;
+                                                final userName = ref.read(userDataProvider)?.username;
+                                                final userImageUrl = ref.read(userDataProvider)?.imageUrl;
                                                 if (user == null) return; // ユーザーがログインしていない場合は何もしない
 
                                                 final favoritesRef = FirebaseFirestore.instance
@@ -239,8 +242,8 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                               },
                                             );
                                             }),
-                                            Text(ref.watch(favoritesCountProvider(book.bookId)).when(
-                                              data: (count) => count.toString(),
+                                            Text(ref.watch(favoritesCountProvider(book)).when(
+                                              data: (count) => 'いいね数：$count',
                                               loading: () => 'Loading...',
                                               error: (error, _) => 'Error',
                                             )),
