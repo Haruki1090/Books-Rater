@@ -168,45 +168,7 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                   book.description,
                                   maxLines: 3,
                                 ),
-                                Row(
-                                    children: [
-                                      IconButton(
-                                        icon: _isProcessing
-                                            ? CircularProgressIndicator() // 非同期処理中はインジケータを表示
-                                            : Icon(
-                                          Icons.favorite,
-                                          color: book.favorites.contains(FirebaseAuth.instance.currentUser!.email) ? Colors.red : Colors.grey,
-                                        ),
-                                        color: book.favorites.contains(FirebaseAuth.instance.currentUser!.email) ? Colors.red : Colors.grey,
-                                        onPressed: () async{
-                                          setState(() {
-                                            _isProcessing = true;
-                                          });
-                                          // いいねボタンが押された時の処理
-                                          var whoLiked = FirebaseAuth.instance.currentUser!.email;
-                                          if (book.favorites.contains(whoLiked)) {
-                                            // いいねを取り消す
-                                            await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).update({'favorites': FieldValue.arrayRemove([whoLiked])});
-                                          } else {
-                                            // いいねを加算
-                                            await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).update({'favorites': FieldValue.arrayUnion([whoLiked])});
-                                          }
-                                          await Future.delayed(Duration(milliseconds: 2180));
-                                          setState(() {
-                                            _isProcessing = false;
-                                          });
-                                        },
-                                      ),
-                                      Text(book.favorites.length.toString()),
-                                      IconButton(
-                                        icon: Icon(Icons.comment),
-                                        onPressed: () {
-                                          // コメントボタンが押された時の処理
-                                        },
-                                      ),
-                                      Text('コメント数'),
-                                    ]
-                                ),
+                                //todo: いいねとコメントの数を表示
                               ],
                             ),
                           ),
