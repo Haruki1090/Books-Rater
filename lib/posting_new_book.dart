@@ -22,7 +22,6 @@ Future<void> callIncrementBookCount(
     ) async {
   HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable('incrementBookCount');
   try {
-    print('投稿者：${email}');
     await callable.call(<String, dynamic>{
       'email': email,
     });
@@ -165,7 +164,7 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                   leading: SizedBox(
                     width: 30,
                     child: IconButton(
-                      icon: Icon(Icons.info_outline),
+                      icon: const Icon(Icons.info_outline),
                       onPressed: () {
                         showDialog(
                           context: context,
@@ -202,9 +201,8 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                 ),
 
                 ElevatedButton(
-                  onPressed: () async {
+                  onPressed: () {
                     if (_selectedBookImageFile != null) {
-
                       final title = ref.read(titleProvider);
                       final description = ref.read(descriptionProvider);
                       final banned = ref.read(bannedProvider);
@@ -217,31 +215,40 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                         },
                       );
 
-                      await addBookToUserBooks(
+                      addBookToUserBooks(
                         title: title,
                         description: description,
                         banned: banned,
                         imageFile: _selectedBookImageFile!,
-                      );
-
-                      await callIncrementBookCount(
-                        email: FirebaseAuth.instance.currentUser!.email!,
-                      );
-
-                      Navigator.of(context).pop();
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('投稿に成功しました'),
-                          backgroundColor: Colors.greenAccent,
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Home()),
-                            (Route<dynamic> route) => false,
-                      );
+                      ).then((_) {
+                        return callIncrementBookCount(
+                          email: FirebaseAuth.instance.currentUser!.email!,
+                        );
+                      }).then((_) {
+                        Navigator.of(context).pop(); // プログレスダイアログを閉じる
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('投稿に成功しました'),
+                            backgroundColor: Colors.greenAccent,
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Home()),
+                              (Route<dynamic> route) => false,
+                        );
+                      }).catchError((error) {
+                        Navigator.of(context).pop(); // プログレスダイアログを閉じる
+                        // エラーが発生した場合の処理
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('投稿に失敗しました: $error'),
+                            backgroundColor: Colors.redAccent,
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                      });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
