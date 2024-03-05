@@ -39,28 +39,32 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
     final currentDescription = ref.read(descriptionProvider);
     final currentBanned = ref.read(bannedProvider);
 
-    try {
-      // usersコレクション内のドキュメントを更新
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.email)
-          .collection('books')
-          .doc(widget.bookId)
-          .update({
-        'description': currentDescription,
-        'banned': currentBanned,
-        'updatedAt': Timestamp.now(),
-      });
-
-      // allUsersBooksコレクション内のドキュメントも更新
-      await updateBookInAllUsersBooks(widget.bookId, currentDescription, currentBanned);
-
-    } catch (e) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.email)
+        .collection('books')
+        .doc(widget.bookId)
+        .update({
+      'description': currentDescription,
+      'banned': currentBanned,
+      'updatedAt': Timestamp.now(),
+    }).then((_) {
+      return updateBookInAllUsersBooks(widget.bookId, currentDescription, currentBanned);
+    }).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('更新に成功しました'),
+          backgroundColor: Colors.greenAccent,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }).catchError((e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('更新に失敗しました: $e')),
       );
-    }
+    });
   }
+
 
   Future<void> updateBookInAllUsersBooks(String targetBookId, String currentDescription, bool currentBanned) async {
     try {
@@ -91,13 +95,13 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
   @override
   void initState() {
     super.initState();
-    // Future.microtaskを使用してウィジェットツリーの構築後に状態更新を行う
     Future.microtask(() {
       ref.read(descriptionProvider.notifier).state = widget.bookDescription;
       ref.read(bannedProvider.notifier).state = widget.bookBanned;
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -109,7 +113,7 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: Container(
+              child: SizedBox(
                 width: 120*1.7,
                 height: 180*1.7,
                 child: Image.network(widget.bookImageUrl, fit: BoxFit.cover),
@@ -148,7 +152,7 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
             Text('最終更新日時: ${DateFormat('yyyy-MM-dd HH:mm').format(widget.bookUpdatedAt)}'),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async{
+              onPressed: () {
                 showDialog(
                   context: context,
                   barrierDismissible: false,
@@ -156,19 +160,32 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
                     return const Center(child: CircularProgressIndicator());
                   },
                 );
-                await upDatePostedBookData();
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('更新に成功しました'),
-                    backgroundColor: Colors.greenAccent,
-                    duration: Duration(seconds: 2),
-                  ),
-                );
+                upDatePostedBookData().then((_) {
+                  // 成功した場合の処理
+                  Navigator.of(context).pop(); // ProgressDialogを閉じる
+                  Navigator.of(context).pop(); // 前の画面に戻る
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('更新に成功しました'),
+                      backgroundColor: Colors.greenAccent,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }).catchError((error) {
+                  Navigator.of(context).pop(); // ProgressDialogを閉じる
+                  // エラーが発生した場合の処理
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('更新に失敗しました: $error'),
+                      backgroundColor: Colors.redAccent,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                });
               },
               child: const Text('更新する'),
             ),
+
           ],
         ),
       ),
