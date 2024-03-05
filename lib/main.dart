@@ -11,7 +11,7 @@ Future<void> main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-      ProviderScope(child: MyApp())
+      const ProviderScope(child: MyApp())
   );
 }
 
@@ -35,7 +35,7 @@ class MyApp extends ConsumerWidget {
         brightness: Brightness.dark,
       ),
       themeMode: themeMode,
-      home: SignInPage(),
+      home: const SignInPage(),
     );
   }
 }

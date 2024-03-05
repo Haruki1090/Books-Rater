@@ -13,7 +13,7 @@ class MyBooksTab extends ConsumerStatefulWidget {
   const MyBooksTab({Key? key}) : super(key: key);
 
   @override
-  _MyBooksTabState createState() => _MyBooksTabState();
+  MyBooksTabState createState() => MyBooksTabState();
 }
 
 Future<void> decrementBookCount(String email) async {
@@ -43,7 +43,7 @@ final myBooksStreamProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
 }
 });
 
-class _MyBooksTabState extends ConsumerState<MyBooksTab> {
+class MyBooksTabState extends ConsumerState<MyBooksTab> {
   @override
   Widget build(BuildContext context) {
     final booksData = ref.watch(myBooksStreamProvider);
@@ -52,7 +52,7 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
         data: (books) {
           if (books.isEmpty) {
             // 本のリストが空の場合、メッセージを表示
-            return Center(child: Text('本が追加されていません'));
+            return const Center(child: Text('本が追加されていません'));
           } else {
             // 本のリストにデータがある場合、リストを表示
             return ListView.builder(
@@ -64,22 +64,22 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                     showModalBottomSheet(
                       context: context,
                       builder: (context) {
-                        return Container(
+                        return SizedBox(
                           height: 250,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               ListTile(
-                                leading: Icon(Icons.keyboard_double_arrow_down),
-                                title: Text('閉じる'),
+                                leading: const Icon(Icons.keyboard_double_arrow_down),
+                                title: const Text('閉じる'),
                                 onTap: () {
                                   Navigator.pop(context);
                                 },
                               ),
                               ListTile(
-                                leading: Icon(Icons.edit),
-                                title: Text('編集'),
+                                leading: const Icon(Icons.edit),
+                                title: const Text('編集'),
                                 onTap: () {
                                   Navigator.pop(context);
                                   Navigator.push(
@@ -99,24 +99,24 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                 },
                               ),
                               ListTile(
-                                leading: Icon(Icons.delete),
-                                title: Text('削除'),
+                                leading: const Icon(Icons.delete),
+                                title: const Text('削除'),
                                 onTap: () {
                                   Navigator.pop(context);
                                   showDialog(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
-                                        title: Text('本を削除しますか？'),
+                                        title: const Text('本を削除しますか？'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
                                               Navigator.pop(context);
                                             },
-                                            child: Text('キャンセル'),
+                                            child: const Text('キャンセル'),
                                           ),
                                           TextButton(
-                                            onPressed: () async {
+                                            onPressed: () {
                                               showDialog(
                                                 context: context,
                                                 barrierDismissible: false,
@@ -125,16 +125,29 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                 },
                                               );
 
-                                              await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).delete();
-
-                                              await decrementBookCount(FirebaseAuth.instance.currentUser!.email!);
-
-                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('本を削除しました')));
-                                              Navigator.pop(context);
-                                              Navigator.pop(context);
+                                              FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).delete().then((_) {
+                                                return decrementBookCount(FirebaseAuth.instance.currentUser!.email!);
+                                              }).then((_) {
+                                                // 本を削除した後の処理
+                                                Navigator.pop(context); // ProgressDialogを閉じる
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                    const SnackBar(content: Text('本を削除しました'))
+                                                );
+                                                Navigator.pop(context); // 前の画面に戻る
+                                              }).catchError((error) {
+                                                Navigator.pop(context); // ProgressDialogを閉じる
+                                                // エラーが発生した場合の処理
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text('本の削除に失敗しました: $error'),
+                                                    backgroundColor: Colors.redAccent,
+                                                  ),
+                                                );
+                                              });
                                             },
-                                            child: Text('削除'),
+                                            child: const Text('削除'),
                                           ),
+
                                         ],
                                       );
                                     },
@@ -159,11 +172,11 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                               children: [
                                 Text(
                                   book.title,
-                                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text("作成日: ${DateFormat('yyyy-MM-dd').format(book.createdAt)}"),
-                                SizedBox(height: 12),
+                                const SizedBox(height: 12),
                                 Text(
                                   book.description,
                                   maxLines: 3,
@@ -178,24 +191,24 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                             context: context,
                                             builder: (context) {
                                               return Container(
-                                                padding: EdgeInsets.all(16),
+                                                padding: const EdgeInsets.all(16),
                                                 width: MediaQuery.of(context).size.width,
                                                 height: MediaQuery.of(context).size.height*0.85,
                                                 child: Column(
                                                   children: [
                                                     Text(ref.watch(favoritesCountProvider(book)).when(
-                                                      data: (count) => '$count',
+                                                      data: (favoritesCount) => 'いいね数：$favoritesCount',
                                                       loading: () => 'Loading...',
                                                       error: (error, _) => 'Error',
                                                     )),
-                                                    SizedBox(height: 16),
+                                                    const SizedBox(height: 16),
                                                     // いいねしたユーザーをListViewで表示
                                                     Expanded(
                                                       child: ref.watch(favoritesUsersProvider(book)).when(
                                                         data: (users) {
                                                           if (users.isEmpty) {
                                                             // いいねしたユーザーがいない場合
-                                                            return Center(
+                                                            return const Center(
                                                               child: Column(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: [
@@ -222,7 +235,7 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                             );
                                                           }
                                                         },
-                                                        loading: () => Center(child: CircularProgressIndicator()),
+                                                        loading: () => const Center(child: CircularProgressIndicator()),
                                                         error: (error, _) => Center(child: Text('エラーが発生しました: $error')),
                                                       ),
                                                     )
@@ -232,18 +245,18 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                             }
                                         );
                                       },
-                                      icon: Icon(Icons.favorite),
+                                      icon: const Icon(Icons.favorite),
                                       label: Text(ref.watch(favoritesCountProvider(book)).when(
-                                        data: (count) => 'いいね数：$count',
+                                        data: (favoritesCount) => 'いいね数：$favoritesCount', // `count`を`favoritesCount`に変更
                                         loading: () => 'Loading...',
                                         error: (error, _) => 'Error',
                                       )),
                                     ),
                                     TextButton.icon(
                                       onPressed: () {},
-                                      icon: Icon(Icons.comment),
+                                      icon: const Icon(Icons.comment),
                                       label: Text(ref.watch(commentsCountProvider(book)).when(
-                                        data: (count) => 'コメント数：$count',
+                                        data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
                                         loading: () => 'Loading...',
                                         error: (error, _) => 'Error',
                                       )),
@@ -257,7 +270,7 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                             padding: const EdgeInsets.all(8.0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
-                              child: Container(
+                              child: SizedBox(
                                 width: 120*0.7,
                                 height: 180*0.7,
                                 child: Image.network(book.bookImageUrl, fit: BoxFit.cover),
