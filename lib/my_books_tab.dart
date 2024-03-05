@@ -1,5 +1,6 @@
 import 'package:books_rater/book_data.dart';
 import 'package:books_rater/editing_posted_book.dart';
+import 'package:books_rater/home_page_tab.dart';
 import 'package:books_rater/sign_in_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -43,7 +44,6 @@ final myBooksStreamProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
 });
 
 class _MyBooksTabState extends ConsumerState<MyBooksTab> {
-  bool _isProcessing = false;
   @override
   Widget build(BuildContext context) {
     final booksData = ref.watch(myBooksStreamProvider);
@@ -169,6 +169,83 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                   maxLines: 3,
                                 ),
                                 //todo: いいねとコメントの数を表示
+                                Row(
+                                  children: [
+                                    TextButton.icon(
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            context: context,
+                                            builder: (context) {
+                                              return Container(
+                                                padding: EdgeInsets.all(16),
+                                                width: MediaQuery.of(context).size.width,
+                                                height: MediaQuery.of(context).size.height*0.85,
+                                                child: Column(
+                                                  children: [
+                                                    Text(ref.watch(favoritesCountProvider(book)).when(
+                                                      data: (count) => 'いいね数：$count',
+                                                      loading: () => 'Loading...',
+                                                      error: (error, _) => 'Error',
+                                                    )),
+                                                    SizedBox(height: 16),
+                                                    // いいねしたユーザーをListViewで表示
+                                                    Expanded(
+                                                      child: ref.watch(favoritesUsersProvider(book)).when(
+                                                        data: (users) {
+                                                          if (users.isEmpty) {
+                                                            // いいねしたユーザーがいない場合
+                                                            return Center(
+                                                              child: Column(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: [
+                                                                  Text('いいねしたユーザーがいません。', style: TextStyle(fontSize: 18.0)),
+                                                                  SizedBox(height: 8),
+                                                                  Text('この投稿にいいねしよう！', style: TextStyle(fontSize: 16.0)),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          } else {
+                                                            // いいねしたユーザーがいる場合
+                                                            return ListView.builder(
+                                                              itemCount: users.length,
+                                                              itemBuilder: (context, index) {
+                                                                final user = users[index];
+                                                                return ListTile(
+                                                                  leading: CircleAvatar(
+                                                                    backgroundImage: NetworkImage(user.imageUrl),
+                                                                  ),
+                                                                  title: Text(user.username),
+                                                                  subtitle: Text(user.email),
+                                                                );
+                                                              },
+                                                            );
+                                                          }
+                                                        },
+                                                        loading: () => Center(child: CircularProgressIndicator()),
+                                                        error: (error, _) => Center(child: Text('エラーが発生しました: $error')),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            }
+                                        );
+                                      },
+                                      icon: Icon(Icons.favorite),
+                                      label: Text(ref.watch(favoritesCountProvider(book)).when(
+                                        data: (count) => 'いいね数：$count',
+                                        loading: () => 'Loading...',
+                                        error: (error, _) => 'Error',
+                                      )),
+                                    ),
+                                    TextButton.icon(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.comment),
+                                      label: Text("0"),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
