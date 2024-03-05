@@ -57,7 +57,7 @@ final favoritesProvider = StreamProvider.family<bool, BookData>((ref, bookData) 
 
 final favoritesUsersProvider = StreamProvider.family<List<FavoritesData>, BookData>((ref, bookData) {  return FirebaseFirestore.instance
       .collection('users')
-      .doc(bookData.email)
+      .doc(bookData.email) // 書籍の投稿者の email を使用
       .collection('books')
       .doc(bookData.bookId)
       .collection('favorites')
@@ -66,6 +66,18 @@ final favoritesUsersProvider = StreamProvider.family<List<FavoritesData>, BookDa
     return FavoritesData.fromJson(doc.data() as Map<String, dynamic>);
   }).toList());
 });
+
+final commentsCountProvider = StreamProvider.family<int, BookData>((ref, bookData) {
+  return FirebaseFirestore.instance
+      .collection('users')
+      .doc(bookData.email) // 書籍の投稿者の email を使用
+      .collection('books')
+      .doc(bookData.bookId)
+      .collection('comments')
+      .snapshots()
+      .map((snapshot) => snapshot.docs.length); // コメントの数をカウント
+});
+
 
 class _HomePageTabState extends ConsumerState<HomePageTab> {
   @override
@@ -160,19 +172,19 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                                                     title: Text(user.username),
                                                                     subtitle: Text(user.email),
                                                                   );
-                                                                },
+                                                                  },
                                                               );
                                                             }
-                                                          },
+                                                            },
                                                           loading: () => Center(child: CircularProgressIndicator()),
                                                           error: (error, _) => Center(child: Text('エラーが発生しました: $error')),
                                                         ),
                                                       )
-                                                      ],
-                                                    ),
-                                                  );
-                                                }
-                                            );
+                                                    ],
+                                                  ),
+                                                );
+                                              }
+                                              );
                                           },
                                         child: Text(ref.watch(favoritesCountProvider(book)).when(
                                           data: (count) => 'いいね数：$count',
@@ -182,10 +194,22 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                       )
                                     ],
                                   ),
-                                  SizedBox(width: 16),
-                                  Text('コメント数: 0'),
                                 ],
-                              )
+                              ),
+                              SizedBox(width: 16),
+                              Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: (){},
+                                      icon: Icon(Icons.comment)
+                                  ),
+                                  Text(ref.watch(commentsCountProvider(book)).when(
+                                    data: (count) => 'コメント数：$count',
+                                    loading: () => 'Loading...',
+                                    error: (error, _) => 'Error',
+                                  )),
+                                ],
+                              ),
                             ],
                           ),
                           actions: [
@@ -248,59 +272,76 @@ class _HomePageTabState extends ConsumerState<HomePageTab> {
                                             Consumer(builder: (context, ref, _) {
                                               // ここで BookData オブジェクトを favoritesProvider に渡す
                                               final isFavorite = ref.watch(favoritesProvider(book)).asData?.value ?? false;
-                                              return IconButton(
-                                                icon: Icon(
-                                                  Icons.favorite,
-                                                  color: isFavorite ? Colors.red : Colors.grey,
-                                                ),
-                                              onPressed: () async{
-                                                // いいねボタンの onPressed コールバック内
-                                                final user = FirebaseAuth.instance.currentUser;
-                                                final userName = ref.read(userDataProvider)?.username;
-                                                final userImageUrl = ref.read(userDataProvider)?.imageUrl;
-                                                if (user == null) return; // ユーザーがログインしていない場合は何もしない
+                                              return Row(
+                                                children: [
+                                                  IconButton(
+                                                    icon: Icon(
+                                                      Icons.favorite,
+                                                      color: isFavorite ? Colors.red : Colors.grey,
+                                                    ),
+                                                  onPressed: () async{
+                                                    // いいねボタンの onPressed コールバック内
+                                                    final user = FirebaseAuth.instance.currentUser;
+                                                    final userName = ref.read(userDataProvider)?.username;
+                                                    final userImageUrl = ref.read(userDataProvider)?.imageUrl;
+                                                    if (user == null) return; // ユーザーがログインしていない場合は何もしない
 
-                                                final favoritesRef = FirebaseFirestore.instance
-                                                    .collection('users')
-                                                    .doc(book.email)
-                                                    .collection('books')
-                                                    .doc(book.bookId)
-                                                    .collection('favorites')
-                                                    .doc(user.uid);
+                                                    final favoritesRef = FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(book.email)
+                                                        .collection('books')
+                                                        .doc(book.bookId)
+                                                        .collection('favorites')
+                                                        .doc(user.uid);
 
-                                                final favoriteDocSnapshot = await favoritesRef.get();
+                                                    final favoriteDocSnapshot = await favoritesRef.get();
 
-                                                if (favoriteDocSnapshot.exists) {
-                                                  // 既にいいねしている場合は、そのドキュメント（いいね）を削除
-                                                  await favoritesRef.delete();
-                                                } else {
-                                                  // いいねしていない場合は、新しいドキュメントを追加
-                                                  final favoritesData = FavoritesData(
-                                                    uid: user.uid,
-                                                    email: user.email ?? '',
-                                                    username: userName ?? '',
-                                                    imageUrl: userImageUrl ?? '',
-                                                    createdAt: DateTime.now(),
-                                                  );
-                                                  await favoritesRef.set(favoritesData.toJson());
-                                                }
-
-                                              },
-                                            );
+                                                    if (favoriteDocSnapshot.exists) {
+                                                      // 既にいいねしている場合は、そのドキュメント（いいね）を削除
+                                                      await favoritesRef.delete();
+                                                    } else {
+                                                      // いいねしていない場合は、新しいドキュメントを追加
+                                                      final favoritesData = FavoritesData(
+                                                        uid: user.uid,
+                                                        email: user.email ?? '',
+                                                        username: userName ?? '',
+                                                        imageUrl: userImageUrl ?? '',
+                                                        createdAt: DateTime.now(),
+                                                      );
+                                                      await favoritesRef.set(favoritesData.toJson());
+                                                    }
+                                                    },
+                                                  ),
+                                                  Text(ref.watch(favoritesCountProvider(book)).when(
+                                                    data: (count) => '$count',
+                                                    loading: () => 'Loading...',
+                                                    error: (error, _) => 'Error',
+                                                  )),
+                                                ],
+                                              );
                                             }),
-                                            Text(ref.watch(favoritesCountProvider(book)).when(
-                                              data: (count) => 'いいね数：$count',
-                                              loading: () => 'Loading...',
-                                              error: (error, _) => 'Error',
-                                            )),
+                                            SizedBox(width: 16),
+                                            Consumer(builder: (context, ref, _) {
+                                              // BookData オブジェクトを使用してコメント数を取得
+                                              final commentsCount = ref.watch(commentsCountProvider(book));
 
-                                            IconButton(
-                                              icon: Icon(Icons.comment),
-                                              onPressed: () {
-                                                // コメントボタンが押された時の処理
-                                              },
-                                            ),
-                                            Text('コメント数'),
+                                              return Row(
+                                                children: [
+                                                  IconButton(
+                                                    icon: Icon(Icons.comment),
+                                                    onPressed: () {
+                                                      // コメントボタンが押された時の処理（コメント表示ダイアログなど）
+                                                    },
+                                                  ),
+                                                  Text(commentsCount.when(
+                                                    data: (count) => '$count', // コメント数の表示
+                                                    loading: () => '...',
+                                                    error: (e, _) => 'Error',
+                                                  )),
+                                                ],
+                                              );
+                                            }),
+
                                           ]
                                       ),
                                     ],

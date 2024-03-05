@@ -184,7 +184,7 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                 child: Column(
                                                   children: [
                                                     Text(ref.watch(favoritesCountProvider(book)).when(
-                                                      data: (count) => 'いいね数：$count',
+                                                      data: (count) => '$count',
                                                       loading: () => 'Loading...',
                                                       error: (error, _) => 'Error',
                                                     )),
@@ -242,7 +242,11 @@ class _MyBooksTabState extends ConsumerState<MyBooksTab> {
                                     TextButton.icon(
                                       onPressed: () {},
                                       icon: Icon(Icons.comment),
-                                      label: Text("0"),
+                                      label: Text(ref.watch(commentsCountProvider(book)).when(
+                                        data: (count) => 'コメント数：$count',
+                                        loading: () => 'Loading...',
+                                        error: (error, _) => 'Error',
+                                      )),
                                     ),
                                   ],
                                 ),
