@@ -53,37 +53,40 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
         },
       );
 
-      // 新しい画像が選択されていればアップロード
-      if (_selectedUserImageFile != null) {
-        final storageRef = FirebaseStorage.instance.ref('userImages/${user.uid}/${Timestamp.now().millisecondsSinceEpoch}');
-        await storageRef.putFile(_selectedUserImageFile!);
-        imageUrl = await storageRef.getDownloadURL(); // 新しい画像URLを取得
+      Future<void> uploadImageIfNeeded() async {
+        if (_selectedUserImageFile != null) {
+          final storageRef = FirebaseStorage.instance.ref('userImages/${user.uid}/${Timestamp.now().millisecondsSinceEpoch}');
+          await storageRef.putFile(_selectedUserImageFile!);
+          imageUrl = await storageRef.getDownloadURL();
+        }
       }
 
-      // Firestoreにユーザーデータを更新
-      await FirebaseFirestore.instance.collection('users').doc(user.email).update({
-        'username': _usernameController.text,
-        'imageUrl': imageUrl,
-        'updatedAt': DateTime.now(),
+      uploadImageIfNeeded().then((_) {
+        return FirebaseFirestore.instance.collection('users').doc(user.email).update({
+          'username': _usernameController.text,
+          'imageUrl': imageUrl,
+          'updatedAt': DateTime.now(),
+        });
+      }).then((_) {
+        ref.read(userDataProvider.notifier).updateUserData(_usernameController.text, imageUrl: imageUrl);
+      }).then((_) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('ユーザー情報を更新しました')),
+        );
+      }).then((_) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const Home()),
+              (Route<dynamic> route) => false,
+        );
+      }).catchError((error) {
+        // エラー処理をここに追加
+        print("An error occurred: $error");
       });
-
-      // 更新後のユーザーデータでstateを更新
-      ref.read(userDataProvider.notifier).updateUserData(_usernameController.text, imageUrl: imageUrl);
-
-      Navigator.of(context).pop();
-
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('ユーザー情報を更新しました')),
-      );
-
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) =>  Home()),
-        (Route<dynamic> route) => false,
-      );
     }
   }
+
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -105,43 +108,41 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (_selectedUserImageFile != null)
-                    Container(
-                        width: 200,
-                        height: 200,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: FileImage(_selectedUserImageFile!)
-                            )
-                        )
-                    )
-                  else if (_imageUrl != null)
-                    Container(
-                        width: 200,
-                        height: 200,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: NetworkImage(_imageUrl!)
-                            )
-                        )
-                    )
-                  else
-                    const Icon(Icons.account_circle, size: 200),
-                  SizedBox(height: 15),
-                  ElevatedButton(
-                    onPressed: _pickImage,
-                    child: const Text('プロフィール画像を変更'),
-                  ),
-                ]
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (_selectedUserImageFile != null)
+                  Container(
+                      width: 200,
+                      height: 200,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: FileImage(_selectedUserImageFile!)
+                          )
+                      )
+                  )
+                else if (_imageUrl != null)
+                  Container(
+                      width: 200,
+                      height: 200,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(_imageUrl!)
+                          )
+                      )
+                  )
+                else
+                  const Icon(Icons.account_circle, size: 200),
+                const SizedBox(height: 15),
+                ElevatedButton(
+                  onPressed: _pickImage,
+                  child: const Text('プロフィール画像を変更'),
+                ),
+              ]
             ),
             Padding(
               padding: const EdgeInsets.all(40.0),

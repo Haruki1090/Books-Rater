@@ -93,7 +93,7 @@ class _HomeState extends ConsumerState<Home> {
     });
   }
 
-  List<Widget> display = [HomePageTab(), MyBooksTab(), MyPageTab()];
+  List<Widget> display = [const HomePageTab(), const MyBooksTab(), const MyPageTab()];
 
   @override
   Widget build(BuildContext context) {
