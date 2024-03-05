@@ -21,7 +21,10 @@ CommentData _$CommentDataFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$CommentData {
   String get comment => throw _privateConstructorUsedError;
-  String get commentator => throw _privateConstructorUsedError;
+  String get commentatorUsername => throw _privateConstructorUsedError;
+  String get commentatorUid => throw _privateConstructorUsedError;
+  String get commentatorEmail => throw _privateConstructorUsedError;
+  String get commentatorImageUrl => throw _privateConstructorUsedError;
   @DateTimeTimestampConverter()
   DateTime get commentedAt => throw _privateConstructorUsedError;
 
@@ -39,7 +42,10 @@ abstract class $CommentDataCopyWith<$Res> {
   @useResult
   $Res call(
       {String comment,
-      String commentator,
+      String commentatorUsername,
+      String commentatorUid,
+      String commentatorEmail,
+      String commentatorImageUrl,
       @DateTimeTimestampConverter() DateTime commentedAt});
 }
 
@@ -57,7 +63,10 @@ class _$CommentDataCopyWithImpl<$Res, $Val extends CommentData>
   @override
   $Res call({
     Object? comment = null,
-    Object? commentator = null,
+    Object? commentatorUsername = null,
+    Object? commentatorUid = null,
+    Object? commentatorEmail = null,
+    Object? commentatorImageUrl = null,
     Object? commentedAt = null,
   }) {
     return _then(_value.copyWith(
@@ -65,9 +74,21 @@ class _$CommentDataCopyWithImpl<$Res, $Val extends CommentData>
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
               as String,
-      commentator: null == commentator
-          ? _value.commentator
-          : commentator // ignore: cast_nullable_to_non_nullable
+      commentatorUsername: null == commentatorUsername
+          ? _value.commentatorUsername
+          : commentatorUsername // ignore: cast_nullable_to_non_nullable
+              as String,
+      commentatorUid: null == commentatorUid
+          ? _value.commentatorUid
+          : commentatorUid // ignore: cast_nullable_to_non_nullable
+              as String,
+      commentatorEmail: null == commentatorEmail
+          ? _value.commentatorEmail
+          : commentatorEmail // ignore: cast_nullable_to_non_nullable
+              as String,
+      commentatorImageUrl: null == commentatorImageUrl
+          ? _value.commentatorImageUrl
+          : commentatorImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       commentedAt: null == commentedAt
           ? _value.commentedAt
@@ -87,7 +108,10 @@ abstract class _$$CommentDataImplCopyWith<$Res>
   @useResult
   $Res call(
       {String comment,
-      String commentator,
+      String commentatorUsername,
+      String commentatorUid,
+      String commentatorEmail,
+      String commentatorImageUrl,
       @DateTimeTimestampConverter() DateTime commentedAt});
 }
 
@@ -103,7 +127,10 @@ class __$$CommentDataImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? comment = null,
-    Object? commentator = null,
+    Object? commentatorUsername = null,
+    Object? commentatorUid = null,
+    Object? commentatorEmail = null,
+    Object? commentatorImageUrl = null,
     Object? commentedAt = null,
   }) {
     return _then(_$CommentDataImpl(
@@ -111,9 +138,21 @@ class __$$CommentDataImplCopyWithImpl<$Res>
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
               as String,
-      commentator: null == commentator
-          ? _value.commentator
-          : commentator // ignore: cast_nullable_to_non_nullable
+      commentatorUsername: null == commentatorUsername
+          ? _value.commentatorUsername
+          : commentatorUsername // ignore: cast_nullable_to_non_nullable
+              as String,
+      commentatorUid: null == commentatorUid
+          ? _value.commentatorUid
+          : commentatorUid // ignore: cast_nullable_to_non_nullable
+              as String,
+      commentatorEmail: null == commentatorEmail
+          ? _value.commentatorEmail
+          : commentatorEmail // ignore: cast_nullable_to_non_nullable
+              as String,
+      commentatorImageUrl: null == commentatorImageUrl
+          ? _value.commentatorImageUrl
+          : commentatorImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       commentedAt: null == commentedAt
           ? _value.commentedAt
@@ -128,7 +167,10 @@ class __$$CommentDataImplCopyWithImpl<$Res>
 class _$CommentDataImpl implements _CommentData {
   const _$CommentDataImpl(
       {required this.comment,
-      required this.commentator,
+      required this.commentatorUsername,
+      required this.commentatorUid,
+      required this.commentatorEmail,
+      required this.commentatorImageUrl,
       @DateTimeTimestampConverter() required this.commentedAt});
 
   factory _$CommentDataImpl.fromJson(Map<String, dynamic> json) =>
@@ -137,14 +179,20 @@ class _$CommentDataImpl implements _CommentData {
   @override
   final String comment;
   @override
-  final String commentator;
+  final String commentatorUsername;
+  @override
+  final String commentatorUid;
+  @override
+  final String commentatorEmail;
+  @override
+  final String commentatorImageUrl;
   @override
   @DateTimeTimestampConverter()
   final DateTime commentedAt;
 
   @override
   String toString() {
-    return 'CommentData(comment: $comment, commentator: $commentator, commentedAt: $commentedAt)';
+    return 'CommentData(comment: $comment, commentatorUsername: $commentatorUsername, commentatorUid: $commentatorUid, commentatorEmail: $commentatorEmail, commentatorImageUrl: $commentatorImageUrl, commentedAt: $commentedAt)';
   }
 
   @override
@@ -153,16 +201,22 @@ class _$CommentDataImpl implements _CommentData {
         (other.runtimeType == runtimeType &&
             other is _$CommentDataImpl &&
             (identical(other.comment, comment) || other.comment == comment) &&
-            (identical(other.commentator, commentator) ||
-                other.commentator == commentator) &&
+            (identical(other.commentatorUsername, commentatorUsername) ||
+                other.commentatorUsername == commentatorUsername) &&
+            (identical(other.commentatorUid, commentatorUid) ||
+                other.commentatorUid == commentatorUid) &&
+            (identical(other.commentatorEmail, commentatorEmail) ||
+                other.commentatorEmail == commentatorEmail) &&
+            (identical(other.commentatorImageUrl, commentatorImageUrl) ||
+                other.commentatorImageUrl == commentatorImageUrl) &&
             (identical(other.commentedAt, commentedAt) ||
                 other.commentedAt == commentedAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, comment, commentator, commentedAt);
+  int get hashCode => Object.hash(runtimeType, comment, commentatorUsername,
+      commentatorUid, commentatorEmail, commentatorImageUrl, commentedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -181,7 +235,10 @@ class _$CommentDataImpl implements _CommentData {
 abstract class _CommentData implements CommentData {
   const factory _CommentData(
           {required final String comment,
-          required final String commentator,
+          required final String commentatorUsername,
+          required final String commentatorUid,
+          required final String commentatorEmail,
+          required final String commentatorImageUrl,
           @DateTimeTimestampConverter() required final DateTime commentedAt}) =
       _$CommentDataImpl;
 
@@ -191,7 +248,13 @@ abstract class _CommentData implements CommentData {
   @override
   String get comment;
   @override
-  String get commentator;
+  String get commentatorUsername;
+  @override
+  String get commentatorUid;
+  @override
+  String get commentatorEmail;
+  @override
+  String get commentatorImageUrl;
   @override
   @DateTimeTimestampConverter()
   DateTime get commentedAt;

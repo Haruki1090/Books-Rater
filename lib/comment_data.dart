@@ -8,7 +8,10 @@ part 'comment_data.g.dart';
 class CommentData with _$CommentData {
   const factory CommentData({
     required String comment,
-    required String commentator,
+    required String commentatorUsername,
+    required String commentatorUid,
+    required String commentatorEmail,
+    required String commentatorImageUrl,
     @DateTimeTimestampConverter() required DateTime commentedAt,
   }) = _CommentData;
 
