@@ -1,4 +1,5 @@
 import 'package:books_rater/home.dart';
+import 'package:books_rater/setting_page.dart';
 import 'package:books_rater/sign_in_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,13 @@ class _MyPageTabState extends ConsumerState<MyPageTab> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingPage()));
+          }, icon: const Icon(Icons.settings)),
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

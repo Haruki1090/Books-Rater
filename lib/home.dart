@@ -98,13 +98,6 @@ class _HomeState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingPage()));
-          }, icon: const Icon(Icons.settings)),
-        ],
-      ),
       body: display[_selectedIndex],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
