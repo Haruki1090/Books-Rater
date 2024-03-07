@@ -61,8 +61,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
       body: CustomScrollView(
         slivers:[
           SliverAppBar(
-            title: Text('${ref.read(userDataProvider)?.username}の本棚'),
-            expandedHeight: MediaQuery.of(context).size.height * 0.2,
+            expandedHeight: MediaQuery.of(context).size.height * 0.15,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Image.network(
@@ -76,7 +75,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'あなたの本棚：${booksData.when(
+                  '${ref.read(userDataProvider)?.username}の本棚：${booksData.when(
                     data: (books) => books.length,
                     loading: () => 'Loading...',
                     error: (error, _) => 'Error',
@@ -212,6 +211,8 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                     children: [
                                       Text(
                                         book.title,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                                       ),
                                       const SizedBox(height: 8),
@@ -219,7 +220,8 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                       const SizedBox(height: 12),
                                       Text(
                                         book.description,
-                                        maxLines: 3,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                       //todo: いいねとコメントの数を表示
                                       Row(
