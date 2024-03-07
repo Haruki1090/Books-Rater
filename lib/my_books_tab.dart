@@ -62,7 +62,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
         slivers:[
           SliverAppBar(
             title: Text('${ref.read(userDataProvider)?.username}の本棚'),
-            expandedHeight: MediaQuery.of(context).size.height * 0.3,
+            expandedHeight: MediaQuery.of(context).size.height * 0.2,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Image.network(
