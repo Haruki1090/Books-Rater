@@ -61,14 +61,12 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
       body: CustomScrollView(
         slivers:[
           SliverAppBar(
-            expandedHeight: MediaQuery.of(context).size.height * 0.15,
             pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
+            expandedHeight: MediaQuery.of(context).size.height * 0.18,
+            flexibleSpace: Image.network(
                 ref.read(userDataProvider)?.imageUrl ?? 'https://via.placeholder.com/150',
                 fit: BoxFit.cover,
               ),
-            ),
           ),
           SliverList(
             delegate: SliverChildListDelegate([
@@ -80,7 +78,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                     loading: () => 'Loading...',
                     error: (error, _) => 'Error',
                   )}冊',
-                  style: const TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
             ]),
