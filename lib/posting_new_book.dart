@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:books_rater/book_data.dart';
+import 'package:books_rater/date_format.dart';
 import 'package:books_rater/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -64,10 +65,9 @@ Future<void> addBookToUserBooks({
   await documentRef.set(_newBookData.toJson());
 }
 
-
 Future<String> uploadImage(File imageFile) async {
   final storageRef = FirebaseStorage.instance.ref();
-  final imagesRef = storageRef.child("images/${DateTime.now().toIso8601String()}.jpg");
+  final imagesRef = storageRef.child("images/${DateTime.now().format()}.jpg");
   UploadTask uploadTask = imagesRef.putFile(imageFile);
 
   // アップロードが完了するのを待つ

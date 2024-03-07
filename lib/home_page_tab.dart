@@ -1,5 +1,6 @@
 import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
+import 'package:books_rater/date_format.dart';
 import 'package:books_rater/favorites_data.dart';
 import 'package:books_rater/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -128,7 +129,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              Text('作成日: ${DateFormat('yyyy-MM-dd HH:mm').format(book.createdAt)}'),
+                              Text('作成日: ${book.createdAt.format()}'),
                               const SizedBox(height: 8),
                               Text(book.description),
                               const SizedBox(height: 8),
@@ -263,7 +264,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                                 ),
                                                                 title: Text(comment.commentatorUsername),
                                                                 subtitle: Text(comment.comment),
-                                                                trailing: Text(DateFormat('MM/dd HH:mm').format(comment.commentedAt)),
+                                                                trailing: Text(comment.commentedAt.format()),
                                                               );
                                                             },
                                                           );
@@ -357,7 +358,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
                                       ),
                                       const SizedBox(height: 8),
-                                      Text("作成日: ${DateFormat('yyyy-MM-dd HH:mm').format(book.createdAt)}"),
+                                      Text("作成日: ${book.createdAt.format()}"),
                                       const SizedBox(height: 8),
                                       Text(
                                         book.description,

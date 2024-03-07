@@ -1,4 +1,5 @@
 import 'package:books_rater/book_data.dart';
+import 'package:books_rater/date_format.dart';
 import 'package:books_rater/editing_posted_book.dart';
 import 'package:books_rater/home_page_tab.dart';
 import 'package:books_rater/sign_in_page.dart';
@@ -7,7 +8,6 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 class MyBooksTab extends ConsumerStatefulWidget {
   const MyBooksTab({Key? key}) : super(key: key);
@@ -175,7 +175,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                   style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                                 ),
                                 const SizedBox(height: 8),
-                                Text("作成日: ${DateFormat('yyyy-MM-dd').format(book.createdAt)}"),
+                                Text("作成日: ${book.createdAt.format()}"),
                                 const SizedBox(height: 12),
                                 Text(
                                   book.description,
