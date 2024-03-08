@@ -299,7 +299,6 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                               commentedAt: DateTime.now(),
                                                           );
                                                           await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).collection('comments').add(newComment.toJson());
-                                                          print(_newCommentController.text);
                                                           _newCommentController.clear();
                                                         },
                                                       ),
@@ -512,7 +511,6 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                                             commentedAt: DateTime.now(),
                                                                           );
                                                                           await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).collection('comments').add(newComment.toJson());
-                                                                          print(_newCommentController.text);
                                                                           _newCommentController.clear();
                                                                         },
                                                                       ),

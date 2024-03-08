@@ -25,7 +25,7 @@ Future<void> decrementBookCount(String email) async {
       'email': email,
     });
   } catch (e) {
-    print(e);
+    throw Exception('Firebase function call failed');
   }
 }
 
@@ -86,8 +86,8 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
           booksData.when(
             data: (books) {
               if (books.isEmpty) {
-                return SliverToBoxAdapter(
-                  child: const Center(child: Text('本が追加されていません')),
+                return const SliverToBoxAdapter(
+                  child: Center(child: Text('本が追加されていません')),
                 );
               } else {
                 return SliverFixedExtentList(
@@ -368,7 +368,6 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                                     commentedAt: DateTime.now(),
                                                                   );
                                                                   await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).collection('comments').add(newComment.toJson());
-                                                                  print(_newCommentController.text);
                                                                   _newCommentController.clear();
                                                                 },
                                                               ),
@@ -416,7 +415,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                 );
               }
             },
-            loading: () => SliverToBoxAdapter(child: const Center(child: CircularProgressIndicator())),
+            loading: () => const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
             error: (e, _) => SliverToBoxAdapter(child: Center(child: Text('エラーが発生しました: $e'))),
           ),
         ],

@@ -1,5 +1,4 @@
 import 'package:books_rater/posting_new_book.dart';
-import 'package:books_rater/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,7 +39,7 @@ class UserStateNotifier extends StateNotifier<UserData?> {
         );
       }
     } catch (e) {
-      print("Error loading user data: $e");
+      throw Exception('Error loading user data: $e');
     }
   }
 
@@ -67,10 +66,9 @@ class UserStateNotifier extends StateNotifier<UserData?> {
         state = updatedState; // StateNotifierのstateを更新
       }
     } catch (e) {
-      print("Error updating user data: $e");
+      throw Exception('Error updating user data: $e');
     }
   }
-
 }
 
 final userDataProvider = StateNotifierProvider<UserStateNotifier, UserData?>((ref) {

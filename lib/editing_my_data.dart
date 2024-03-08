@@ -81,8 +81,10 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
               (Route<dynamic> route) => false,
         );
       }).catchError((error) {
-        // エラー処理をここに追加
-        print("An error occurred: $error");
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('ユーザー情報の更新に失敗しました: $error')),
+        );
       });
     }
   }

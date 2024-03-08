@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'date_time_timestamp_converter.dart';
 
 class EditingPostedBook extends ConsumerStatefulWidget {
@@ -30,15 +29,15 @@ class EditingPostedBook extends ConsumerStatefulWidget {
   ConsumerState<EditingPostedBook> createState() => _EditingPostedBookState();
 }
 
-final descriptionProvider = StateProvider<String>((ref) => '');
-final bannedProvider = StateProvider<bool>((ref) => false);
+final descriptionControllerProvider = StateProvider<String>((ref) => '');
+final bannedControllerProvider = StateProvider<bool>((ref) => false);
 
 class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
 
   Future<void> upDatePostedBookData() async {
     // 現在の状態を読み取る
-    final currentDescription = ref.read(descriptionProvider);
-    final currentBanned = ref.read(bannedProvider);
+    final currentDescription = ref.read(descriptionControllerProvider);
+    final currentBanned = ref.read(bannedControllerProvider);
 
     FirebaseFirestore.instance
         .collection('users')
@@ -82,12 +81,11 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
             'banned': currentBanned,
             'updatedAt': Timestamp.now(),
           });
-          print("Document with bookId $targetBookId updated successfully.");
           break; // 一致するドキュメントを更新したらループを抜ける
         }
       }
     } catch (e) {
-      print("Error updating document: $e");
+      throw 'allUsersBooks コレクションの更新に失敗しました: $e';
     }
   }
 
@@ -97,8 +95,8 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      ref.read(descriptionProvider.notifier).state = widget.bookDescription;
-      ref.read(bannedProvider.notifier).state = widget.bookBanned;
+      ref.read(descriptionControllerProvider.notifier).state = widget.bookDescription;
+      ref.read(bannedControllerProvider.notifier).state = widget.bookBanned;
     });
   }
 
@@ -131,7 +129,7 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
               ),
               maxLines: 3,
               onChanged: (value) {
-                ref.read(descriptionProvider.notifier).state = value;
+                ref.read(descriptionControllerProvider.notifier).state = value;
               },
             ),
             const SizedBox(height: 20),
@@ -139,11 +137,11 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
               title: const Text('ホーム非表示にする'),
               trailing: Consumer(
                 builder: (context, ref, _) {
-                  final banned = ref.watch(bannedProvider);
+                  final banned = ref.watch(bannedControllerProvider);
                   return CupertinoSwitch(
                     value: banned,
                     onChanged: (bool newValue) {
-                      ref.read(bannedProvider.notifier).state = newValue;
+                      ref.read(bannedControllerProvider.notifier).state = newValue;
                       },
                   );
                   },
