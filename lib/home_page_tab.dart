@@ -2,6 +2,7 @@ import 'package:books_rater/all_users_books_controller.dart';
 import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/date_format.dart';
+import 'package:books_rater/favorites_controller.dart';
 import 'package:books_rater/favorites_count_controller.dart';
 import 'package:books_rater/favorites_data.dart';
 import 'package:books_rater/home.dart';
@@ -357,7 +358,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                           children: [
                                             Consumer(builder: (context, ref, _) {
                                               // ここで BookData オブジェクトを favoritesProvider に渡す
-                                              final isFavorite = ref.watch(favoritesProvider(book)).asData?.value ?? false;
+                                              final isFavorite = ref.watch(favoritesControllerNotifierProvider(book)).asData?.value ?? false;
                                               return Row(
                                                 children: [
                                                   IconButton(
