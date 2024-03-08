@@ -1,5 +1,6 @@
 import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
+import 'package:books_rater/comments_count_controller.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:books_rater/editing_posted_book.dart';
 import 'package:books_rater/favorited_users_controller.dart';
@@ -308,7 +309,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                       height: MediaQuery.of(context).size.height * 0.85,
                                                       child: Column(
                                                         children: [
-                                                          Text(ref.watch(commentsCountProvider(book)).when(
+                                                          Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
                                                             data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
                                                             loading: () => 'Loading...',
                                                             error: (error, _) => 'Error',
@@ -383,7 +384,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                               );
                                             },
                                             icon: const Icon(Icons.comment),
-                                            label: Text(ref.watch(commentsCountProvider(book)).when(
+                                            label: Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
                                               data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
                                               loading: () => 'Loading...',
                                               error: (error, _) => 'Error',

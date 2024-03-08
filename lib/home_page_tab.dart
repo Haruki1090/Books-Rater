@@ -1,6 +1,7 @@
 import 'package:books_rater/all_users_books_controller.dart';
 import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
+import 'package:books_rater/comments_count_controller.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:books_rater/favorited_users_controller.dart';
 import 'package:books_rater/favorites_controller.dart';
@@ -18,17 +19,6 @@ class HomePageTab extends ConsumerStatefulWidget {
   @override
   HomePageTabState createState() => HomePageTabState();
 }
-
-final commentsCountProvider = StreamProvider.family<int, BookData>((ref, bookData) {
-  return FirebaseFirestore.instance
-      .collection('users')
-      .doc(bookData.email) // 書籍の投稿者の email を使用
-      .collection('books')
-      .doc(bookData.bookId)
-      .collection('comments')
-      .snapshots()
-      .map((snapshot) => snapshot.docs.length); // コメントの数をカウント
-});
 
 final commentsDataProvider = StreamProvider.family<List<CommentData>, BookData>((ref, bookData) {
   return FirebaseFirestore.instance
@@ -188,7 +178,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                               height: MediaQuery.of(context).size.height * 0.85,
                                               child: Column(
                                                 children: [
-                                              Text(ref.watch(commentsCountProvider(book)).when(
+                                              Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
                                               data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
                                               loading: () => 'Loading...',
                                               error: (error, _) => 'Error',
@@ -263,7 +253,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                       );
                                     },
                                   ),
-                                  Text(ref.watch(commentsCountProvider(book)).when(
+                                  Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
                                     data: (commentsCount) => 'コメント数：$commentsCount',
                                     loading: () => 'Loading...',
                                     error: (error, _) => 'Error',
@@ -400,7 +390,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                               height: MediaQuery.of(context).size.height * 0.85,
                                                               child: Column(
                                                                 children: [
-                                                                  Text(ref.watch(commentsCountProvider(book)).when(
+                                                                  Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
                                                                     data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
                                                                     loading: () => 'Loading...',
                                                                     error: (error, _) => 'Error',
@@ -475,7 +465,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                       );
                                                     },
                                                   ),
-                                                  Text(ref.watch(commentsCountProvider(book)).when(
+                                                  Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
                                                     data: (commentsCount) => '$commentsCount',
                                                     loading: () => 'Loading...',
                                                     error: (error, _) => 'Error',
