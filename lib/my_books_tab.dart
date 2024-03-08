@@ -1,12 +1,12 @@
 import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/comments_count_controller.dart';
+import 'package:books_rater/comments_data_controller.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:books_rater/editing_posted_book.dart';
 import 'package:books_rater/favorited_users_controller.dart';
 import 'package:books_rater/favorites_count_controller.dart';
 import 'package:books_rater/home.dart';
-import 'package:books_rater/home_page_tab.dart';
 import 'package:books_rater/sign_in_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -317,7 +317,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                           const SizedBox(height: 16),
                                                           // コメントをListViewで表示
                                                           Expanded(
-                                                            child: ref.watch(commentsDataProvider(book)).when(
+                                                            child: ref.watch(commentsDataControllerNotifierProvider(book)).when(
                                                               data: (comments) {
                                                                 if (comments.isEmpty) {
                                                                   // コメントが一つもない場合

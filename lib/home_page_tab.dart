@@ -1,7 +1,7 @@
 import 'package:books_rater/all_users_books_controller.dart';
-import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/comments_count_controller.dart';
+import 'package:books_rater/comments_data_controller.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:books_rater/favorited_users_controller.dart';
 import 'package:books_rater/favorites_controller.dart';
@@ -19,21 +19,6 @@ class HomePageTab extends ConsumerStatefulWidget {
   @override
   HomePageTabState createState() => HomePageTabState();
 }
-
-final commentsDataProvider = StreamProvider.family<List<CommentData>, BookData>((ref, bookData) {
-  return FirebaseFirestore.instance
-      .collection('users')
-      .doc(bookData.email) // 書籍の投稿者の email を使用
-      .collection('books')
-      .doc(bookData.bookId)
-      .collection('comments')
-      .orderBy('commentedAt', descending: true) // 最新のコメントが上に来るように
-      .snapshots()
-      .map((snapshot) {
-    return snapshot.docs.map((doc) => CommentData.fromJson(doc.data())).toList();
-  });
-});
-
 
 class HomePageTabState extends ConsumerState<HomePageTab> {
   final _newCommentController = TextEditingController();
@@ -186,7 +171,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                           const SizedBox(height: 16),
                                                   // コメントをListViewで表示
                                                   Expanded(
-                                                    child: ref.watch(commentsDataProvider(book)).when(
+                                                    child: ref.watch(commentsDataControllerNotifierProvider(book)).when(
                                                       data: (comments) {
                                                         if (comments.isEmpty) {
                                                           // コメントが一つもない場合
@@ -398,7 +383,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                                   const SizedBox(height: 16),
                                                                   // コメントをListViewで表示
                                                                   Expanded(
-                                                                    child: ref.watch(commentsDataProvider(book)).when(
+                                                                    child: ref.watch(commentsDataControllerNotifierProvider(book)).when(
                                                                       data: (comments) {
                                                                         if (comments.isEmpty) {
                                                                           // コメントが一つもない場合
