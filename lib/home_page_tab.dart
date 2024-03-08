@@ -2,6 +2,7 @@ import 'package:books_rater/all_users_books_controller.dart';
 import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/date_format.dart';
+import 'package:books_rater/favorited_users_controller.dart';
 import 'package:books_rater/favorites_controller.dart';
 import 'package:books_rater/favorites_count_controller.dart';
 import 'package:books_rater/favorites_data.dart';
@@ -17,34 +18,6 @@ class HomePageTab extends ConsumerStatefulWidget {
   @override
   HomePageTabState createState() => HomePageTabState();
 }
-
-final favoritesProvider = StreamProvider.family<bool, BookData>((ref, bookData) {
-  final user = FirebaseAuth.instance.currentUser;
-  if (user == null) {
-    return Stream.value(false);
-  }
-  return FirebaseFirestore.instance
-      .collection('users')
-      .doc(bookData.email) // 投稿者の email を使用
-      .collection('books')
-      .doc(bookData.bookId)
-      .collection('favorites')
-      .doc(user.uid)
-      .snapshots()
-      .map((snapshot) => snapshot.exists);
-});
-
-final favoritesUsersProvider = StreamProvider.family<List<FavoritesData>, BookData>((ref, bookData) {  return FirebaseFirestore.instance
-      .collection('users')
-      .doc(bookData.email) // 書籍の投稿者の email を使用
-      .collection('books')
-      .doc(bookData.bookId)
-      .collection('favorites')
-      .snapshots()
-      .map((snapshot) => snapshot.docs.map((doc) {
-    return FavoritesData.fromJson(doc.data());
-  }).toList());
-});
 
 final commentsCountProvider = StreamProvider.family<int, BookData>((ref, bookData) {
   return FirebaseFirestore.instance
@@ -146,7 +119,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                 const SizedBox(height: 16),
                                                       // いいねしたユーザーをListViewで表示
                                                       Expanded(
-                                                        child: ref.watch(favoritesUsersProvider(book)).when(
+                                                        child: ref.watch(favoritedUsersControllerProvider(book)).when(
                                                           data: (users) {
                                                             if (users.isEmpty) {
                                                               // いいねしたユーザーがいない場合

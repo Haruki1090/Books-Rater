@@ -2,6 +2,7 @@ import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:books_rater/editing_posted_book.dart';
+import 'package:books_rater/favorited_users_controller.dart';
 import 'package:books_rater/favorites_count_controller.dart';
 import 'package:books_rater/home.dart';
 import 'package:books_rater/home_page_tab.dart';
@@ -245,7 +246,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                           const SizedBox(height: 16),
                                                           // いいねしたユーザーをListViewで表示
                                                           Expanded(
-                                                            child: ref.watch(favoritesUsersProvider(book)).when(
+                                                            child: ref.watch(favoritedUsersControllerProvider(book)).when(
                                                               data: (users) {
                                                                 if (users.isEmpty) {
                                                                   // いいねしたユーザーがいない場合
