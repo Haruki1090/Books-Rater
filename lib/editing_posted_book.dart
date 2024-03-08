@@ -1,11 +1,11 @@
-import 'package:books_rater/banned_controller.dart';
+import 'package:books_rater/controllers/banned_controller.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'date_time_timestamp_converter.dart';
-import 'package:books_rater/description_controller.dart';
+import 'package:books_rater/controllers/description_controller.dart';
 
 class EditingPostedBook extends ConsumerStatefulWidget {
   final String email;

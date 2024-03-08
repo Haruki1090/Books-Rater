@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'book_data.dart';
+import '../book_data.dart';
 
 part 'all_users_books_controller.g.dart';
 

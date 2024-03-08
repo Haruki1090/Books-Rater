@@ -1,11 +1,11 @@
-import 'package:books_rater/all_users_books_controller.dart';
+import 'package:books_rater/controllers/all_users_books_controller.dart';
 import 'package:books_rater/comment_data.dart';
-import 'package:books_rater/comments_count_controller.dart';
-import 'package:books_rater/comments_data_controller.dart';
+import 'package:books_rater/controllers/comments_count_controller.dart';
+import 'package:books_rater/controllers/comments_data_controller.dart';
 import 'package:books_rater/date_format.dart';
-import 'package:books_rater/favorited_users_controller.dart';
+import 'package:books_rater/controllers/favorited_users_controller.dart';
 import 'package:books_rater/favorites_controller.dart';
-import 'package:books_rater/favorites_count_controller.dart';
+import 'package:books_rater/controllers/favorites_count_controller.dart';
 import 'package:books_rater/favorites_data.dart';
 import 'package:books_rater/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
