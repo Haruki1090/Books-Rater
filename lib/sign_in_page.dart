@@ -17,10 +17,6 @@ final _auth = FirebaseAuth.instance;
 Future<void>signInWithEmailAndPassword(String email, String password) async {
 }
 
-final authControllerProvider = StateNotifierProvider.autoDispose<AuthController, User?>(
-    (ref) => AuthController(initialUser: FirebaseAuth.instance.currentUser),
-);
-
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});
 

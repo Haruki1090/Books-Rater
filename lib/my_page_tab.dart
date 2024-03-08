@@ -1,3 +1,4 @@
+import 'package:books_rater/controllers/auth_controller.dart';
 import 'package:books_rater/home.dart';
 import 'package:books_rater/setting_page.dart';
 import 'package:books_rater/sign_in_page.dart';
@@ -14,7 +15,7 @@ class MyPageTab extends ConsumerStatefulWidget {
 }
 
 final bookCountProvider = StreamProvider.autoDispose<int>((ref) {
-  final userCredential = ref.watch(authControllerProvider);
+  final userCredential = ref.watch(authControllerNotifierProvider);
   if (userCredential == null) {
     throw Exception('User not logged in');
   } else {

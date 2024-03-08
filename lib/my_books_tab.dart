@@ -1,13 +1,12 @@
-import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/controllers/comments_count_controller.dart';
 import 'package:books_rater/controllers/comments_data_controller.dart';
+import 'package:books_rater/controllers/my_books_controller.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:books_rater/editing_posted_book.dart';
 import 'package:books_rater/controllers/favorited_users_controller.dart';
 import 'package:books_rater/controllers/favorites_count_controller.dart';
 import 'package:books_rater/home.dart';
-import 'package:books_rater/sign_in_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,22 +31,6 @@ Future<void> decrementBookCount(String email) async {
   }
 }
 
-final myBooksStreamProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
-  final userCredential = ref.watch(authControllerProvider);
-  if (userCredential == null) {
-    throw Exception('User not logged in');
-  } else {
-    final collection = FirebaseFirestore.instance
-        .collection('users')
-        .doc(userCredential.email)
-        .collection('books');
-    final stream = collection.snapshots().map(
-        (e) => e.docs.map((e) => BookData.fromJson(e.data())).toList()
-    );
-    return stream;
-}
-});
-
 class MyBooksTabState extends ConsumerState<MyBooksTab> {
   final _newCommentController = TextEditingController();
 
@@ -59,7 +42,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
 
   @override
   Widget build(BuildContext context) {
-    final booksData = ref.watch(myBooksStreamProvider);
+    final booksData = ref.watch(myBooksControllerNotifierProvider as ProviderListenable);
     return Scaffold(
       body: CustomScrollView(
         slivers:[
