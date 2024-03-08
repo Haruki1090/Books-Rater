@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'date_time_timestamp_converter.dart';
+import 'package:books_rater/description_controller.dart';
 
 class EditingPostedBook extends ConsumerStatefulWidget {
   final String email;
@@ -29,14 +30,13 @@ class EditingPostedBook extends ConsumerStatefulWidget {
   ConsumerState<EditingPostedBook> createState() => _EditingPostedBookState();
 }
 
-final descriptionControllerProvider = StateProvider<String>((ref) => '');
 final bannedControllerProvider = StateProvider<bool>((ref) => false);
 
 class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
 
   Future<void> upDatePostedBookData() async {
     // 現在の状態を読み取る
-    final currentDescription = ref.read(descriptionControllerProvider);
+    final currentDescription = ref.read(descriptionControllerNotifierProvider);
     final currentBanned = ref.read(bannedControllerProvider);
 
     FirebaseFirestore.instance
@@ -95,7 +95,7 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      ref.read(descriptionControllerProvider.notifier).state = widget.bookDescription;
+      ref.read(descriptionControllerNotifierProvider.notifier).fetchBookDescription(widget.bookDescription);
       ref.read(bannedControllerProvider.notifier).state = widget.bookBanned;
     });
   }
@@ -129,7 +129,7 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
               ),
               maxLines: 3,
               onChanged: (value) {
-                ref.read(descriptionControllerProvider.notifier).state = value;
+                ref.read(descriptionControllerNotifierProvider.notifier).fetchBookDescription(value);
               },
             ),
             const SizedBox(height: 20),
