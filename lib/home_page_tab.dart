@@ -1,3 +1,4 @@
+import 'package:books_rater/all_users_books_controller.dart';
 import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/date_format.dart';
@@ -14,20 +15,6 @@ class HomePageTab extends ConsumerStatefulWidget {
   @override
   HomePageTabState createState() => HomePageTabState();
 }
-
-final allUsersBooksProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
-  return FirebaseFirestore.instance
-      .collection("allUsersBooks")
-      .where('banned', isEqualTo: false)
-      .snapshots()
-      .map((snapshot) {
-    final books = snapshot.docs.map((e) {
-      final bookData = BookData.fromJson(e.data());
-      return bookData;
-    }).toList();
-    return books;
-  });
-});
 
 final favoritesCountProvider = StreamProvider.family<int, BookData>((ref, bookData) {  return FirebaseFirestore.instance
       .collection('users')
@@ -105,7 +92,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
 
   @override
   Widget build(BuildContext context) {
-    final booksData = ref.watch(allUsersBooksProvider);
+    final booksData = ref.watch(allUsersBooksControllerNotifierProvider);
 
     return Scaffold(
       body: booksData.when(

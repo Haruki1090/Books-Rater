@@ -7,7 +7,7 @@ part of 'banned_controller.dart';
 // **************************************************************************
 
 String _$bannedControllerNotifierHash() =>
-    r'79f68ed7bf56d7d85ee98193d143f37c6e74025a';
+    r'bc497b91d34dc9c184c000cc71f91fb462eca850';
 
 /// See also [BannedControllerNotifier].
 @ProviderFor(BannedControllerNotifier)
