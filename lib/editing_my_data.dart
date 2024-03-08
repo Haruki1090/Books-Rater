@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:books_rater/controllers/user_data_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -68,7 +69,7 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
           'updatedAt': DateTime.now(),
         });
       }).then((_) {
-        ref.read(userDataProvider.notifier).updateUserData(_usernameController.text, imageUrl: imageUrl);
+        ref.read(userDataControllerNotifierProvider.notifier).updateUserData(_usernameController.text, imageUrl: imageUrl);
       }).then((_) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(

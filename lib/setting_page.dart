@@ -1,4 +1,4 @@
-import 'package:books_rater/home.dart';
+import 'package:books_rater/controllers/user_data_controller.dart';
 import 'package:books_rater/sign_in_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,7 +56,7 @@ class SettingPage extends ConsumerWidget {
                 ).then((result) {
                   if (result == true) {
                     FirebaseAuth.instance.signOut().then((_) {
-                      ref.read(userDataProvider.notifier).resetUserData();
+                      ref.read(userDataControllerNotifierProvider.notifier).resetUserData();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('サインアウトしました')),
                       );

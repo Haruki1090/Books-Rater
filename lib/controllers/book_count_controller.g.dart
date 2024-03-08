@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'my_books_controller.dart';
+part of 'book_count_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$myBooksControllerNotifierHash() =>
-    r'a88e8b44a6faadee0c30abdb3c8f92a5ae1e6876';
+String _$bookCountControllerNotifierHash() =>
+    r'b35be453cf49ef37dd92b970d461976f511a8bc7';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,37 +30,36 @@ class _SystemHash {
   }
 }
 
-abstract class _$MyBooksControllerNotifier
-    extends BuildlessAutoDisposeStreamNotifier<List<BookData>> {
+abstract class _$BookCountControllerNotifier
+    extends BuildlessAutoDisposeStreamNotifier<int> {
   late final User userCredential;
 
-  Stream<List<BookData>> build(
+  Stream<int> build(
     User userCredential,
   );
 }
 
-/// See also [MyBooksControllerNotifier].
-@ProviderFor(MyBooksControllerNotifier)
-const myBooksControllerNotifierProvider = MyBooksControllerNotifierFamily();
+/// See also [BookCountControllerNotifier].
+@ProviderFor(BookCountControllerNotifier)
+const bookCountControllerNotifierProvider = BookCountControllerNotifierFamily();
 
-/// See also [MyBooksControllerNotifier].
-class MyBooksControllerNotifierFamily
-    extends Family<AsyncValue<List<BookData>>> {
-  /// See also [MyBooksControllerNotifier].
-  const MyBooksControllerNotifierFamily();
+/// See also [BookCountControllerNotifier].
+class BookCountControllerNotifierFamily extends Family<AsyncValue<int>> {
+  /// See also [BookCountControllerNotifier].
+  const BookCountControllerNotifierFamily();
 
-  /// See also [MyBooksControllerNotifier].
-  MyBooksControllerNotifierProvider call(
+  /// See also [BookCountControllerNotifier].
+  BookCountControllerNotifierProvider call(
     User userCredential,
   ) {
-    return MyBooksControllerNotifierProvider(
+    return BookCountControllerNotifierProvider(
       userCredential,
     );
   }
 
   @override
-  MyBooksControllerNotifierProvider getProviderOverride(
-    covariant MyBooksControllerNotifierProvider provider,
+  BookCountControllerNotifierProvider getProviderOverride(
+    covariant BookCountControllerNotifierProvider provider,
   ) {
     return call(
       provider.userCredential,
@@ -79,31 +78,31 @@ class MyBooksControllerNotifierFamily
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'myBooksControllerNotifierProvider';
+  String? get name => r'bookCountControllerNotifierProvider';
 }
 
-/// See also [MyBooksControllerNotifier].
-class MyBooksControllerNotifierProvider
-    extends AutoDisposeStreamNotifierProviderImpl<MyBooksControllerNotifier,
-        List<BookData>> {
-  /// See also [MyBooksControllerNotifier].
-  MyBooksControllerNotifierProvider(
+/// See also [BookCountControllerNotifier].
+class BookCountControllerNotifierProvider
+    extends AutoDisposeStreamNotifierProviderImpl<BookCountControllerNotifier,
+        int> {
+  /// See also [BookCountControllerNotifier].
+  BookCountControllerNotifierProvider(
     User userCredential,
   ) : this._internal(
-          () => MyBooksControllerNotifier()..userCredential = userCredential,
-          from: myBooksControllerNotifierProvider,
-          name: r'myBooksControllerNotifierProvider',
+          () => BookCountControllerNotifier()..userCredential = userCredential,
+          from: bookCountControllerNotifierProvider,
+          name: r'bookCountControllerNotifierProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$myBooksControllerNotifierHash,
-          dependencies: MyBooksControllerNotifierFamily._dependencies,
+                  : _$bookCountControllerNotifierHash,
+          dependencies: BookCountControllerNotifierFamily._dependencies,
           allTransitiveDependencies:
-              MyBooksControllerNotifierFamily._allTransitiveDependencies,
+              BookCountControllerNotifierFamily._allTransitiveDependencies,
           userCredential: userCredential,
         );
 
-  MyBooksControllerNotifierProvider._internal(
+  BookCountControllerNotifierProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -116,8 +115,8 @@ class MyBooksControllerNotifierProvider
   final User userCredential;
 
   @override
-  Stream<List<BookData>> runNotifierBuild(
-    covariant MyBooksControllerNotifier notifier,
+  Stream<int> runNotifierBuild(
+    covariant BookCountControllerNotifier notifier,
   ) {
     return notifier.build(
       userCredential,
@@ -125,10 +124,10 @@ class MyBooksControllerNotifierProvider
   }
 
   @override
-  Override overrideWith(MyBooksControllerNotifier Function() create) {
+  Override overrideWith(BookCountControllerNotifier Function() create) {
     return ProviderOverride(
       origin: this,
-      override: MyBooksControllerNotifierProvider._internal(
+      override: BookCountControllerNotifierProvider._internal(
         () => create()..userCredential = userCredential,
         from: from,
         name: null,
@@ -141,14 +140,14 @@ class MyBooksControllerNotifierProvider
   }
 
   @override
-  AutoDisposeStreamNotifierProviderElement<MyBooksControllerNotifier,
-      List<BookData>> createElement() {
-    return _MyBooksControllerNotifierProviderElement(this);
+  AutoDisposeStreamNotifierProviderElement<BookCountControllerNotifier, int>
+      createElement() {
+    return _BookCountControllerNotifierProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is MyBooksControllerNotifierProvider &&
+    return other is BookCountControllerNotifierProvider &&
         other.userCredential == userCredential;
   }
 
@@ -161,20 +160,20 @@ class MyBooksControllerNotifierProvider
   }
 }
 
-mixin MyBooksControllerNotifierRef
-    on AutoDisposeStreamNotifierProviderRef<List<BookData>> {
+mixin BookCountControllerNotifierRef
+    on AutoDisposeStreamNotifierProviderRef<int> {
   /// The parameter `userCredential` of this provider.
   User get userCredential;
 }
 
-class _MyBooksControllerNotifierProviderElement
-    extends AutoDisposeStreamNotifierProviderElement<MyBooksControllerNotifier,
-        List<BookData>> with MyBooksControllerNotifierRef {
-  _MyBooksControllerNotifierProviderElement(super.provider);
+class _BookCountControllerNotifierProviderElement
+    extends AutoDisposeStreamNotifierProviderElement<
+        BookCountControllerNotifier, int> with BookCountControllerNotifierRef {
+  _BookCountControllerNotifierProviderElement(super.provider);
 
   @override
   User get userCredential =>
-      (origin as MyBooksControllerNotifierProvider).userCredential;
+      (origin as BookCountControllerNotifierProvider).userCredential;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

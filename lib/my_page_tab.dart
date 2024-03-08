@@ -1,8 +1,6 @@
-import 'package:books_rater/controllers/auth_controller.dart';
-import 'package:books_rater/home.dart';
+import 'package:books_rater/controllers/book_count_controller.dart';
+import 'package:books_rater/controllers/user_data_controller.dart';
 import 'package:books_rater/setting_page.dart';
-import 'package:books_rater/sign_in_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'editing_my_data.dart';
@@ -14,24 +12,11 @@ class MyPageTab extends ConsumerStatefulWidget {
   ConsumerState<MyPageTab> createState() => _MyPageTabState();
 }
 
-final bookCountProvider = StreamProvider.autoDispose<int>((ref) {
-  final userCredential = ref.watch(authControllerNotifierProvider);
-  if (userCredential == null) {
-    throw Exception('User not logged in');
-  } else {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(userCredential.email)
-        .snapshots()
-        .map((snapshot) => snapshot.data()?['bookCount'] ?? 0);
-  }
-});
-
 class _MyPageTabState extends ConsumerState<MyPageTab> {
   @override
   Widget build(BuildContext context) {
-    final userData = ref.watch(userDataProvider);
-    final bookCount = ref.watch(bookCountProvider).asData?.value;
+    final userData = ref.watch(userDataControllerNotifierProvider);
+    final bookCount = ref.watch(bookCountControllerNotifierProvider as ProviderListenable).asData?.value;
 
     if (userData == null) {
       return const Scaffold(

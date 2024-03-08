@@ -2,12 +2,12 @@ import 'package:books_rater/controllers/all_users_books_controller.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/controllers/comments_count_controller.dart';
 import 'package:books_rater/controllers/comments_data_controller.dart';
+import 'package:books_rater/controllers/user_data_controller.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:books_rater/controllers/favorited_users_controller.dart';
 import 'package:books_rater/favorites_controller.dart';
 import 'package:books_rater/controllers/favorites_count_controller.dart';
 import 'package:books_rater/favorites_data.dart';
-import 'package:books_rater/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -218,10 +218,10 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                         onPressed: () async{
                                                           final newComment = CommentData(
                                                               comment: _newCommentController.text,
-                                                              commentatorUsername: ref.read(userDataProvider)?.username ?? '不明',
-                                                              commentatorUid: ref.read(userDataProvider)?.uid ?? '不明',
-                                                              commentatorEmail: ref.read(userDataProvider)?.email ?? '不明',
-                                                              commentatorImageUrl: ref.read(userDataProvider)?.imageUrl ?? 'デフォルト画像URL',
+                                                              commentatorUsername: ref.read(userDataControllerNotifierProvider)?.username ?? '不明',
+                                                              commentatorUid: ref.read(userDataControllerNotifierProvider)?.uid ?? '不明',
+                                                              commentatorEmail: ref.read(userDataControllerNotifierProvider)?.email ?? '不明',
+                                                              commentatorImageUrl: ref.read(userDataControllerNotifierProvider)?.imageUrl ?? 'デフォルト画像URL',
                                                               commentedAt: DateTime.now(),
                                                           );
                                                           await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).collection('comments').add(newComment.toJson());
@@ -317,8 +317,8 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                   onPressed: () async{
                                                     // いいねボタンの onPressed コールバック内
                                                     final user = FirebaseAuth.instance.currentUser;
-                                                    final userName = ref.read(userDataProvider)?.username;
-                                                    final userImageUrl = ref.read(userDataProvider)?.imageUrl;
+                                                    final userName = ref.read(userDataControllerNotifierProvider)?.username;
+                                                    final userImageUrl = ref.read(userDataControllerNotifierProvider)?.imageUrl;
                                                     if (user == null) return; // ユーザーがログインしていない場合は何もしない
 
                                                     final favoritesRef = FirebaseFirestore.instance
@@ -430,10 +430,10 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                                         onPressed: () async{
                                                                           final newComment = CommentData(
                                                                             comment: _newCommentController.text,
-                                                                            commentatorUsername: ref.read(userDataProvider)?.username ?? '不明',
-                                                                            commentatorUid: ref.read(userDataProvider)?.uid ?? '不明',
-                                                                            commentatorEmail: ref.read(userDataProvider)?.email ?? '不明',
-                                                                            commentatorImageUrl: ref.read(userDataProvider)?.imageUrl ?? 'デフォルト画像URL',
+                                                                            commentatorUsername: ref.read(userDataControllerNotifierProvider)?.username ?? '不明',
+                                                                            commentatorUid: ref.read(userDataControllerNotifierProvider)?.uid ?? '不明',
+                                                                            commentatorEmail: ref.read(userDataControllerNotifierProvider)?.email ?? '不明',
+                                                                            commentatorImageUrl: ref.read(userDataControllerNotifierProvider)?.imageUrl ?? 'デフォルト画像URL',
                                                                             commentedAt: DateTime.now(),
                                                                           );
                                                                           await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).collection('comments').add(newComment.toJson());

@@ -4,6 +4,7 @@ part 'auth_controller.g.dart';
 
 @riverpod
 class AuthControllerNotifier extends _$AuthControllerNotifier {
+  @override
   User? build() {
     return FirebaseAuth.instance.currentUser;
   }
