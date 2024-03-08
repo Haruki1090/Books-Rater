@@ -7,7 +7,7 @@ part of 'description_controller.dart';
 // **************************************************************************
 
 String _$descriptionControllerNotifierHash() =>
-    r'cf774da42f75de5616ef1dc987c76549f8417ec0';
+    r'a47318c72a794f34c0111b921f51b73fd60d702c';
 
 /// See also [DescriptionControllerNotifier].
 @ProviderFor(DescriptionControllerNotifier)

@@ -1,3 +1,4 @@
+import 'package:books_rater/banned_controller.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,14 +31,12 @@ class EditingPostedBook extends ConsumerStatefulWidget {
   ConsumerState<EditingPostedBook> createState() => _EditingPostedBookState();
 }
 
-final bannedControllerProvider = StateProvider<bool>((ref) => false);
-
 class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
 
   Future<void> upDatePostedBookData() async {
     // 現在の状態を読み取る
     final currentDescription = ref.read(descriptionControllerNotifierProvider);
-    final currentBanned = ref.read(bannedControllerProvider);
+    final currentBanned = ref.read(bannedControllerNotifierProvider);
 
     FirebaseFirestore.instance
         .collection('users')
@@ -96,7 +95,7 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
     super.initState();
     Future.microtask(() {
       ref.read(descriptionControllerNotifierProvider.notifier).fetchBookDescription(widget.bookDescription);
-      ref.read(bannedControllerProvider.notifier).state = widget.bookBanned;
+      ref.read(bannedControllerNotifierProvider.notifier).fetchBookBanned(widget.bookBanned);
     });
   }
 
@@ -137,11 +136,11 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
               title: const Text('ホーム非表示にする'),
               trailing: Consumer(
                 builder: (context, ref, _) {
-                  final banned = ref.watch(bannedControllerProvider);
+                  final banned = ref.watch(bannedControllerNotifierProvider);
                   return CupertinoSwitch(
                     value: banned,
                     onChanged: (bool newValue) {
-                      ref.read(bannedControllerProvider.notifier).state = newValue;
+                      ref.read(bannedControllerNotifierProvider.notifier).fetchBookBanned(newValue);
                       },
                   );
                   },
