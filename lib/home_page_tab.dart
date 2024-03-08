@@ -2,6 +2,7 @@ import 'package:books_rater/all_users_books_controller.dart';
 import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/date_format.dart';
+import 'package:books_rater/favorites_count_controller.dart';
 import 'package:books_rater/favorites_data.dart';
 import 'package:books_rater/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,17 +16,6 @@ class HomePageTab extends ConsumerStatefulWidget {
   @override
   HomePageTabState createState() => HomePageTabState();
 }
-
-final favoritesCountProvider = StreamProvider.family<int, BookData>((ref, bookData) {  return FirebaseFirestore.instance
-      .collection('users')
-      .doc(bookData.email) // 書籍の投稿者の email を使用
-      .collection('books')
-      .doc(bookData.bookId)
-      .collection('favorites')
-      .snapshots()
-      .map((snapshot) => snapshot.docs.length); // いいねの数をカウント
-});
-
 
 final favoritesProvider = StreamProvider.family<bool, BookData>((ref, bookData) {
   final user = FirebaseAuth.instance.currentUser;
@@ -147,7 +137,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                   height: MediaQuery.of(context).size.height*0.85,
                                                   child: Column(
                                                     children: [
-                                                  Text(ref.watch(favoritesCountProvider(book)).when(
+                                                  Text(ref.watch(favoritesCountControllerNotifierProvider(book)).when(
                                                   data: (favoritesCount) => 'いいね数：$favoritesCount',
                                                   loading: () => 'Loading...',
                                                   error: (error, _) => 'Error',
@@ -196,7 +186,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                               }
                                               );
                                           },
-                                        child: Text(ref.watch(favoritesCountProvider(book)).when(
+                                        child: Text(ref.watch(favoritesCountControllerNotifierProvider(book)).when(
                                           data: (favoritesCount) => 'いいね数：$favoritesCount', // `count`を`favoritesCount`に変更
                                           loading: () => 'Loading...',
                                           error: (error, _) => 'Error',
@@ -408,7 +398,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                     }
                                                     },
                                                   ),
-                                                  Text(ref.watch(favoritesCountProvider(book)).when(
+                                                  Text(ref.watch(favoritesCountControllerNotifierProvider(book)).when(
                                                     data: (favoritesCount) => '$favoritesCount',
                                                     loading: () => 'Loading...',
                                                     error: (error, _) => 'Error',

@@ -2,6 +2,7 @@ import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:books_rater/editing_posted_book.dart';
+import 'package:books_rater/favorites_count_controller.dart';
 import 'package:books_rater/home.dart';
 import 'package:books_rater/home_page_tab.dart';
 import 'package:books_rater/sign_in_page.dart';
@@ -236,7 +237,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                       height: MediaQuery.of(context).size.height*0.85,
                                                       child: Column(
                                                         children: [
-                                                          Text(ref.watch(favoritesCountProvider(book)).when(
+                                                          Text(ref.watch(favoritesCountControllerNotifierProvider(book)).when(
                                                             data: (favoritesCount) => 'いいね数：$favoritesCount',
                                                             loading: () => 'Loading...',
                                                             error: (error, _) => 'Error',
@@ -286,7 +287,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                               );
                                             },
                                             icon: const Icon(Icons.favorite),
-                                            label: Text(ref.watch(favoritesCountProvider(book)).when(
+                                            label: Text(ref.watch(favoritesCountControllerNotifierProvider(book)).when(
                                               data: (favoritesCount) => 'いいね数：$favoritesCount', // `count`を`favoritesCount`に変更
                                               loading: () => 'Loading...',
                                               error: (error, _) => 'Error',
