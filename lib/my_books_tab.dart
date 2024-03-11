@@ -74,7 +74,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
           SliverList(
             delegate: SliverChildListDelegate([
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Text(
                   '${ref.read(userDataControllerNotifierProvider)?.username}の本棚：${booksData.when(
                     data: (books) => books.length,
