@@ -90,7 +90,23 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
             data: (books) {
               if (books.isEmpty) {
                 return const SliverToBoxAdapter(
-                  child: Center(child: Text('本が追加されていません')),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 160),
+                      Text(
+                        '本が追加されていません',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        '右下のボタンを押して本を追加しよう！',
+                        style: TextStyle(fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 );
               } else {
                 return SliverFixedExtentList(

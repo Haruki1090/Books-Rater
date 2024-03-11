@@ -1,11 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:books_rater/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
