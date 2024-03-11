@@ -1,13 +1,12 @@
-import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/controllers/comments_count_controller.dart';
 import 'package:books_rater/controllers/comments_data_controller.dart';
+import 'package:books_rater/controllers/my_books_controller.dart';
+import 'package:books_rater/controllers/user_data_controller.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:books_rater/editing_posted_book.dart';
 import 'package:books_rater/controllers/favorited_users_controller.dart';
 import 'package:books_rater/controllers/favorites_count_controller.dart';
-import 'package:books_rater/home.dart';
-import 'package:books_rater/sign_in_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,22 +31,6 @@ Future<void> decrementBookCount(String email) async {
   }
 }
 
-final myBooksStreamProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
-  final userCredential = ref.watch(authControllerProvider);
-  if (userCredential == null) {
-    throw Exception('User not logged in');
-  } else {
-    final collection = FirebaseFirestore.instance
-        .collection('users')
-        .doc(userCredential.email)
-        .collection('books');
-    final stream = collection.snapshots().map(
-        (e) => e.docs.map((e) => BookData.fromJson(e.data())).toList()
-    );
-    return stream;
-}
-});
-
 class MyBooksTabState extends ConsumerState<MyBooksTab> {
   final _newCommentController = TextEditingController();
 
@@ -59,7 +42,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
 
   @override
   Widget build(BuildContext context) {
-    final booksData = ref.watch(myBooksStreamProvider);
+    final booksData = ref.watch(myBooksControllerNotifierProvider as ProviderListenable);
     return Scaffold(
       body: CustomScrollView(
         slivers:[
@@ -67,7 +50,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
             pinned: true,
             expandedHeight: MediaQuery.of(context).size.height * 0.18,
             flexibleSpace: Image.network(
-                ref.read(userDataProvider)?.imageUrl ?? 'https://via.placeholder.com/150',
+                ref.read(userDataControllerNotifierProvider)?.imageUrl ?? 'https://via.placeholder.com/150',
                 fit: BoxFit.cover,
               ),
           ),
@@ -76,7 +59,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  '${ref.read(userDataProvider)?.username}の本棚：${booksData.when(
+                  '${ref.read(userDataControllerNotifierProvider)?.username}の本棚：${booksData.when(
                     data: (books) => books.length,
                     loading: () => 'Loading...',
                     error: (error, _) => 'Error',
@@ -364,10 +347,10 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                                 onPressed: () async{
                                                                   final newComment = CommentData(
                                                                     comment: _newCommentController.text,
-                                                                    commentatorUsername: ref.read(userDataProvider)?.username ?? '不明',
-                                                                    commentatorUid: ref.read(userDataProvider)?.uid ?? '不明',
-                                                                    commentatorEmail: ref.read(userDataProvider)?.email ?? '不明',
-                                                                    commentatorImageUrl: ref.read(userDataProvider)?.imageUrl ?? 'デフォルト画像URL',
+                                                                    commentatorUsername: ref.read(userDataControllerNotifierProvider)?.username ?? '不明',
+                                                                    commentatorUid: ref.read(userDataControllerNotifierProvider)?.uid ?? '不明',
+                                                                    commentatorEmail: ref.read(userDataControllerNotifierProvider)?.email ?? '不明',
+                                                                    commentatorImageUrl: ref.read(userDataControllerNotifierProvider)?.imageUrl ?? 'デフォルト画像URL',
                                                                     commentedAt: DateTime.now(),
                                                                   );
                                                                   await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).collection('comments').add(newComment.toJson());

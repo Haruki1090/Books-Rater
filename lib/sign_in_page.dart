@@ -1,3 +1,4 @@
+import 'package:books_rater/controllers/user_data_controller.dart';
 import 'package:books_rater/sign_up_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +17,6 @@ final _auth = FirebaseAuth.instance;
 
 Future<void>signInWithEmailAndPassword(String email, String password) async {
 }
-
-final authControllerProvider = StateNotifierProvider.autoDispose<AuthController, User?>(
-    (ref) => AuthController(initialUser: FirebaseAuth.instance.currentUser),
-);
 
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});
@@ -105,7 +102,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                         Navigator.of(context).pop(); // プログレスダイアログを閉じる
 
                         // サインイン成功時の処理
-                        ref.read(userDataProvider.notifier).reloadUserData();
+                        ref.read(userDataControllerNotifierProvider.notifier).reloadUserData();
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('サインインしました')),
