@@ -33,14 +33,34 @@ class MyApp extends ConsumerWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         useMaterial3: true,
+        // ライトモード時のボトムナビゲーションバーのテーマ
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: Colors.black, // ライトモード時の選択されたアイテムの色
+        ),
+        // ライトモード時のFABのテーマ
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.white, // ライトモードの背景色
+          foregroundColor: Colors.black, // ライトモードのアイコン色
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)), // 角丸の形状
+            side: BorderSide(color: Colors.black, width: 2), // 太線で黒色の外枠線
+          ),
         ),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
+        // ダークモード時のボトムナビゲーションバーのテーマ
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: Colors.white, // ダークモード時の選択されたアイテムの色
+        ),
+        // ダークモード時のFABのテーマ
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.black, // ダークモードの背景色
+          foregroundColor: Colors.white, // ダークモードのアイコン色
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)), // 角丸の形状
+            side: BorderSide(color: Colors.white, width: 2), // 太線で白色の外枠線
+          ),
         ),
       ),
       themeMode: themeMode,
