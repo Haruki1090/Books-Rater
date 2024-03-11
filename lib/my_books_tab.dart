@@ -1,7 +1,8 @@
+import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
+import 'package:books_rater/controllers/auth_controller.dart';
 import 'package:books_rater/controllers/comments_count_controller.dart';
 import 'package:books_rater/controllers/comments_data_controller.dart';
-import 'package:books_rater/controllers/my_books_controller.dart';
 import 'package:books_rater/controllers/user_data_controller.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:books_rater/editing_posted_book.dart';
@@ -12,6 +13,22 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final myBooksStreamProvider = StreamProvider.autoDispose<List<BookData>>((ref) {
+  final userCredential = ref.watch(authControllerNotifierProvider);
+  if (userCredential == null) {
+    throw Exception('User not logged in');
+  } else {
+    final collection = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userCredential.email)
+        .collection('books');
+    final stream = collection.snapshots().map(
+            (e) => e.docs.map((e) => BookData.fromJson(e.data())).toList()
+    );
+    return stream;
+  }
+});
 
 class MyBooksTab extends ConsumerStatefulWidget {
   const MyBooksTab({Key? key}) : super(key: key);
@@ -42,7 +59,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
 
   @override
   Widget build(BuildContext context) {
-    final booksData = ref.watch(myBooksControllerNotifierProvider as ProviderListenable);
+    final booksData = ref.watch(myBooksStreamProvider);
     return Scaffold(
       body: CustomScrollView(
         slivers:[
