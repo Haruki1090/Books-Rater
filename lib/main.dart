@@ -33,9 +33,15 @@ class MyApp extends ConsumerWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         useMaterial3: true,
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedItemColor: Colors.black, // ライトモード時の選択されたアイテムの色
+        ),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedItemColor: Colors.white, // ダークモード時の選択されたアイテムの色
+        ),
       ),
       themeMode: themeMode,
       home: const SignInPage(),
