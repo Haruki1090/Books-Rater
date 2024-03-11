@@ -11,6 +11,7 @@ class AllUsersBooksControllerNotifier extends _$AllUsersBooksControllerNotifier 
     return FirebaseFirestore.instance
         .collection("allUsersBooks")
         .where('banned', isEqualTo: false)
+        .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snapshot) {
       final books = snapshot.docs.map((e) {
