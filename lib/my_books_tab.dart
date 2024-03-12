@@ -61,6 +61,9 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
   Widget build(BuildContext context) {
     final booksData = ref.watch(myBooksStreamProvider);
     return Scaffold(
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.grey[850]
+          : Colors.grey[100],
       body: CustomScrollView(
         slivers:[
           SliverAppBar(

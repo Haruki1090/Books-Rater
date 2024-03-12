@@ -34,6 +34,9 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
     final booksData = ref.watch(allUsersBooksControllerNotifierProvider);
 
     return Scaffold(
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.grey[850]
+          : Colors.grey[100],
       body: booksData.when(
         data: (books) {
           if (books.isEmpty) {
