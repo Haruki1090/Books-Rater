@@ -120,8 +120,17 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                           showModalBottomSheet(
                             context: context,
                             builder: (context) {
-                              return SizedBox(
+                              return Container(
                                 height: 250,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).brightness == Brightness.dark
+                                      ? Colors.grey[850]
+                                      : Colors.white,
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(16),
+                                    topRight: Radius.circular(16),
+                                  ),
+                                ),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.start,

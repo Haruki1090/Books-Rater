@@ -49,6 +49,10 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
+                          backgroundColor: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.grey[850]
+                              : Colors.white,
+                          surfaceTintColor: Colors.white,
                           title: Text(book.title),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
