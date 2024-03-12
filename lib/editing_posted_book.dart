@@ -188,6 +188,20 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
             Text('最終更新日時: ${widget.bookUpdatedAt.format()}'),
             const SizedBox(height: 20),
             ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.pressed)) {
+                      return Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white // ダークモードの時のボタンの背景色
+                          : Colors.black; // ライトモードの時のボタンの背景色
+                    }
+                    return Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white // ダークモードの時のボタンの背景色
+                        : Colors.black; // ライトモードの時のボタンの背景色
+                  },
+                ),
+              ),
               onPressed: () {
                 showDialog(
                   context: context,
@@ -219,7 +233,16 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
                   );
                 });
               },
-              child: const Text('更新する'),
+              child: Text(
+                '更新する',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.black // ダークモードの時のテキストカラー
+                      : Colors.white, // ライトモードの時のテキストカラー
+                ),
+              ),
             ),
 
           ],
