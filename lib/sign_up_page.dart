@@ -169,7 +169,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         );
                         return;
                       }
-
                       if (password != confirmPassword) {
                         showDialog(
                           context: context,
@@ -190,7 +189,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         );
                         return;
                       }
-
                       try {
                         showDialog(
                           context: context,
@@ -206,6 +204,13 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                           ),
                         );
 
+                        // firebase Authにユーザー登録(email & password)
+                        await ref.read(firebaseAuthProvider.notifier).state.createUserWithEmailAndPassword(
+                          email: email,
+                          password: password,
+                        );
+
+                        // ユーザー登録が成功したら、firestoreにユーザー情報を登録
                         await FirebaseFirestore.instance.collection('users').doc(email).set({
                           'uid': email,
                           'username': username,
