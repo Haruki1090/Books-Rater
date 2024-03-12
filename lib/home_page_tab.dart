@@ -393,9 +393,16 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                         isScrollControlled: true,
                                                         context: context,
                                                         builder: (context) {
-                                                          return Padding(
-                                                            padding: const EdgeInsets.all(16.0),
-                                                            child: Container(
+                                                          return Container(
+                                                              decoration: BoxDecoration(
+                                                                color: Theme.of(context).brightness == Brightness.dark
+                                                                    ? Colors.grey[850]
+                                                                    : Colors.white,
+                                                                borderRadius: const BorderRadius.only(
+                                                                  topLeft: Radius.circular(16),
+                                                                  topRight: Radius.circular(16),
+                                                                ),
+                                                              ),
                                                               padding: const EdgeInsets.all(16),
                                                               width: MediaQuery.of(context).size.width,
                                                               height: MediaQuery.of(context).size.height * 0.85,
@@ -470,8 +477,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                                   ),
                                                                 ],
                                                               ),
-                                                            ),
-                                                          );
+                                                            );
                                                         },
                                                       );
                                                     },
