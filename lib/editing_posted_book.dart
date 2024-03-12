@@ -177,7 +177,7 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
                     return CupertinoSwitch(
                       value: banned,
                       onChanged: (bool value) {
-                        ref.read(bannedControllerNotifierProvider.notifier).state = value;
+                        ref.read(bannedControllerNotifierProvider.notifier).fetchBookBanned(value);
                       },
                     );
                   },
