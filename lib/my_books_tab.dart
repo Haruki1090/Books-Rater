@@ -328,7 +328,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                               loading: () => 'Loading...',
                                               error: (error, _) => 'Error',
                                             ),
-                                                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.grey)),
+                                                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)),
                                           ),
                                           TextButton.icon(
                                             onPressed: () {
@@ -429,7 +429,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                               loading: () => 'Loading...',
                                               error: (error, _) => 'Error',
                                             ),
-                                                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.grey)),
+                                                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)),
                                           ),
                                         ],
                                       ),

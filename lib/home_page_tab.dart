@@ -100,7 +100,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                   data: (favoritesCount) => 'いいね数：$favoritesCount',
                                                   loading: () => 'Loading...',
                                                   error: (error, _) => 'Error',
-                                                )),
+                                                ),),
                                                 const SizedBox(height: 16),
                                                       // いいねしたユーザーをListViewで表示
                                                       Expanded(
@@ -149,7 +149,9 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                           data: (favoritesCount) => 'いいね数：$favoritesCount', // `count`を`favoritesCount`に変更
                                           loading: () => 'Loading...',
                                           error: (error, _) => 'Error',
-                                        )),
+                                        ),
+                                          style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                                        ),
                                       )
                                     ],
                                   ),
@@ -258,7 +260,8 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                       data: (commentsCount) => 'コメント数：$commentsCount',
                                       loading: () => 'Loading...',
                                       error: (error, _) => 'Error',
-                                    )),
+                                    ),
+                                      style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
                                   ),
 
                                 ],
