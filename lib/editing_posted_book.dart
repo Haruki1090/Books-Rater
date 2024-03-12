@@ -122,30 +122,36 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
             const SizedBox(height: 20),
             Text(widget.bookTitle, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
-            TextFormField(
-              initialValue: widget.bookDescription,
-              decoration: const InputDecoration(
-                labelText: '本の説明',
-                border: OutlineInputBorder(),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextFormField(
+                initialValue: widget.bookDescription,
+                decoration: const InputDecoration(
+                  labelText: '本の説明',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 3,
+                onChanged: (value) {
+                  ref.read(descriptionControllerNotifierProvider.notifier).fetchBookDescription(value);
+                },
               ),
-              maxLines: 3,
-              onChanged: (value) {
-                ref.read(descriptionControllerNotifierProvider.notifier).fetchBookDescription(value);
-              },
             ),
             const SizedBox(height: 20),
-            ListTile(
-              title: const Text('ホーム非表示にする'),
-              trailing: Consumer(
-                builder: (context, ref, _) {
-                  final banned = ref.watch(bannedControllerNotifierProvider);
-                  return CupertinoSwitch(
-                    value: banned,
-                    onChanged: (bool newValue) {
-                      ref.read(bannedControllerNotifierProvider.notifier).fetchBookBanned(newValue);
-                      },
-                  );
-                  },
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+              child: ListTile(
+                title: const Text('ホーム非表示にする'),
+                trailing: Consumer(
+                  builder: (context, ref, _) {
+                    final banned = ref.watch(bannedControllerNotifierProvider);
+                    return CupertinoSwitch(
+                      value: banned,
+                      onChanged: (bool newValue) {
+                        ref.read(bannedControllerNotifierProvider.notifier).fetchBookBanned(newValue);
+                        },
+                    );
+                    },
+                ),
               ),
             ),
             const SizedBox(height: 20),
