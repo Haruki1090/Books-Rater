@@ -142,8 +142,31 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
                   const Icon(Icons.account_circle, size: 200),
                 const SizedBox(height: 15),
                 ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed)) {
+                          return Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white // ダークモードの時のボタンの背景色
+                              : Colors.black; // ライトモードの時のボタンの背景色
+                        }
+                        return Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white // ダークモードの時のボタンの背景色
+                            : Colors.black; // ライトモードの時のボタンの背景色
+                      },
+                    ),
+                  ),
                   onPressed: _pickImage,
-                  child: const Text('プロフィール画像を変更'),
+                  child: Text(
+                    'プロフィール画像を変更',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.black // ダークモードの時のテキストカラー
+                          : Colors.white, // ライトモードの時のテキストカラー
+                    ),
+                  ),
                 ),
               ]
             ),
@@ -158,8 +181,31 @@ class _EditingUserDataPageState extends ConsumerState<EditingUserDataPage> {
               ),
             ),
             ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.pressed)) {
+                      return Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white // ダークモードの時のボタンの背景色
+                          : Colors.black; // ライトモードの時のボタンの背景色
+                    }
+                    return Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white // ダークモードの時のボタンの背景色
+                        : Colors.black; // ライトモードの時のボタンの背景色
+                  },
+                ),
+              ),
               onPressed: _saveUserData,
-              child: const Text('保存'),
+              child: Text(
+                '保存',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.black // ダークモードの時のテキストカラー
+                      : Colors.white, // ライトモードの時のテキストカラー
+                ),
+              ),
             ),
           ],
         ),

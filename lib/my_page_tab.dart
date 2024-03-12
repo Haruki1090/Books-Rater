@@ -69,13 +69,36 @@ class _MyPageTabState extends ConsumerState<MyPageTab> {
             Text(userData.username, style: const TextStyle(fontSize: 24)),
             Text('登録した本：${bookCount ?? 0}冊', style: const TextStyle(fontSize: 20)),
             ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.pressed)) {
+                      return Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white // ダークモードの時のボタンの背景色
+                          : Colors.black; // ライトモードの時のボタンの背景色
+                    }
+                    return Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white // ダークモードの時のボタンの背景色
+                        : Colors.black; // ライトモードの時のボタンの背景色
+                  },
+                ),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const EditingUserDataPage()),
                 );
               },
-              child: const Text('プロフィールを編集'),
+              child: Text(
+                'プロフィールを編集',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.black // ダークモードの時のテキストカラー
+                      : Colors.white, // ライトモードの時のテキストカラー
+                ),
+              ),
             ),
           ],
         ),

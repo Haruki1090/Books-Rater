@@ -35,8 +35,36 @@ class SettingPage extends ConsumerWidget {
             ),
 
             ElevatedButton.icon(
-              icon: const Icon(Icons.logout),
-              label: const Text('サインアウト'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.pressed)) {
+                      return Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white // ダークモードの時のボタンの背景色
+                          : Colors.black; // ライトモードの時のボタンの背景色
+                    }
+                    return Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white // ダークモードの時のボタンの背景色
+                        : Colors.black; // ライトモードの時のボタンの背景色
+                  },
+                ),
+              ),
+              icon: Icon(
+                  Icons.logout,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.black // ダークモードの時のアイコンカラー
+                      : Colors.white // ライトモードの時のアイコンカラー
+              ),
+              label: Text(
+                'サインイン',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.black // ダークモードの時のテキストカラー
+                      : Colors.white, // ライトモードの時のテキストカラー
+                ),
+              ),
               onPressed: () {
                 showDialog<bool>(
                   context: context,
