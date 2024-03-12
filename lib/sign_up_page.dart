@@ -128,14 +128,40 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
+                              backgroundColor: Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.black // ダークモードの時の背景色
+                                  : Colors.white, // ライトモードの時の背景色
                               title: const Text('エラー'),
                               content: const Text('全ての項目を入力してください。'),
                               actions: [
                                 TextButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                          (Set<MaterialState> states) {
+                                        if (states.contains(MaterialState.pressed)) {
+                                          return Theme.of(context).brightness == Brightness.dark
+                                              ? Colors.white // ダークモードの時のボタンの背景色
+                                              : Colors.black; // ライトモードの時のボタンの背景色
+                                        }
+                                        return Theme.of(context).brightness == Brightness.dark
+                                            ? Colors.white // ダークモードの時のボタンの背景色
+                                            : Colors.black; // ライトモードの時のボタンの背景色
+                                      },
+                                    ),
+                                  ),
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: const Text('OK'),
+                                  child: Text(
+                                    'OK',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).brightness == Brightness.dark
+                                          ? Colors.black // ダークモードの時のテキストカラー
+                                          : Colors.white, // ライトモードの時のテキストカラー
+                                    ),
+                                  ),
                                 ),
                               ],
                             );
