@@ -102,7 +102,9 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
         title: const Text('本の編集'),
       ),
       body: Center(
