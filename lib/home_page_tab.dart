@@ -149,7 +149,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                               );
                                           },
                                         child: Text(ref.watch(favoritesCountControllerNotifierProvider(book)).when(
-                                          data: (favoritesCount) => 'いいね数：$favoritesCount', // `count`を`favoritesCount`に変更
+                                          data: (favoritesCount) => 'いいね数：$favoritesCount',
                                           loading: () => 'Loading...',
                                           error: (error, _) => 'Error',
                                         ),
@@ -186,7 +186,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                             child: Column(
                                               children: [
                                                 Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
-                                                  data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
+                                                  data: (commentsCount) => 'コメント数：$commentsCount',
                                                   loading: () => 'Loading...',
                                                   error: (error, _) => 'Error',
                                                 ),
@@ -344,7 +344,6 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                       color: isFavorite ? Colors.red : Colors.grey,
                                                     ),
                                                   onPressed: () async{
-                                                    // いいねボタンの onPressed コールバック内
                                                     final user = FirebaseAuth.instance.currentUser;
                                                     final userName = ref.read(userDataControllerNotifierProvider)?.username;
                                                     final userImageUrl = ref.read(userDataControllerNotifierProvider)?.imageUrl;
