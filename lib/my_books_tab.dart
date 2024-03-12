@@ -217,6 +217,11 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                           );
                         },
                         child: Card(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.grey[850]
+                              : Colors.white,
+                          surfaceTintColor: Colors.white,
+                          elevation: 5,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(8, 14, 8, 14),
                             child: Row(
@@ -240,7 +245,6 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                      //todo: いいねとコメントの数を表示
                                       Row(
                                         children: [
                                           TextButton.icon(
@@ -304,12 +308,18 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                   }
                                               );
                                             },
-                                            icon: const Icon(Icons.favorite),
+                                            icon: Icon(
+                                                Icons.favorite,
+                                                color: Theme.of(context).brightness == Brightness.dark
+                                                    ? Colors.white // ダークモードの時のアイコンカラー
+                                                    : Colors.grey // ライトモードの時のアイコンカラー
+                                            ),
                                             label: Text(ref.watch(favoritesCountControllerNotifierProvider(book)).when(
                                               data: (favoritesCount) => 'いいね数：$favoritesCount', // `count`を`favoritesCount`に変更
                                               loading: () => 'Loading...',
                                               error: (error, _) => 'Error',
-                                            )),
+                                            ),
+                                                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.grey)),
                                           ),
                                           TextButton.icon(
                                             onPressed: () {
@@ -399,12 +409,18 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                 },
                                               );
                                             },
-                                            icon: const Icon(Icons.comment),
+                                            icon: Icon(
+                                                Icons.comment,
+                                                color: Theme.of(context).brightness == Brightness.dark
+                                                    ? Colors.white // ダークモードの時のアイコンカラー
+                                                    : Colors.grey // ライトモードの時のアイコンカラー
+                                            ),
                                             label: Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
                                               data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
                                               loading: () => 'Loading...',
                                               error: (error, _) => 'Error',
-                                            )),
+                                            ),
+                                                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.grey)),
                                           ),
                                         ],
                                       ),

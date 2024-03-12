@@ -268,6 +268,11 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                         final userName = userData?['username'] ?? '不明';
                         final userImageUrl = userData?['imageUrl'] ?? 'デフォルト画像URL';
                         return Card(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.grey[850]
+                              : Colors.white,
+                          surfaceTintColor: Colors.white,
+                          elevation: 5,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
