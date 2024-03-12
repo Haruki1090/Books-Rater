@@ -37,6 +37,7 @@ class _HomeState extends ConsumerState<Home> {
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const <BottomNavigationBarItem>[
