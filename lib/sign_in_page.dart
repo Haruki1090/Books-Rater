@@ -195,7 +195,8 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         return AlertDialog(
           backgroundColor: Theme.of(context).brightness == Brightness.dark
               ? Colors.grey[800] // ダークモードの時の背景色
-              : Colors.white, // ライトモードの時の背景色
+              : Colors.white,// ライトモードの時の背景色
+          surfaceTintColor: Colors.white,
           title: const Text('エラー'),
           content: Text(message),
           actions: <Widget>[

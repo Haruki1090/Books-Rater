@@ -99,10 +99,6 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      shadowColor: Theme.of(context).brightness == Brightness.dark
-          ? Colors.grey // ダークモードの時の影の色
-          : Colors.black, // ライトモードの時の影の色
-      elevation: 30.0,
       backgroundColor: Theme.of(context).brightness == Brightness.dark
           ? Colors.grey[800] // ダークモードの時の背景色
             : Colors.white,// ライトモードの時の背景色

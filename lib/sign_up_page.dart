@@ -129,8 +129,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               backgroundColor: Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.black // ダークモードの時の背景色
-                                  : Colors.white, // ライトモードの時の背景色
+                                  ? Colors.grey[800] // ダークモードの時の背景色
+                                  : Colors.white,// ライトモードの時の背景色
+                              surfaceTintColor: Colors.white,
                               title: const Text('エラー'),
                               content: const Text('全ての項目を入力してください。'),
                               actions: [

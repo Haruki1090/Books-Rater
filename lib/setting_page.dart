@@ -41,6 +41,10 @@ class SettingPage extends ConsumerWidget {
                 showDialog<bool>(
                   context: context,
                   builder: (context) => AlertDialog(
+                    backgroundColor: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.grey[800] // ダークモードの時の背景色
+                        : Colors.white,// ライトモードの時の背景色
+                    surfaceTintColor: Colors.white,
                     title: const Text('サインアウトしますか？'),
                     actions: <Widget>[
                       TextButton(
