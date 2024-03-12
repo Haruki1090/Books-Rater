@@ -17,7 +17,9 @@ class SettingPage extends ConsumerWidget {
     final String currentMode = isDarkModeEnabled ? 'ダークモード' : 'ライトモード';
 
     return Scaffold(
+      backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
         title: const Text('設定'),
       ),
       body: Center(
