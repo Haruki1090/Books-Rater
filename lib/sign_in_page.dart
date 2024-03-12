@@ -79,55 +79,16 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      // ボタンの背景色　ダークモード時は黒、ライトモード時は白
-                      // ボタンの影の深さ　押下時は影をなくす、通常時は10
-                      // ボタンのテキストカラー　ダークモード時は白、ライトモード時は黒
-                      // ボタンの外枠線の色　ダークモード時は白、ライトモード時は黒
                       backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
+                        (Set<MaterialState> states) {
                           if (states.contains(MaterialState.pressed)) {
-                            return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+                            return Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white // ダークモードの時のボタンの背景色
+                                : Colors.black; // ライトモードの時のボタンの背景色
                           }
                           return Theme.of(context).brightness == Brightness.dark
-                              ? Colors.black // ダークモードの時のボタンの背景色
-                              : Colors.white; // ライトモードの時のボタンの背景色
-                        },
-                      ),
-                      elevation: MaterialStateProperty.resolveWith<double>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.pressed)) {
-                            return 0; // 押下時は影をなくす
-                          }
-                          return 10; // 通常時の影の深さ
-                        },
-                      ),
-                      foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          return Theme.of(context).brightness == Brightness.dark
-                              ? Colors.black // ダークモードの時のテキストカラー
-                              : Colors.white; // ライトモードの時のテキストカラー
-                        },
-                      ),
-                      shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
-                            (Set<MaterialState> states) {
-                          return RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                              color: Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.white // ダークモードの時の外枠線の色
-                                  : Colors.black, // ライトモードの時の外枠線の色
-                            ),
-                          );
-                        },
-                      ),
-                      overlayColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          // 押下時に透明色を適用
-                          if (states.contains(MaterialState.pressed)) {
-                            return Colors.transparent;
-                          }
-                          // デフォルト状態でのオーバーレイ色を設定（ここでは透明を選択）
-                          return Colors.transparent;
+                              ? Colors.white // ダークモードの時のボタンの背景色
+                              : Colors.black; // ライトモードの時のボタンの背景色
                         },
                       ),
                     ),
@@ -178,8 +139,8 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white // ダークモードの時のテキストカラー
-                            : Colors.black, // ライトモードの時のテキストカラー
+                            ? Colors.black // ダークモードの時のテキストカラー
+                            : Colors.white, // ライトモードの時のテキストカラー
                       ),
                     ),
                   ),
@@ -193,21 +154,15 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
                         (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed)) {
-                        return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+                        return Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white // ダークモードの時のボタンの背景色
+                            : Colors.black; // ライトモードの時のボタンの背景色
                       }
                       return Theme.of(context).brightness == Brightness.dark
                           ? Colors.white // ダークモードの時のボタンの背景色
                           : Colors.black; // ライトモードの時のボタンの背景色
                     },
                   ),
-                elevation: MaterialStateProperty.resolveWith<double>(
-                      (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.pressed)) {
-                      return 0; // 押下時は影をなくす
-                    }
-                    return 10; // 通常時の影の深さ
-                  },
-                ),
                 ),
                 onPressed: () {
                   Navigator.push(
