@@ -41,7 +41,9 @@ class _MyPageTabState extends ConsumerState<MyPageTab> {
     }
 
     return Scaffold(
+      backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
         actions: [
           IconButton(onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingPage()));
