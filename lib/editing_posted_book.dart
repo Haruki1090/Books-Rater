@@ -141,16 +141,46 @@ class _EditingPostedBookState extends ConsumerState<EditingPostedBook> {
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
               child: ListTile(
                 title: const Text('ホーム非表示にする'),
+                leading: SizedBox(
+                  width: 30,
+                  child: IconButton(
+                    icon: const Icon(Icons.info_outline),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.grey[800] // ダークモードの時の背景色
+                                : Colors.white,
+                            surfaceTintColor: Colors.white,
+                            title: const Text('ホーム非表示について'),
+                            content: const Text('ホーム非表示にすると、他のユーザーがあなたの投稿した本を見ることができなくなります。ただし、あなた自身は自分の投稿した本を見ることができます。この設定は投稿した後からでも変更可能です。'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('閉じる'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+                    },
+                  ),
+                ),
                 trailing: Consumer(
                   builder: (context, ref, _) {
                     final banned = ref.watch(bannedControllerNotifierProvider);
                     return CupertinoSwitch(
                       value: banned,
-                      onChanged: (bool newValue) {
-                        ref.read(bannedControllerNotifierProvider.notifier).fetchBookBanned(newValue);
-                        },
+                      onChanged: (bool value) {
+                        ref.read(bannedControllerNotifierProvider.notifier).state = value;
+                      },
                     );
-                    },
+                  },
                 ),
               ),
             ),
