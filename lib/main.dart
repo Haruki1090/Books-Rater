@@ -45,7 +45,7 @@ class MyApp extends ConsumerWidget {
           foregroundColor: Colors.black, // ライトモードのアイコン色
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16)), // 角丸の形状
-            side: BorderSide(color: Colors.black, width: 2), // 太線で黒色の外枠線
+            side: BorderSide(color: Colors.black, width: 4), // 太線で黒色の外枠線
           ),
         ),
 

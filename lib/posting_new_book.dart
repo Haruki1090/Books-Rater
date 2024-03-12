@@ -99,6 +99,14 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
+      shadowColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.grey // ダークモードの時の影の色
+          : Colors.black, // ライトモードの時の影の色
+      elevation: 30.0,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.grey[800] // ダークモードの時の背景色
+            : Colors.white,// ライトモードの時の背景色
+      surfaceTintColor: Colors.white,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -170,6 +178,9 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
+                              backgroundColor: Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.grey[800] // ダークモードの時の背景色
+                                  : Colors.white,
                               title: const Text('ホーム非表示について'),
                               content: const Text('ホーム非表示にすると、他のユーザーがあなたの投稿した本を見ることができなくなります。ただし、あなた自身は自分の投稿した本を見ることができます。この設定は投稿した後からでも変更可能です。'),
                               actions: [
@@ -201,6 +212,20 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                 ),
 
                 ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed)) {
+                          return Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white // ダークモードの時のボタンの背景色
+                              : Colors.black; // ライトモードの時のボタンの背景色
+                        }
+                        return Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white // ダークモードの時のボタンの背景色
+                            : Colors.black; // ライトモードの時のボタンの背景色
+                      },
+                    ),
+                  ),
                   onPressed: () {
                     if (_selectedBookImageFile != null) {
                       final title = ref.read(titleProvider);
@@ -259,7 +284,16 @@ class _PostingNewBookState extends ConsumerState<PostingNewBook> {
                       );
                     }
                   },
-                  child: const Text('投稿'),
+                  child: Text(
+                    '投稿',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.black // ダークモードの時のテキストカラー
+                          : Colors.white, // ライトモードの時のテキストカラー
+                    ),
+                  ),
                 ),
               ],
             ),
