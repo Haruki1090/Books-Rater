@@ -103,6 +103,20 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed)) {
+                            return Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white // ダークモードの時のボタンの背景色
+                                : Colors.black; // ライトモードの時のボタンの背景色
+                          }
+                          return Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white // ダークモードの時のボタンの背景色
+                              : Colors.black; // ライトモードの時のボタンの背景色
+                        },
+                      ),
+                    ),
                     onPressed: () async {
                       final username = _usernameController.text.trim();
                       final email = _emailController.text.trim();
@@ -203,7 +217,16 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         );
                       }
                     },
-                    child: const Text('サインアップ'),
+                    child: Text(
+                      'サインアップ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black // ダークモードの時のテキストカラー
+                            : Colors.white, // ライトモードの時のテキストカラー
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -211,10 +234,33 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed)) {
+                        return Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white // ダークモードの時のボタンの背景色
+                            : Colors.black; // ライトモードの時のボタンの背景色
+                      }
+                      return Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white // ダークモードの時のボタンの背景色
+                          : Colors.black; // ライトモードの時のボタンの背景色
+                    },
+                  ),
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('アカウントを既にお持ちの場合'),
+                child: Text(
+                  'アカウントをすでにお持ちの方',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.black // ダークモードの時のテキストカラー
+                        : Colors.white, // ライトモードの時のテキストカラー
+                  ),
+                ),
               ),
             ),
           ],
