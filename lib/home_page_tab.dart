@@ -534,7 +534,14 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                         );
                       } else {
                         // データロード中またはエラーがある場合
-                        return const Center(child: CircularProgressIndicator());
+                        return Container(
+                          height: 196, // 8+180+8
+                          padding: const EdgeInsets.all(16.0),
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.grey[850]
+                              : Colors.white,
+                          child: const Center(child: CircularProgressIndicator()),
+                        );
                       }
                     },
                   ),
@@ -544,7 +551,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
           }
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(child: Text('Error: $error')),
+        error: (error, _) => Center(child: Text('エラー: $error')),
       ),
     );
   }
