@@ -58,7 +58,7 @@ class SettingPage extends ConsumerWidget {
                       : Colors.white // ライトモードの時のアイコンカラー
               ),
               label: Text(
-                'サインイン',
+                'サインアウト',
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
