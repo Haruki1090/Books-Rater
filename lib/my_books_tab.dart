@@ -333,7 +333,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                     : Colors.grey // ライトモードの時のアイコンカラー
                                             ),
                                             label: Text(ref.watch(favoritesCountControllerNotifierProvider(book)).when(
-                                              data: (favoritesCount) => 'いいね数：$favoritesCount', // `count`を`favoritesCount`に変更
+                                              data: (favoritesCount) => 'いいね数：$favoritesCount',
                                               loading: () => 'Loading...',
                                               error: (error, _) => 'Error',
                                             ),
@@ -359,7 +359,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                     child: Column(
                                                       children: [
                                                         Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
-                                                          data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
+                                                          data: (commentsCount) => 'コメント数：$commentsCount',
                                                           loading: () => 'Loading...',
                                                           error: (error, _) => 'Error',
                                                         )),
@@ -438,7 +438,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                     : Colors.grey // ライトモードの時のアイコンカラー
                                             ),
                                             label: Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
-                                              data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
+                                              data: (commentsCount) => 'コメント数：$commentsCount',
                                               loading: () => 'Loading...',
                                               error: (error, _) => 'Error',
                                             ),

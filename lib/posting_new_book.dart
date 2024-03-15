@@ -58,7 +58,7 @@ Future<void> addBookToUserBooks({
     updatedAt: DateTime.now(),
   );
 
-  // bookId 問題の解決
+
   final DocumentReference documentRef = FirebaseFirestore.instance.collection('users').doc(user.email).collection('books').doc();
   final bookId = documentRef.id;
   final newBookData0 = newBookData.copyWith(bookId: bookId);
