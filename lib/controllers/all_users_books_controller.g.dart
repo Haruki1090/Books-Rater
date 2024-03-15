@@ -7,7 +7,7 @@ part of 'all_users_books_controller.dart';
 // **************************************************************************
 
 String _$allUsersBooksControllerNotifierHash() =>
-    r'178a26e1a94dc6524632252f5ec7051ddb8abfcb';
+    r'1620350b7136854f8f63dc353e2457f43c1b24ba';
 
 /// See also [AllUsersBooksControllerNotifier].
 @ProviderFor(AllUsersBooksControllerNotifier)

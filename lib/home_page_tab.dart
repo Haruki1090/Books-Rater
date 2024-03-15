@@ -1,10 +1,9 @@
+import 'package:books_rater/book_data.dart';
 import 'package:books_rater/controllers/all_users_books_controller.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/controllers/comments_count_controller.dart';
-import 'package:books_rater/controllers/comments_data_controller.dart';
 import 'package:books_rater/controllers/user_data_controller.dart';
 import 'package:books_rater/date_format.dart';
-import 'package:books_rater/controllers/favorited_users_controller.dart';
 import 'package:books_rater/favorites_controller.dart';
 import 'package:books_rater/controllers/favorites_count_controller.dart';
 import 'package:books_rater/favorites_data.dart';
@@ -19,6 +18,33 @@ class HomePageTab extends ConsumerStatefulWidget {
   @override
   HomePageTabState createState() => HomePageTabState();
 }
+
+final favoritesUsersProvider = StreamProvider.family<List<FavoritesData>, BookData>((ref, bookData) {  return FirebaseFirestore.instance
+    .collection('users')
+    .doc(bookData.email) // 書籍の投稿者の email を使用
+    .collection('books')
+    .doc(bookData.bookId)
+    .collection('favorites')
+    .snapshots()
+    .map((snapshot) => snapshot.docs.map((doc) {
+  return FavoritesData.fromJson(doc.data());
+}).toList());
+});
+
+final commentsDataProvider = StreamProvider.family<List<CommentData>, BookData>((ref, bookData) {
+  return FirebaseFirestore.instance
+      .collection('users')
+      .doc(bookData.email) // 書籍の投稿者の email を使用
+      .collection('books')
+      .doc(bookData.bookId)
+      .collection('comments')
+      .orderBy('commentedAt', descending: true) // 最新のコメントが上に来るように
+      .snapshots()
+      .map((snapshot) {
+    return snapshot.docs.map((doc) => CommentData.fromJson(doc.data())).toList();
+  });
+});
+
 
 class HomePageTabState extends ConsumerState<HomePageTab> {
   final _newCommentController = TextEditingController();
@@ -58,218 +84,216 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                           surfaceTintColor: Colors.white,
                           title: Text(book.title),
                           content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Center(
-                                child: SizedBox(
-                                    width: 200,
-                                    height: 200,
-                                    child: Image(image: NetworkImage(book.bookImageUrl))
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: SizedBox(
+                                      width: 200,
+                                      height: 200,
+                                      child: Image(image: NetworkImage(book.bookImageUrl))
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text('作成日: ${book.createdAt.format()}'),
-                              const SizedBox(height: 8),
-                              Text(book.description),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.favorite),
-                                      TextButton(
-                                        onPressed: (){
-                                          showModalBottomSheet(
-                                              isScrollControlled: true,
-                                              context: context,
-                                              builder: (context) {
-                                                return Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Theme.of(context).brightness == Brightness.dark
-                                                        ? Colors.grey[850]
-                                                        : Colors.white,
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(16),
-                                                      topRight: Radius.circular(16),
+                                const SizedBox(height: 8),
+                                Text('作成日: ${book.createdAt.format()}'),
+                                const SizedBox(height: 8),
+                                Text(book.description),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.favorite),
+                                        TextButton(
+                                          onPressed: () {
+                                            showModalBottomSheet(
+                                                isScrollControlled: true,
+                                                context: context,
+                                                builder: (context) {
+                                                  return Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[850] : Colors.white,
+                                                      borderRadius: const BorderRadius.only(
+                                                        topLeft: Radius.circular(16),
+                                                        topRight: Radius.circular(16),
+                                                      ),
                                                     ),
-                                                  ),
-                                                  padding: const EdgeInsets.all(16),
-                                                  width: MediaQuery.of(context).size.width,
-                                                  height: MediaQuery.of(context).size.height*0.85,
-                                                  child: Column(
-                                                    children: [
-                                                  Text(ref.watch(favoritesCountControllerNotifierProvider(book)).when(
-                                                  data: (favoritesCount) => 'いいね数：$favoritesCount',
-                                                  loading: () => 'Loading...',
-                                                  error: (error, _) => 'Error',
-                                                ),),
-                                                const SizedBox(height: 16),
-                                                      // いいねしたユーザーをListViewで表示
-                                                      Expanded(
-                                                        child: ref.watch(favoritedUsersControllerProvider(book)).when(
-                                                          data: (users) {
-                                                            if (users.isEmpty) {
-                                                              // いいねしたユーザーがいない場合
-                                                              return const Center(
-                                                                child: Column(
-                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                  children: [
-                                                                    Text('いいねしたユーザーがいません。', style: TextStyle(fontSize: 18.0)),
-                                                                    SizedBox(height: 8),
-                                                                    Text('この投稿にいいねしよう！', style: TextStyle(fontSize: 16.0)),
-                                                                  ],
-                                                                ),
-                                                              );
-                                                            } else {
-                                                              // いいねしたユーザーがいる場合
-                                                              return ListView.builder(
-                                                                itemCount: users.length,
-                                                                itemBuilder: (context, index) {
-                                                                  final user = users[index];
-                                                                  return ListTile(
-                                                                    leading: CircleAvatar(
-                                                                      backgroundImage: NetworkImage(user.imageUrl),
-                                                                    ),
-                                                                    title: Text(user.username),
-                                                                    subtitle: Text(user.email),
-                                                                  );
+                                                    padding: const EdgeInsets.all(16),
+                                                    width: MediaQuery.of(context).size.width,
+                                                    height: MediaQuery.of(context).size.height * 0.85,
+                                                    child: Column(
+                                                      children: [
+                                                        Text(ref.watch(favoritesCountControllerNotifierProvider(book)).when(
+                                                          data: (favoritesCount) => 'いいね数：$favoritesCount',
+                                                          loading: () => 'Loading...',
+                                                          error: (error, _) => 'Error',
+                                                        ),),
+                                                        const SizedBox(height: 16),
+                                                        // いいねしたユーザーをListViewで表示
+                                                        Expanded(
+                                                          child: ref.watch(favoritesUsersProvider(book)).when(
+                                                            data: (users) {
+                                                              if (users.isEmpty) {
+                                                                // いいねしたユーザーがいない場合
+                                                                return const Center(
+                                                                  child: Column(
+                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                    children: [
+                                                                      Text('いいねしたユーザーがいません。', style: TextStyle(fontSize: 18.0)),
+                                                                      SizedBox(height: 8),
+                                                                      Text('この投稿にいいねしよう！', style: TextStyle(fontSize: 16.0)),
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              } else {
+                                                                // いいねしたユーザーがいる場合
+                                                                return ListView.builder(
+                                                                  itemCount: users.length,
+                                                                  itemBuilder: (context, index) {
+                                                                    final user = users[index];
+                                                                    return ListTile(
+                                                                      leading: CircleAvatar(backgroundImage: NetworkImage(user.imageUrl),),
+                                                                      title: Text(user.username),
+                                                                      subtitle: Text(user.email),
+                                                                    );
                                                                   },
-                                                              );
-                                                            }
+                                                                );
+                                                              }
                                                             },
-                                                          loading: () => const Center(child: CircularProgressIndicator()),
-                                                          error: (error, _) => Center(child: Text('エラーが発生しました: $error')),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                );
-                                              }
-                                              );
-                                          },
-                                        child: Text(ref.watch(favoritesCountControllerNotifierProvider(book)).when(
-                                          data: (favoritesCount) => 'いいね数：$favoritesCount',
-                                          loading: () => 'Loading...',
-                                          error: (error, _) => 'Error',
-                                        ),
-                                          style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(width: 16),
-                              Row(
-                                children: [
-                                  const Icon(Icons.comment),
-                                  TextButton(
-                                    onPressed: (){
-                                      showModalBottomSheet(
-                                        isScrollControlled: true,
-                                        context: context,
-                                        builder: (context) {
-                                          return Container(
-                                            decoration: BoxDecoration(
-                                              color: Theme.of(context).brightness == Brightness.dark
-                                                  ? Colors.grey[850]
-                                                  : Colors.white,
-                                              borderRadius: const BorderRadius.only(
-                                                topLeft: Radius.circular(16),
-                                                topRight: Radius.circular(16),
-                                              ),
-                                            ),
-                                            padding: const EdgeInsets.all(16),
-                                            width: MediaQuery.of(context).size.width,
-                                            height: MediaQuery.of(context).size.height * 0.85,
-                                            child: Column(
-                                              children: [
-                                                Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
-                                                  data: (commentsCount) => 'コメント数：$commentsCount',
-                                                  loading: () => 'Loading...',
-                                                  error: (error, _) => 'Error',
-                                                ),
-                                                ),
-                                                const SizedBox(height: 16),
-                                                // コメントをListViewで表示
-                                                Expanded(
-                                                  child: ref.watch(commentsDataControllerNotifierProvider(book)).when(
-                                                    data: (comments) {
-                                                      if (comments.isEmpty) {
-                                                        // コメントが一つもない場合
-                                                        return const Center(
-                                                          child: Text(
-                                                            'コメントはまだありません。\nコメントを追加しましょう。',
-                                                            textAlign: TextAlign.center,
-                                                            style: TextStyle(
-                                                              color: Colors.grey,
-                                                              fontSize: 18.0,
-                                                            ),
+                                                            loading: () => const Center(child: CircularProgressIndicator()),
+                                                            error: (error, _) => Center(child: Text('エラーが発生しました: $error')),
                                                           ),
-                                                        );
-                                                      } else {
-                                                        // コメントがある場合
-                                                        return ListView.builder(
-                                                          itemCount: comments.length,
-                                                          itemBuilder: (context, index) {
-                                                            final comment = comments[index];
-                                                            return ListTile(
-                                                              leading: CircleAvatar(
-                                                                backgroundImage: NetworkImage(comment.commentatorImageUrl),
-                                                              ),
-                                                              title: Text(comment.commentatorUsername),
-                                                              subtitle: Text(comment.comment),
-                                                              trailing: Text(comment.commentedAt.format()),
-                                                            );
-                                                          },
-                                                        );
-                                                      }
-                                                    },
-                                                    loading: () => const Center(child: CircularProgressIndicator()),
-                                                    error: (error, _) => Center(child: Text('エラーが発生しました: $error')),
-                                                  ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  );
+                                                }
+                                            );
+                                          },
+                                          child: Text(ref.watch(favoritesCountControllerNotifierProvider(book)).when(
+                                            data: (favoritesCount) => 'いいね数：$favoritesCount',
+                                            loading: () => 'Loading...',
+                                            error: (error, _) => 'Error',
+                                          ),
+                                            style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(width: 16),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.comment),
+                                    TextButton(
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          builder: (context) {
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context).brightness == Brightness.dark
+                                                    ? Colors.grey[850]
+                                                    : Colors.white,
+                                                borderRadius: const BorderRadius.only(
+                                                  topLeft: Radius.circular(16),
+                                                  topRight: Radius.circular(16),
                                                 ),
-                                                // コメント入力フィールド
-                                                TextFormField(
-                                                  controller: _newCommentController,
-                                                  decoration: InputDecoration(
-                                                    border: const OutlineInputBorder(),
-                                                    labelText: 'コメントを追加...',
-                                                    suffixIcon: IconButton(
-                                                      icon: const Icon(Icons.send),
-                                                      onPressed: () async{
-                                                        final newComment = CommentData(
-                                                          comment: _newCommentController.text,
-                                                          commentatorUsername: ref.read(userDataControllerNotifierProvider)?.username ?? '不明',
-                                                          commentatorUid: ref.read(userDataControllerNotifierProvider)?.uid ?? '不明',
-                                                          commentatorEmail: ref.read(userDataControllerNotifierProvider)?.email ?? '不明',
-                                                          commentatorImageUrl: ref.read(userDataControllerNotifierProvider)?.imageUrl ?? 'デフォルト画像URL',
-                                                          commentedAt: DateTime.now(),
-                                                        );
-                                                        await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).collection('comments').add(newComment.toJson());
-                                                        _newCommentController.clear();
+                                              ),
+                                              padding: const EdgeInsets.all(16),
+                                              width: MediaQuery.of(context).size.width,
+                                              height: MediaQuery.of(context).size.height * 0.85,
+                                              child: Column(
+                                                children: [
+                                                  Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
+                                                    data: (commentsCount) => 'コメント数：$commentsCount',
+                                                    loading: () => 'Loading...',
+                                                    error: (error, _) => 'Error',
+                                                  ),
+                                                  ),
+                                                  const SizedBox(height: 16),
+                                                  // コメントをListViewで表示
+                                                  Expanded(
+                                                    child: ref.watch(commentsDataProvider(book)).when(
+                                                      data: (comments) {
+                                                        if (comments.isEmpty) {
+                                                          // コメントが一つもない場合
+                                                          return const Center(
+                                                            child: Text(
+                                                              'コメントはまだありません。\nコメントを追加しましょう。',
+                                                              textAlign: TextAlign.center,
+                                                              style: TextStyle(
+                                                                color: Colors.grey,
+                                                                fontSize: 18.0,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        } else {
+                                                          // コメントがある場合
+                                                          return ListView.builder(
+                                                            itemCount: comments.length,
+                                                            itemBuilder: (context, index) {
+                                                              final comment = comments[index];
+                                                              return ListTile(
+                                                                leading: CircleAvatar(
+                                                                  backgroundImage: NetworkImage(comment.commentatorImageUrl),
+                                                                ),
+                                                                title: Text(comment.commentatorUsername),
+                                                                subtitle: Text(comment.comment),
+                                                                trailing: Text(comment.commentedAt.format()),
+                                                              );
+                                                            },
+                                                          );
+                                                        }
                                                       },
+                                                      loading: () => const Center(child: CircularProgressIndicator()),
+                                                      error: (error, _) => Center(child: Text('エラーが発生しました: $error')),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
-                                      data: (commentsCount) => 'コメント数：$commentsCount',
-                                      loading: () => 'Loading...',
-                                      error: (error, _) => 'Error',
+                                                  // コメント入力フィールド
+                                                  TextFormField(
+                                                    controller: _newCommentController,
+                                                    decoration: InputDecoration(
+                                                      border: const OutlineInputBorder(),
+                                                      labelText: 'コメントを追加...',
+                                                      suffixIcon: IconButton(
+                                                        icon: const Icon(Icons.send),
+                                                        onPressed: () async {
+                                                          final newComment = CommentData(
+                                                            comment: _newCommentController.text,
+                                                            commentatorUsername: ref.read(userDataControllerNotifierProvider)?.username ?? '不明',
+                                                            commentatorUid: ref.read(userDataControllerNotifierProvider)?.uid ?? '不明',
+                                                            commentatorEmail: ref.read(userDataControllerNotifierProvider)?.email ?? '不明',
+                                                            commentatorImageUrl: ref.read(userDataControllerNotifierProvider)?.imageUrl ?? 'デフォルト画像URL',
+                                                            commentedAt: DateTime.now(),
+                                                          );
+                                                          await FirebaseFirestore.instance.collection('users').doc(book.email).collection('books').doc(book.bookId).collection('comments').add(newComment.toJson());
+                                                          _newCommentController.clear();
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
+                                        data: (commentsCount) => 'コメント数：$commentsCount',
+                                        loading: () => 'Loading...',
+                                        error: (error, _) => 'Error',
+                                      ),
+                                        style: TextStyle(color: Theme.of(context).brightness == Brightness.dark
+                                            ? Colors.white
+                                            : Colors.black),
+                                      ),
                                     ),
-                                      style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
-                                  ),
-
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
                           ),
                           actions: [
                             TextButton(
@@ -411,14 +435,14 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                               child: Column(
                                                                 children: [
                                                                   Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
-                                                                    data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
+                                                                    data: (commentsCount) => 'コメント数：$commentsCount',
                                                                     loading: () => 'Loading...',
                                                                     error: (error, _) => 'Error',
                                                                   )),
                                                                   const SizedBox(height: 16),
                                                                   // コメントをListViewで表示
                                                                   Expanded(
-                                                                    child: ref.watch(commentsDataControllerNotifierProvider(book)).when(
+                                                                    child: ref.watch(commentsDataProvider(book)).when(
                                                                       data: (comments) {
                                                                         if (comments.isEmpty) {
                                                                           // コメントが一つもない場合

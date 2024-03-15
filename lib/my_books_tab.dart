@@ -2,12 +2,11 @@ import 'package:books_rater/book_data.dart';
 import 'package:books_rater/comment_data.dart';
 import 'package:books_rater/controllers/auth_controller.dart';
 import 'package:books_rater/controllers/comments_count_controller.dart';
-import 'package:books_rater/controllers/comments_data_controller.dart';
 import 'package:books_rater/controllers/user_data_controller.dart';
 import 'package:books_rater/date_format.dart';
 import 'package:books_rater/editing_posted_book.dart';
-import 'package:books_rater/controllers/favorited_users_controller.dart';
 import 'package:books_rater/controllers/favorites_count_controller.dart';
+import 'package:books_rater/home_page_tab.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -266,6 +265,13 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                   context: context,
                                                   builder: (context) {
                                                     return Container(
+                                                      decoration: BoxDecoration(
+                                                        color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[850] : Colors.white,
+                                                        borderRadius: const BorderRadius.only(
+                                                          topLeft: Radius.circular(16),
+                                                          topRight: Radius.circular(16),
+                                                        ),
+                                                      ),
                                                       padding: const EdgeInsets.all(16),
                                                       width: MediaQuery.of(context).size.width,
                                                       height: MediaQuery.of(context).size.height*0.85,
@@ -279,7 +285,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                           const SizedBox(height: 16),
                                                           // いいねしたユーザーをListViewで表示
                                                           Expanded(
-                                                            child: ref.watch(favoritedUsersControllerProvider(book)).when(
+                                                            child: ref.watch(favoritesUsersProvider(book)).when(
                                                               data: (users) {
                                                                 if (users.isEmpty) {
                                                                   // いいねしたユーザーがいない場合
@@ -339,9 +345,14 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                 isScrollControlled: true,
                                                 context: context,
                                                 builder: (context) {
-                                                  return Padding(
-                                                    padding: const EdgeInsets.all(16.0),
-                                                    child: Container(
+                                                  return Container(
+                                                      decoration: BoxDecoration(
+                                                        color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[850] : Colors.white,
+                                                        borderRadius: const BorderRadius.only(
+                                                          topLeft: Radius.circular(16),
+                                                          topRight: Radius.circular(16),
+                                                        ),
+                                                      ),
                                                       padding: const EdgeInsets.all(16),
                                                       width: MediaQuery.of(context).size.width,
                                                       height: MediaQuery.of(context).size.height * 0.85,
@@ -355,7 +366,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                           const SizedBox(height: 16),
                                                           // コメントをListViewで表示
                                                           Expanded(
-                                                            child: ref.watch(commentsDataControllerNotifierProvider(book)).when(
+                                                            child: ref.watch(commentsDataProvider(book)).when(
                                                               data: (comments) {
                                                                 if (comments.isEmpty) {
                                                                   // コメントが一つもない場合
@@ -416,8 +427,7 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                           ),
                                                         ],
                                                       ),
-                                                    ),
-                                                  );
+                                                    );
                                                 },
                                               );
                                             },
