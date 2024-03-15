@@ -353,16 +353,16 @@ class MyBooksTabState extends ConsumerState<MyBooksTab> {
                                                           topRight: Radius.circular(16),
                                                         ),
                                                       ),
-                                                      padding: const EdgeInsets.all(16),
-                                                      width: MediaQuery.of(context).size.width,
-                                                      height: MediaQuery.of(context).size.height * 0.85,
-                                                      child: Column(
-                                                        children: [
-                                                          Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
-                                                            data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
-                                                            loading: () => 'Loading...',
-                                                            error: (error, _) => 'Error',
-                                                          )),
+                                                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 46),
+                                                    width: MediaQuery.of(context).size.width,
+                                                    height: MediaQuery.of(context).size.height * 0.85,
+                                                    child: Column(
+                                                      children: [
+                                                        Text(ref.watch(commentsCountControllerNotifierProvider(book)).when(
+                                                          data: (commentsCount) => 'コメント数：$commentsCount', // `count`を`commentsCount`に変更
+                                                          loading: () => 'Loading...',
+                                                          error: (error, _) => 'Error',
+                                                        )),
                                                           const SizedBox(height: 16),
                                                           // コメントをListViewで表示
                                                           Expanded(

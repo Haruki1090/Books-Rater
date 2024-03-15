@@ -202,7 +202,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                   topRight: Radius.circular(16),
                                                 ),
                                               ),
-                                              padding: const EdgeInsets.all(16),
+                                              padding: const EdgeInsets.fromLTRB(16, 16, 16, 46),
                                               width: MediaQuery.of(context).size.width,
                                               height: MediaQuery.of(context).size.height * 0.85,
                                               child: Column(
@@ -429,7 +429,7 @@ class HomePageTabState extends ConsumerState<HomePageTab> {
                                                                   topRight: Radius.circular(16),
                                                                 ),
                                                               ),
-                                                              padding: const EdgeInsets.all(16),
+                                                              padding: const EdgeInsets.fromLTRB(16, 16, 16, 46),
                                                               width: MediaQuery.of(context).size.width,
                                                               height: MediaQuery.of(context).size.height * 0.85,
                                                               child: Column(
