@@ -213,7 +213,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         );
 
                         // ユーザー登録が成功したら、firestoreにユーザー情報を登録
-                        await FirebaseFirestore.instance.collection('users').doc(email).set({
+                        await FirebaseFirestore.instance.collection('users').doc().set({
                           'uid': email,
                           'username': username,
                           'bookCount': 0,
