@@ -1,4 +1,5 @@
 import 'package:books_rater/home.dart';
+import 'package:books_rater/home_page_tab.dart';
 import 'package:books_rater/setting_page.dart';
 import 'package:books_rater/sign_in_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
