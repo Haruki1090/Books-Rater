@@ -15,9 +15,6 @@ class AuthController extends StateNotifier<User?>{
 
 final _auth = FirebaseAuth.instance;
 
-Future<void>signInWithEmailAndPassword(String email, String password) async {
-}
-
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});
 
