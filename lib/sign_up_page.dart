@@ -222,12 +222,14 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                           'imageUrl': 'https://knsoza1.com/wp-content/uploads/2020/07/70b3dd52350bf605f1bb4078ef79c9b9.png',
                         });
                         Navigator.pushAndRemoveUntil(
+                          // ignore: use_build_context_synchronously
                           context,
                           MaterialPageRoute(builder: (context) => const Home()),
                               (Route<dynamic> route) => false,
                         );
                       } on FirebaseAuthException {
                         showDialog(
+                          // ignore: use_build_context_synchronously
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
